@@ -3,9 +3,14 @@ const Session = require('../models/Session');
 const TypeMoypaiement = require('../models/TypeMoypaiement');
 const Utils = require('../utils/utils.methods');
 
+const type_moyen_paiement = ['', 'Compte Bancaire', 'Mobile Money', 'Wallet', 'Carte Bancaire'];
+
 const getAllTypeMoypaiement = async (req, res, next) => {
-    await TypeMoypaiement.findAll()
-    .then(typemp => response(res, 200, `Chargement des types moyen de paiement`, typemp))
+    await TypeMoypaiement.findAll().then(typemp => {
+        typemp.forEach(tmp => {
+            tmp['type_moyen_paiement'] = type_moyen_paiement[tmp.r_type]
+        })
+        return response(res, 200, `Chargement des types moyen de paiement`, typemp)})
     .catch(err => next(err));
 }
 
@@ -22,7 +27,9 @@ const createTypeMoypaiement = async (req, res, next) => {
             Utils.generateCode('TMOP', TypeMoypaiement.tableName, 'r_code', '-').then(async code => {
                 console.log(`Enregistrement de type moyen de paiement`);
                 await TypeMoypaiement.create(code, {...req.body})
-                .then(typemp => response(res, 200, `Création de type moyen de paiement`,typemp))
+                .then(typemp => {
+                    if (typemp) typemp['type_moyen_paiement'] = type_moyen_paiement[typemp.r_type];
+                    return response(res, 200, `Création de type moyen de paiement`,typemp)})
                 .catch(err => next(err));
             }).catch(err => next(err));
         }).catch(err => response(res, 400, err));
@@ -31,8 +38,9 @@ const createTypeMoypaiement = async (req, res, next) => {
 }
 
 const getTypeMoypaiement = async (req, res, next) => {
-    await TypeMoypaiement.findByCode(req.params.code).then(typemp => {
+    await TypeMoypaiement.findByCode(req.params.code).then(async typemp => {
         if (!typemp) return response(res, 404, `Type moyen de paiement non trouvé !`);
+        typemp['type_moyen_paiement'] = type_moyen_paiement[typemp.r_type];
         return response(res, 200, `Chargement du type moyen de paiement`, typemp);
     }).catch(err => next(err));
 }
@@ -49,7 +57,9 @@ const updateTypeMoypaiement = async (req, res, next) => {
             const code = req.params.code;
             console.log(`Mise à jour de type moyen de paiement ${code}`);
             await TypeMoypaiement.update(code, {...req.body})
-                .then(typemp => response(res, 200, `Mise à jour de type moyen de paiement ${code}`, typemp))
+                .then(async typemp => {
+                    if (typemp) typemp['type_moyen_paiement'] = type_moyen_paiement[typemp.r_type];
+                    return response(res, 200, `Mise à jour de type moyen de paiement ${code}`, typemp)})
                 .catch(err => next(err));
         }).catch(err => response(res, 400, err));
     }).catch(err => response(res, 400, err));

@@ -2,12 +2,27 @@ const response = require('../middlewares/response');
 const Session = require('../models/Session');
 const Campagne = require('../models/Campagne');
 const Utils = require('../utils/utils.methods');
+const Acteur = require('../models/Acteur');
+
+const periodicite = ['Indeterminée', 'Limitée'];
+const cible = ['Particulier', 'Entreprise', 'Les deux'];
 
 const getAllCampagnes = async (req, res, next) => {
     console.log(`Chargement de la liste de campagne..`)
     await Campagne.findAll()
-        .then(results => response(res, 200, `Chargement terminé`, results))
-        .catch(err => next(err));
+        .then(async results => {
+            if (results) {
+                for(let result of results) {
+                    await Acteur.findById(result.e_acteur).then(acteur => {
+                        result['acteur'] = acteur;
+                        delete result.e_acteur;
+                    }).catch(err => next(err));
+                    result['periodicite_intitule'] = periodicite[result.r_periodicite];
+                    result['cible_intitule'] = cible[result.r_cible];
+                }
+            }
+            return response(res, 200, `Chargement terminé`, results)
+        }).catch(err => next(err));
 }
 
 const createCampagne = async (req, res, next) => {
@@ -28,7 +43,11 @@ const createCampagne = async (req, res, next) => {
                 await Campagne.checkExists(code).then(async exists => {
                     if (exists) return response(res, 409, `Le code ${code} est déjà utilisée !`, exists);
                     await Campagne.create(code, session.e_acteur, {...req.body})
-                    .then(result => response(res, 201, `Campagne créé avec succès`, result))
+                    .then(result => {
+                        if (!result) return response(res, 400, `Une erreur s'est produite !`);
+                        result['periodicite_intitule'] = periodicite[result.r_periodicite];
+                        result['cible_intitule'] = cible[result.r_cible];
+                        return response(res, 201, `Campagne créé avec succès`, result)})
                     .catch(err => next(err))
                 }).catch(err => next(err))
             }).catch(err => next(err));
@@ -40,9 +59,16 @@ const createCampagne = async (req, res, next) => {
 const getCampagne = async (req, res, next) => {
     console.log(`Chargement de campagne par code..`)
     const code = req.params.code;
-    await Campagne.findByCode(code).then(result => {
+    await Campagne.findByCode(code).then(async result => {
         if (!result) return response(res, 404, `Campagne ${code} non trouvé !`, result)
-        response(res, 200, `Chargement de campagne ${code}`, result)
+        await Acteur.findById(result.e_acteur).then(acteur => {
+            result['acteur'] = acteur;
+            delete result.e_acteur;
+        }).catch(err => next(err));
+        if (!result) return response(res, 400, `Une erreur s'est produite`)
+            result['periodicite_intitule'] = periodicite[result.r_periodicite];
+            result['cible_intitule'] = cible[result.r_cible];
+        return response(res, 200, `Chargement de campagne ${code}`, result)
     }).catch(err => next(err));
 }
 
@@ -63,6 +89,8 @@ const updateCampagne = async (req, res, next) => {
             await Campagne.update(code, {...req.body})
             .then(result => {
                 if (!result) return response(res, 400, `Une erreur s'est produite !`);
+                result['periodicite_intitule'] = periodicite[result.r_periodicite];
+                result['cible_intitule'] = cible[result.r_cible];
                 return response(res, 200, `Mise à jour de campagne ${code} terminé`, result);
             }).catch(error => next(error));
 

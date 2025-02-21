@@ -69,7 +69,7 @@ const Fonds = {
         const res = db.query(`UPDATE ${this.tableName} 
             SET r_statut = $1
             WHERE r_reference=$1
-            RETURNING *`, [-1, ref]);
+            RETURNING *`, [2, ref]);
         return (await res).rows[0];
     }
 }

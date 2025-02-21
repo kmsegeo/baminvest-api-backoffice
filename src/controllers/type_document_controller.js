@@ -21,10 +21,10 @@ const createTypeDocument = async (req, res, next) => {
     const {session_ref, intitule} = req.body;
     
     console.log(`Vérification des paramètres`)
-    Utils.expectedParameters({session_ref, intitule}).then(async () => {
+    Utils.expectedParameters({session_ref, intitule, format}).then(async () => {
 
         await Session.findByRef(session_ref).then(async () => {
-            Utils.generateCode("TYDC", 't_type_document', 'r_code', '-').then(async code => {
+            Utils.generateCode(TypeDocument.code_prefix, TypeDocument.tableName, TypeDocument.code_colunm, TypeDocument.code_spliter).then(async code => {
                 await TypeDocument.checkExists(code).then(async exists => {
                     if (exists) return response(res, 409, `La reference ${code} est déjà utilisée !`, exists);
                     await TypeDocument.create(code, {...req.body})
@@ -57,11 +57,11 @@ const updateTypeDocument = async (req, res, next) => {
     const {session_ref, intitule, description} = req.body;
     
     console.log(`Vérification des paramètres`)
-    Utils.expectedParameters({session_ref, intitule}).then(async () => {
+    Utils.expectedParameters({session_ref, intitule, format}).then(async () => {
         
         const code = req.params.code;
         await Session.findByRef(session_ref).then(async () => {
-            await TypeDocument.update(code, {intitule, description}).then(result => {
+            await TypeDocument.update(code, {intitule, description, format}).then(result => {
                 if (!result) return response(res, 400, `Une erreur s'est produite !`);
                 return response(res, 200, `Mise à jour du type document ${code} terminé`, result);
             }).catch(error => next(error));

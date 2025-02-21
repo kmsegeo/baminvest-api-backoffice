@@ -6,7 +6,16 @@ const Utils = require("../utils/utils.methods");
 
 const getAllValLiquidative = async (req, res, next) => {
     await ValeurLiquidative.findAll()
-        .then(results => response(res, 200, `Chargement de toutes les valeurs liquidatives`, results))
+        .then(async results => {
+            for (let result of results) {
+                await Fonds.findById(result.e_fonds).then(async fonds => {
+                    if (fonds) {
+                        result['fonds'] = fonds;
+                        delete result.e_fonds;
+                    }
+                }).catch(err => next(err));
+            }
+            return response(res, 200, `Chargement de toutes les valeurs liquidatives`, results)})
         .catch(err => next(err));
 }
 
@@ -49,8 +58,14 @@ const createValLiquidative = async (req, res, next) => {
 }
 
 const getOneValLiquidative = async (req, res, next) => {
-    await ValeurLiquidative.findById(req.params.id).then(vl => {
+    await ValeurLiquidative.findById(req.params.id).then(async vl => {
         if (!vl) return response(res, 404, `Valeur liquidative non trouvé`);
+        await Fonds.findById(vl.e_fonds).then(async fonds => {
+            if (fonds) {
+                vl['fonds'] = fonds;
+                delete vl.e_fonds;
+            }
+        }).catch(err => next(err));
         return response(res, 200, `Chargement d'une valeur liquidative`, vl);
     }).catch(err => next(err));
 }

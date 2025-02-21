@@ -5,9 +5,9 @@ const Utils = require('../utils/utils.methods');
 
 const getAllSystemes = async (req, res, next) => {
     console.log(`Chargement de la liste des éléments système..`)
-    await Systeme.findAll()
-        .then(results => response(res, 200, `Chargement terminé`, results))
-        .catch(err => next(err));
+    await Systeme.findAll().then(results => {
+        return response(res, 200, `Chargement terminé`, results)})
+    .catch(err => next(err));
 }
 
 const createSysteme = async (req, res, next) => {
@@ -25,8 +25,7 @@ const createSysteme = async (req, res, next) => {
         await Session.findByRef(session_ref).then(async () => {
             await Systeme.checkExists(tag).then(async exists => {
                 if (exists) return response(res, 409, `Le tag ${tag} est déjà utilisée !`, exists);
-                await Systeme.create({...req.body})
-                .then(result => response(res, 201, `Elément système créé avec succès`, result))
+                await Systeme.create({...req.body}).then(result => response(res, 201, `Elément système créé avec succès`, result))
                 .catch(err => next(err))
             }).catch(err => next(err))
         }).catch(error => response(res, 400, error));

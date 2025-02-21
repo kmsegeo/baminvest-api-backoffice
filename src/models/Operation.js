@@ -28,6 +28,11 @@ const Operation = {
     async findByRef(ref) {
         const res = db.query(`SELECT * FROM ${this.tableName} WHERE r_reference=$1`, [ref]);
         return (await res).rows[0];
+    },
+
+    async valid(id) {
+        const res = db.query(`UPDATE ${this.tableName} SET r_statut=$1 WHERE r_i=$2 RETURNING *`, [1, id]);
+        return (await res).rows[0];
     }
 }
 

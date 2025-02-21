@@ -14,9 +14,4 @@ router.post('/circuits/etapes', app_auth, session_verify, validationController.c
 router.get('/circuits/etapes/:ref', app_auth, session_verify, validationController.getOneCircuitEtape);
 router.put('/circuits/etapes/:ref', app_auth, session_verify, validationController.updateCircuitEtape);
 
-router.get('/circuits/:ref/affectations', app_auth, session_verify, validationController.getAllCircuitAffectation);
-router.post('/circuits/affectations', app_auth, session_verify, validationController.createCircuitAffectation);
-router.get('/circuits/affectations/:ref', app_auth, session_verify, validationController.getOneCircuitAffectation);
-router.put('/circuits/affectations/:ref', app_auth, session_verify, validationController.updateCircuitAffectation);
-
 module.exports = router;

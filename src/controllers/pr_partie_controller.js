@@ -3,12 +3,22 @@ const Session = require('../models/Session');
 const PrPartie = require('../models/ProfilRisquePartie');
 const Campagne = require('../models/Campagne');
 const Utils = require('../utils/utils.methods');
+const Acteur = require('../models/Acteur');
 
 const getAllPrParties = async (req, res, next) => {
     console.log(`Chargement de la liste de profil risque partie..`)
     await PrPartie.findAll()
-        .then(results => response(res, 200, `Chargement terminé`, results))
-        .catch(err => next(err));
+        .then(async results => {
+            if (results) {
+                for(let result of results) {
+                    await Acteur.findById(result.e_acteur).then(acteur => {
+                        result['acteur'] = acteur;
+                        delete result.e_acteur;
+                    }).catch(err => next(err));
+                }
+            }
+            return response(res, 200, `Chargement terminé`, results)
+        }).catch(err => next(err));
 }
 
 const getAllCampagnePrParties = async (req, res, next) => {
@@ -17,8 +27,18 @@ const getAllCampagnePrParties = async (req, res, next) => {
     .then(async campagne => {
         if (!campagne) return response(res, 404, `Campagne non trouvé !`);
         await PrPartie.findAllByCampgagne(campagne.r_i)
-        .then(results => response(res, 200, `Chargement terminé`, results))
-        .catch(err => next(err))
+            .then(async results => {
+                if (results) {
+                    for(let result of results) {
+                        await Acteur.findById(result.e_acteur).then(acteur => {
+                            result['acteur'] = acteur;
+                            delete result.e_acteur;
+                        }).catch(err => next(err));
+                        delete result.e_campagne;
+                    }
+                }
+                return response(res, 200, `Chargement terminé`, results)
+            }).catch(err => next(err))
     }).catch(err => next(err));
 }
 
@@ -55,8 +75,12 @@ const createPrPartie = async (req, res, next) => {
 const getPrPartie = async (req, res, next) => {
     console.log(`Chargement de PRP par reference..`)
     const ref = req.params.p_ref;
-    await PrPartie.findByRef(ref).then(result => {
+    await PrPartie.findByRef(ref).then(async result => {
         if (!result) return response(res, 404, `PrPartie ${ref} non trouvé !`, result)
+        await Acteur.findById(result.e_acteur).then(acteur => {
+            result['acteur'] = acteur;
+            delete result.e_acteur;
+        }).catch(err => next(err));
         response(res, 200, `Chargement de profil risque partie ${ref}`, result)
     }).catch(err => next(err));
 }

@@ -10,14 +10,14 @@ const Profil = {
     return (await res).rows;
   },
 
-  async create(code, {intitule, description}) {
+  async create(code, {intitule, description, habilitation}) {
     const queryString = `
       INSERT INTO ${this.tableName}
-        (r_code, r_intitule, r_date_creer, r_date_modif, r_description, r_statut)
-      VALUES($1, $2, $3, $4, $5, $6) 
+        (r_code, r_intitule, r_date_creer, r_date_modif, r_description, r_statut, r_habilitation)
+      VALUES($1, $2, $3, $4, $5, $6, $7) 
       RETURNING *`;
     const createDate = new Date();
-    const res = db.query(queryString, [code, intitule, createDate, createDate, description, 1]);
+    const res = db.query(queryString, [code, intitule, createDate, createDate, description, 1, habilitation]);
     return (await res).rows[0];
   },
 
@@ -26,7 +26,8 @@ const Profil = {
         r_code, 
         r_intitule, 
         r_description, 
-        r_statut 
+        r_statut, 
+        r_habilitation 
       FROM ${this.tableName} 
       WHERE r_i=$1`;
     const res = db.query(queryString, [id]);
@@ -39,13 +40,13 @@ const Profil = {
     return (await res).rows[0];
   },
   
-  async update(code, {intitule, description}) {
+  async update(code, {intitule, description, habilitation}) {
     const queryString = `
       UPDATE ${this.tableName} 
-      SET r_intitule=$1, r_description=$2 
-      WHERE r_code=$3 
+      SET r_intitule=$1, r_description=$2, r_habilitation=$3 
+      WHERE r_code=$4 
       RETURNING *`;
-    const res = db.query(queryString, [intitule, description, code])
+    const res = db.query(queryString, [intitule, description, habilitation, code])
     return (await res).rows[0];
   },
 
@@ -54,7 +55,7 @@ const Profil = {
       UPDATE ${this.tableName} 
       SET r_statut=$1 
       WHERE r_code=$2`;
-    db.query(queryString, [0, code])
+    db.query(queryString, [2, code])
     return null;
   }
 

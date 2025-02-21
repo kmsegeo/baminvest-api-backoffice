@@ -3,6 +3,7 @@ const Session = require('../models/Session');
 const MReponse = require('../models/ProfilRisqueReponse');
 const RMatrice = require('../models/ProfilRisqueRepMatrice');
 const Utils = require('../utils/utils.methods');
+const Acteur = require('../models/Acteur');
 
 const getAllMReponses = async (req, res, next) => {
     console.log(`Chargement des réponses de matrice..`)
@@ -10,8 +11,18 @@ const getAllMReponses = async (req, res, next) => {
     await RMatrice.findByRef(rm_ref).then(async matrice => {
         if (!matrice) return response(res, 404, 'Matrice non trouvé !');
         await MReponse.findAllByMatrice(matrice.r_i)
-        .then(results => response(res, 200, `Chargement terminé`, results))
-        .catch(err => next(err))
+            .then(async results => {
+                if (results) {
+                    for(let result of results) {
+                        await Acteur.findById(result.e_acteur).then(acteur => {
+                            result['acteur'] = acteur;
+                            delete result.e_acteur;
+                        }).catch(err => next(err));
+                        delete result.e_ligne_colonne;
+                    }
+                }
+                return response(res, 200, `Chargement terminé`, results)
+            }).catch(err => next(err))
     }).catch(err => next(err));
 }
 
@@ -52,9 +63,13 @@ const createMReponse = async (req, res, next) => {
 const getMReponse = async (req, res, next) => {
     console.log(`Chargement de la réponse par reference..`);
     const ref = req.params._ref;
-    await MReponse.findByRef(req.params._ref).then(result => {
+    await MReponse.findByRef(req.params._ref).then(async result => {
         if (!result) return response(res, 404, `Reponse ${ref} non trouvé !`);
-        response(res, 200, `Chargement de la réponse ${ref}`, result);
+        await Acteur.findById(result.e_acteur).then(acteur => {
+            result['acteur'] = acteur;
+            delete result.e_acteur;
+        }).catch(err => next(err));
+        return response(res, 200, `Chargement de la réponse ${ref}`, result);
     }).catch(err => next(err));
 }
 

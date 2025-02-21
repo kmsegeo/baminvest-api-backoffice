@@ -33,12 +33,12 @@ const TypeMoypaiement = {
 
     async findByCode(code) {
         const res = db.query(`SELECT * FROM ${this.tableName} WHERE r_code=$1`, [code]);
-        return (await res).rows;
+        return (await res).rows[0];
     },
 
     async findById(id) {
         const res = db.query(`SELECT * FROM ${this.tableName} WHERE r_i=$1`, [id]);
-        return (await res).rows;
+        return (await res).rows[0];
     },
 
     async update(code, {intitule, type}) {

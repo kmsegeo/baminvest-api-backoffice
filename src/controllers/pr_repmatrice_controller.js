@@ -3,12 +3,23 @@ const Session = require('../models/Session');
 const RepMatrice = require('../models/ProfilRisqueRepMatrice');
 const PrQuestion = require('../models/ProfilRisqueQuestion');
 const Utils = require('../utils/utils.methods');
+const Acteur = require('../models/Acteur');
 
 const getAllRepMatrices = async (req, res, next) => {
     console.log(`Chargement de la liste des réponses matricées..`)
     await RepMatrice.findAll()
-    .then(results => response(res, 200, `Chargement terminé`, results))
-    .catch(err => next(err));
+        .then(async results => {
+            if (results) {
+                for(let result of results) {
+                    await Acteur.findById(result.e_acteur).then(acteur => {
+                        result['acteur'] = acteur;
+                        delete result.e_acteur;
+                    }).catch(err => next(err));
+                    delete result.e_risques_questions;
+                }
+            }
+            return response(res, 200, `Chargement terminé`, results)
+        }).catch(err => next(err));
 }
 
 const getAllPrQuestRepMatrice = async (req, res, next) => {
@@ -16,8 +27,18 @@ const getAllPrQuestRepMatrice = async (req, res, next) => {
     await PrQuestion.findByRef(req.params.q_ref).then(async question => {
         if (!question) return response(res, 404, `Question non trouvé !`);
         await RepMatrice.findAllByQuestion(question.r_i)
-        .then(results => response(res, 200, `Chargement terminé`, results))
-        .catch(err => next(err))
+            .then(async results => {
+                if (results) {
+                    for(let result of results) {
+                        await Acteur.findById(result.e_acteur).then(acteur => {
+                            result['acteur'] = acteur;
+                            delete result.e_acteur;
+                        }).catch(err => next(err));
+                        delete result.e_risques_questions;
+                    }
+                }
+                return response(res, 200, `Chargement terminé`, results)
+            }).catch(err => next(err))
     }).catch(err => next(err));
 }
 
@@ -55,8 +76,12 @@ const createRepMatrice = async (req, res, next) => {
 const getRepMatrice = async (req, res, next) => {
     console.log(`Chargement de la réponce matricée par reference..`)
     const ref = req.params.rm_ref;
-    await RepMatrice.findByRef(ref).then(result => {
+    await RepMatrice.findByRef(ref).then(async result => {
         if (!result) return response(res, 404, `Reponse ${ref} non trouvé !`, result);
+        await Acteur.findById(result.e_acteur).then(acteur => {
+            result['acteur'] = acteur;
+            delete result.e_acteur;
+        }).catch(err => next(err));
         return response(res, 200, `Chargement de la réponse matricée ${ref}`, result);
     }).catch(err => next(err));
 }

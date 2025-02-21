@@ -58,6 +58,16 @@ const CircuitAffectation = {
             RETURNING *`, [new Date(), e_acteur, e_circuit_validation, e_operation, r_reference]);
 
         return (await res).rows[0];
+    },
+
+    async delete (id) {
+        const res = db.query(`UPDATE ${this.tableName} SET r_statut=$1 WHERE r_i=$2 RETURNING *`, [0, id]);
+        return (await res).rows[0];
+    },
+
+    async findByActeurId(id) {
+        const res = db.query(`SELECT * FROM ${this.tableName} WHERE e_acteur=$1 AND r_statut=$2`, [id, 1]);
+        return (await res).rows;
     }
 }
 

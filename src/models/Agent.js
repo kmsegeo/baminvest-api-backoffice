@@ -5,7 +5,11 @@ const Agent = {
   tableName: 't_agent',
 
   async findAll() {
-    const queryString = `SELECT * FROM ${this.tableName}`;
+    const queryString = `
+      SELECT ag.*, ac.r_nom_complet, ac.r_email, ac.r_telephone_prp, ac.r_telephone_scd, ac.r_adresse, ac.r_date_activation, ac.r_langue
+      FROM ${this.tableName} As ag 
+      INNER JOIN t_acteur As ac
+      ON ac.e_agent=ag.r_i`;
     const res = db.query(queryString);
     return (await res).rows;
   },
@@ -18,7 +22,12 @@ const Agent = {
   },
 
   async findById(id) {
-    const queryString = `SELECT * FROM ${this.tableName} WHERE r_i = $1`;
+    const queryString = `
+      SELECT ag.*, ac.r_nom_complet, ac.r_email, ac.r_telephone_prp, ac.r_telephone_scd, ac.r_adresse, ac.r_date_activation, ac.r_langue 
+      FROM ${this.tableName} As ag 
+      INNER JOIN t_acteur As ac
+      ON ac.e_agent=ag.r_i
+      WHERE ag.r_i = $1`;
     const res = db.query(queryString, [id]);
     return (await res).rows[0];
   },

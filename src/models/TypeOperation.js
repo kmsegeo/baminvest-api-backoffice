@@ -3,6 +3,9 @@ const db = require('../config/database');
 const TypeOperation = {
 
     tableName: `t_type_operation`,
+    code_colunm: `r_code`,
+    code_prefix: `TYOP`,
+    code_spliter: `-`,
 
     async findAll() {
         const queryString = `SELECT * FROM ${this.tableName}`;

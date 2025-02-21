@@ -10,6 +10,9 @@ const CircuitEtape = require('../models/CircuitEtape');
 const CircuitAffectation = require('../models/CircuitAffectation');
 const Operation = require('../models/Operation');
 
+const scalable = [`Respecter l'ordre`, `Sans respecter l'ordre`];
+const type_etape = [``, `Validation sur profil`, `Validation par un type acteur`, `Validation par un acteur`];
+
 const getAllCircuit = async (req, res, next) => {
     console.log(`Chargement de la liste de circuit de validation..`);
     await CircuitValidation.findAll().then(async results => {
@@ -18,7 +21,8 @@ const getAllCircuit = async (req, res, next) => {
                 for(t of typeop)
                     if (r.e_type_operation==t.r_i)
                         r['type_operation']=t;
-                delete r.e_type_operation;
+                    delete r.e_type_operation;
+                if (r) r['scalable_intitule'] = scalable[r.r_scalable];
             });
             return response(res, 200, `Chargement terminé`, results)
         }).catch(err => next(err));
@@ -45,7 +49,9 @@ const createCircuit = async (req, res, next) => {
                     await TypeOperation.findByCode(type_op_code).then(async type_operation => {
                         if (!type_operation) return response(res, 404, 'Type opération non trouvé !');
                         await CircuitValidation.create(ref, type_operation.r_i, {...req.body})
-                        .then(result => response(res, 201, `Circuit de validation créé avec succès`, result))
+                        .then(result => {
+                            if (result) result['scalable_intitule'] = scalable[result.r_scalable];
+                            return response(res, 201, `Circuit de validation créé avec succès`, result)})
                         .catch(err => next(err))
                     }).catch(err => next(err))
                 }).catch(err => next(err))
@@ -59,7 +65,8 @@ const getOneCircuit = async (req, res, next) => {
     const ref = req.params.ref;
     await CircuitValidation.findByRef(ref).then(result => {
         if (!result) return response(res, 404, `Circuit de validation ${ref} non trouvé !`, result)
-        response(res, 200, `Chargement de circuit de validation ${ref}`, result)
+        result['scalable_intitule'] = scalable[result.r_scalable];
+        return response(res, 200, `Chargement de circuit de validation ${ref}`, result)
     }).catch(err => next(err));
 }
 const updateCircuit = async (req, res, next) => {
@@ -80,6 +87,7 @@ const updateCircuit = async (req, res, next) => {
                 const ref = req.params.ref;
                 await CircuitValidation.update(ref, type_operation.r_i, {...req.body}).then(result => {
                     if (!result) return response(res, 400, `Une erreur s'est produite !`);
+                    result['scalable_intitule'] = scalable[result.r_scalable];
                     return response(res, 200, `Mise à jour de circuit ${ref} terminé`, result);
                 }).catch(error => next(error));
             }).catch(error => next(error));
@@ -93,7 +101,11 @@ const getAllCircuitEtape = async (req, res, next) => {
     await CircuitValidation.findByRef(ref).then(async circuit => {
         if (!circuit) return response(res, 404, `Circuit non trouvé !`);
         await CircuitEtape.findAllByCircuitId(circuit.r_i)
-            .then(etapes => response(res, 200, `Chargement des étapes du circuit ${ref}`, etapes))
+            .then(etapes => {
+                etapes.forEach(etape => {
+                    if (etape) etape['type_intitule'] = type_etape[etape.r_type];
+                })
+                return response(res, 200, `Chargement des étapes du circuit ${ref}`, etapes)})
             .catch(err => next(err));
     }).catch(err => next(err));
 }
@@ -138,7 +150,9 @@ const createCircuitEtape = async (req, res, next) => {
                 Utils.generateCode('CETP', CircuitEtape.tableName, 'r_reference', '-').then(async ref => {
                     console.log(`Enregistrement de l'étape de circuit`)
                     await CircuitEtape.create(circuit.r_i, ref, e_profil, e_type_acteur, {r_intitule, r_ordre, r_description, r_type, e_acteur})
-                        .then(etape => response(res, 201, `Enregistrement de l'etape du circuit`, etape))
+                        .then(etape => {
+                            if (etape) etape['type_intitule'] = type_etape[etape.r_type];
+                            return response(res, 201, `Enregistrement de l'etape du circuit`, etape)})
                         .catch(err => next(err));
                 }).catch(err => next(err));
 
@@ -149,6 +163,7 @@ const createCircuitEtape = async (req, res, next) => {
 const getOneCircuitEtape = async (req, res, next) => {
     await CircuitEtape.findByRef(req.params.ref).then(etape => {
         if (!etape) return response(res, 404, `Etape de circuit introuvable`);
+        etape['type_intitule'] = type_etape[etape.r_type];
         return response(res, 200, `Chargement d'une étape de circuit`, etape);
     }).catch(err => next(err));
 }
@@ -195,7 +210,9 @@ const updateCircuitEtape = async (req, res, next) => {
                     
                     console.log(`Mise à jour de l'étape de circuit`)
                     await CircuitEtape.update(circuit.r_i, ref, e_profil, e_type_acteur, {r_intitule, r_ordre, r_description, r_type, e_acteur})
-                        .then(update => response(res, 201, `Mise à jour de l'etape du circuit`, update))
+                        .then(update => {
+                            if (etape) etape['type_intitule'] = type_etape[etape.r_type];
+                            return response(res, 201, `Mise à jour de l'etape du circuit`, update)})
                         .catch(err => next(err));
 
                 }).catch(err => next(err));
@@ -204,64 +221,62 @@ const updateCircuitEtape = async (req, res, next) => {
     }).catch(err => response(res, 400, err));
 }
 
-const getAllCircuitAffectation = async (req, res, next) => {
-    const ref = req.params.ref;
-    await CircuitValidation.findByRef(ref).then(async circuit => {
-        if (!circuit) return response(res, 404, `Circuit non trouvé !`);
-        await CircuitAffectation.findAllByCircuitId(circuit.r_i)
-            .then(affectations => response(res, 200, `Chargement des affectations`, affectations))
-            .catch(err => next(err));
-    }).catch(err => next(err));
-}
-
-const createCircuitAffectation = async (req, res, next) => {
-    console.log(`Création dune étape de circuit..`)
-    const {session_ref, circuit_ref, op_ref, e_acteur} = req.body;
-    console.log(`Vérification des paramètres`)
-    Utils.expectedParameters({session_ref, circuit_ref, op_ref, e_acteur}).then(async () => {
-        console.log(`Chargement de la session`)
-        await Session.findByRef(session_ref).then(async session => {
-            console.log(`Chargement du circuit de validation`)
-            await CircuitValidation.findByRef(circuit_ref).then(async circuit => {
-                if (!circuit) return response(res, 404, `Circuit de validation introuvable !`);
-                await Operation.findByRef(op_ref).then(async operation => {
-                    if (!operation) return response(res, 404, `Opération non trouvé !`);
-                    await CircuitAffectation.create(circuit.r_i, operation.r_i, {e_acteur})
-                        .then(affectations => response(res, 201, `Enregistrement de l'affectation`, affectations))
-                        .catch(err => next(err));
-                }).catch(err => next(err));
-            }).catch(err => next(err));
-        }).catch(err => response(res, 400, err));
-    }).catch(err => response(res, 400, err));
-}
-const getOneCircuitAffectation = async (req, res, next) => {
-    await CircuitAffectation.findByRef(req.params.ref).then(affectation => {
-        if (!affectation) return response(res, 404, `Affectation introuvable`);
-        return response(res, 200, `Chargement d'une affectation`, affectation);
-    }).catch(err => next(err));
-}
-
-const updateCircuitAffectation = async (req, res, next) => {
-    console.log(`Création dune étape de circuit..`)
-    const {session_ref, circuit_ref, op_ref, e_acteur} = req.body;
-    console.log(`Vérification des paramètres`)
-    Utils.expectedParameters({session_ref, circuit_ref, op_ref, e_acteur}).then(async () => {
-        console.log(`Chargement de la session`)
-        await Session.findByRef(session_ref).then(async session => {
-            console.log(`Chargement du circuit de validation`)
-            await CircuitValidation.findByRef(circuit_ref).then(async circuit => {
-                if (!circuit) return response(res, 404, `Circuit de validation introuvable !`);
-                console.log(`Mise à jour de l'affectation`)
-                await Operation.findByRef(op_ref).then(async operation => {
-                    if (!operation) return response(res, 404, `Opération non trouvé !`);
-                    await CircuitAffectation.update(req.params.ref, circuit.r_i, operation.r_i, {e_acteur})
-                        .then(affectations => response(res, 200, `Mise à jour de l'affectation`, affectations))
-                        .catch(err => next(err));
-                }).catch(err => next(err));
-            }).catch(err => next(err));
-        }).catch(err => response(res, 400, err));
-    }).catch(err => response(res, 400, err));
-}
+// const getAllCircuitAffectation = async (req, res, next) => {
+//     const ref = req.params.ref;
+//     await CircuitValidation.findByRef(ref).then(async circuit => {
+//         if (!circuit) return response(res, 404, `Circuit non trouvé !`);
+//         await CircuitAffectation.findAllByCircuitId(circuit.r_i)
+//             .then(affectations => response(res, 200, `Chargement des affectations`, affectations))
+//             .catch(err => next(err));
+//     }).catch(err => next(err));
+// }
+// const createCircuitAffectation = async (req, res, next) => {
+//     console.log(`Création dune étape de circuit..`)
+//     const {session_ref, circuit_ref, op_ref, e_acteur} = req.body;
+//     console.log(`Vérification des paramètres`)
+//     Utils.expectedParameters({session_ref, circuit_ref, op_ref, e_acteur}).then(async () => {
+//         console.log(`Chargement de la session`)
+//         await Session.findByRef(session_ref).then(async session => {
+//             console.log(`Chargement du circuit de validation`)
+//             await CircuitValidation.findByRef(circuit_ref).then(async circuit => {
+//                 if (!circuit) return response(res, 404, `Circuit de validation introuvable !`);
+//                 await Operation.findByRef(op_ref).then(async operation => {
+//                     if (!operation) return response(res, 404, `Opération non trouvé !`);
+//                     await CircuitAffectation.create(circuit.r_i, operation.r_i, {e_acteur})
+//                         .then(affectations => response(res, 201, `Enregistrement de l'affectation`, affectations))
+//                         .catch(err => next(err));
+//                 }).catch(err => next(err));
+//             }).catch(err => next(err));
+//         }).catch(err => response(res, 400, err));
+//     }).catch(err => response(res, 400, err));
+// }
+// const getOneCircuitAffectation = async (req, res, next) => {
+//     await CircuitAffectation.findByRef(req.params.ref).then(affectation => {
+//         if (!affectation) return response(res, 404, `Affectation introuvable`);
+//         return response(res, 200, `Chargement d'une affectation`, affectation);
+//     }).catch(err => next(err));
+// }
+// const updateCircuitAffectation = async (req, res, next) => {
+//     console.log(`Création dune étape de circuit..`)
+//     const {session_ref, circuit_ref, op_ref, e_acteur} = req.body;
+//     console.log(`Vérification des paramètres`)
+//     Utils.expectedParameters({session_ref, circuit_ref, op_ref, e_acteur}).then(async () => {
+//         console.log(`Chargement de la session`)
+//         await Session.findByRef(session_ref).then(async session => {
+//             console.log(`Chargement du circuit de validation`)
+//             await CircuitValidation.findByRef(circuit_ref).then(async circuit => {
+//                 if (!circuit) return response(res, 404, `Circuit de validation introuvable !`);
+//                 console.log(`Mise à jour de l'affectation`)
+//                 await Operation.findByRef(op_ref).then(async operation => {
+//                     if (!operation) return response(res, 404, `Opération non trouvé !`);
+//                     await CircuitAffectation.update(req.params.ref, circuit.r_i, operation.r_i, {e_acteur})
+//                         .then(affectations => response(res, 200, `Mise à jour de l'affectation`, affectations))
+//                         .catch(err => next(err));
+//                 }).catch(err => next(err));
+//             }).catch(err => next(err));
+//         }).catch(err => response(res, 400, err));
+//     }).catch(err => response(res, 400, err));
+// }
 
 module.exports = {
     getAllCircuit,
@@ -272,8 +287,8 @@ module.exports = {
     createCircuitEtape,
     getOneCircuitEtape,
     updateCircuitEtape,
-    getAllCircuitAffectation,
-    createCircuitAffectation,
-    getOneCircuitAffectation,
-    updateCircuitAffectation
+    // getAllCircuitAffectation,
+    // createCircuitAffectation,
+    // getOneCircuitAffectation,
+    // updateCircuitAffectation
 }

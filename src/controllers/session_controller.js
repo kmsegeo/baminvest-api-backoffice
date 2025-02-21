@@ -4,6 +4,8 @@ const Session = require('../models/Session');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Utils = require('../utils/utils.methods');
+const Agent = require('../models/Agent');
+const Profil = require('../models/Profil');
 
 const login = async (req, res, next) => {
 
@@ -20,7 +22,7 @@ const login = async (req, res, next) => {
     Utils.expectedParameters({email, mdp}).then(async () => {
 
         console.log(`Chargement de l'acteur`)
-        await Acteur.findByEmail(req.body.email).then(acteur => {
+        await Acteur.findByEmail(req.body.email).then(async acteur => {
             if (!acteur) return response(res, 401, `Login ou mot de passe incorrect !`);
             console.log(`Vérification de mot de passe`)
             bcrypt.compare(req.body.mdp, acteur.r_mdp).then(async valid => {
@@ -33,15 +35,22 @@ const login = async (req, res, next) => {
                     model_device: req.headers.model_device,
                     autres: "",
                     acteur: acteur.r_i
-                }).then(session => {
-                    return response(res, 200, 'Nouvelle session', {
-                        auth_token: jwt.sign(
-                            {session: session.r_reference},
-                            process.env.SESSION_KEY,
-                            // { expiresIn: '24h' }
-                        ),
-                        session: session
-                    });
+                }).then(async session => {
+                    await Agent.findById(acteur.e_agent).then(async agent => {
+                        await Profil.findById(agent.e_profil).then(async profil =>{
+                            agent['profil'] = profil;
+                            delete agent.e_profil;
+                        }).catch(err => next(err));
+                        return response(res, 200, 'Nouvelle session', {
+                            auth_token: jwt.sign(
+                                {session: session.r_reference},
+                                process.env.SESSION_KEY,
+                                // { expiresIn: '24h' }
+                            ),
+                            session: session,
+                            agent: agent
+                        });
+                    }).catch(err => next(err));
                 }).catch(error => next(error));
             }).catch(error => next(error));
         }).catch(error => next(error));

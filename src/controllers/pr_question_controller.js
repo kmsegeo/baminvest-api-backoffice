@@ -3,6 +3,7 @@ const Session = require('../models/Session');
 const PrQuestion = require('../models/ProfilRisqueQuestion');
 const PrPartie = require('../models/ProfilRisquePartie');
 const Utils = require('../utils/utils.methods');
+const Acteur = require('../models/Acteur');
 
 const getAllPrQuestions = async (req, res, next) => {
     console.log(`Chargement de la liste des questions..`)
@@ -16,8 +17,18 @@ const getAllPrPartieQuestions = async (req, res, next) => {
     await PrPartie.findByRef(req.params.p_ref).then(async partie => {
         if (!partie) return response(res, 404, `Partie non trouvé !`);
         await PrQuestion.findAllByPartie(partie.r_i)
-        .then(results => response(res, 200, `Chargement terminé`, results))
-        .catch(err => next(err))
+            .then(async results => {
+                if (results) {
+                    for(let result of results) {
+                        await Acteur.findById(result.e_acteur).then(acteur => {
+                            result['acteur'] = acteur;
+                            delete result.e_acteur;
+                        }).catch(err => next(err));
+                        delete result.e_profil_partie;
+                    }
+                }
+                return response(res, 200, `Chargement terminé`, results);
+            }).catch(err => next(err))
     }).catch(err => next(err));
 }
 
@@ -54,9 +65,13 @@ const createPrQuestion = async (req, res, next) => {
 const getPrQuestion = async (req, res, next) => {
     console.log(`Chargement de la question par reference..`)
     const ref = req.params.q_ref;
-    await PrQuestion.findByRef(ref).then(result => {
+    await PrQuestion.findByRef(ref).then(async result => {
         if (!result) return response(res, 404, `PrQuestion ${ref} non trouvé !`, result)
-        response(res, 200, `Chargement de la question ${ref}`, result)
+        await Acteur.findById(result.e_acteur).then(acteur => {
+            result['acteur'] = acteur;
+            delete result.e_acteur;
+        }).catch(err => next(err));
+        return response(res, 200, `Chargement de la question ${ref}`, result)
     }).catch(err => next(err));
 }
 

@@ -7,7 +7,7 @@ const getAllProfils = async (req, res, next) => {
     /**
      * [x] Chargement de la liste des pofils
      */
-    console.log('Chargement des profils..')
+    console.log('Chargement des profils..');
     await Profil.findAll()
         .then(results => response(res, 200, 'Chargement terminé', results))
         .catch(error => next(error));
@@ -63,7 +63,7 @@ const updateProfil = async (req, res, next) => {
 
         const code = req.params.code;
         await Session.findByRef(session_ref).then(async () => {
-            await Profil.update(code, {intitule, description}).then(result => {
+            await Profil.update(code, {intitule, description, habilitation}).then(result => {
                 if (!result) return response(res, 400, `Une erreur s'est produite !`);
                 return response(res, 200, `Mise à jour du profil ${code} terminé`, result);
             }).catch(error => next(error));

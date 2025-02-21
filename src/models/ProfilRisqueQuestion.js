@@ -59,7 +59,7 @@ const ProfilRisqueQuestion = {
     }, 
 
     async findByRef(ref) {
-        const queryString = `SELECT * ROM ${this.tableName} WHERE r_reference=$1`;
+        const queryString = `SELECT * FROM ${this.tableName} WHERE r_reference=$1`;
         const res = db.query(queryString, [ref]);
         return (await res).rows[0];
     },

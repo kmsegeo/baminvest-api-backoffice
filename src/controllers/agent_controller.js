@@ -5,56 +5,8 @@ const Acteur = require('../models/Acteur');
 const bcrypt = require('bcryptjs');
 const Session = require('../models/Session');
 const Utils = require('../utils/utils.methods');
-
-const defautAgent = async () => {
-
-    /**
-     * [x] Vérifier qu'un agent/administrateur existe dans la base de données
-     * [x] Si oui: ne rien faire ; Sinon: Créer un agent/administrateur par defaut
-     *  __ login: admin@mediasoftci.net
-     *  __ mdp: admin
-     * [x] En passant, créer un profil Administrateur
-     */
-
-    await Agent.findAll().then(async results => {
-        if (results.length==0) {
-            console.log("Création d'un profil par defaut: ");
-            await Utils.generateCode("PRFA", 't_profil', 'r_code', '-').then(async code => {
-                await Profil.create(code, {
-                    intitule: `Admin`, 
-                    description: `Administrateur principal`
-                }).then(async profil => {
-                    console.log(profil);
-                    console.log(`Création d'un agent par defaut: `);
-                    await Agent.create({
-                        civilite : 1, 
-                        nom : `Médiasoft`, 
-                        prenom : `Admin`, 
-                        profil : profil.r_code
-                    }).then(async admin => {
-                        console.log(admin);
-                        console.log("Cryptage du mot passe");
-                        bcrypt.hash("admin", 10).then(async hash => {
-                            console.log(hash);
-                            console.log("Mise en place du compte acteur");
-                            await Acteur.createAgent({
-                                nom_complet: admin.r_nom + ' ' + admin.r_prenom,
-                                email: `admin@mediasoftci.net`,
-                                telephone: `+0000000000`,
-                                adresse: "Abidjan - Deux plateaux les vallons",
-                                agent: admin.r_i,
-                                mdp : hash
-                            }).then(async acteur => {
-                                console.log(acteur)
-                                console.log("Création de l'agent/administrateur par defaut terminé.")
-                            }).catch(error => console.log(error.stack))
-                        }).catch(error => console.log(error.stack))
-                    }).catch(error => console.log(error.stack))
-                }).catch(error => console.log(error.stack))
-            }).catch(error => console.log(error.stack))
-        }
-    }).catch(error => console.log(error.stack));
-}
+const CircuitAffectation = require('../models/CircuitAffectation');
+const Operation = require('../models/Operation');
 
 const getAllAgents = async (req, res, next) => {
     /**
@@ -167,11 +119,29 @@ const updateAgent = async (req, res) => {
 //     }).catch(error => next(error));
 // }
 
+const getAllAgentAffectation = async (req, res, next) => {
+    const id = req.params.id;
+    await Acteur.findByAgentId(id).then(async acteur => {
+        if (!acteur) return response(res, 404, `Acteur introuvable !`);
+        await CircuitAffectation.findByActeurId(acteur.r_i)
+            .then(async affectations => {
+                if (!affectations) return response(res, 404, `Panier vide !`)
+                for(let affectation of affectations) {
+                    await Operation.findById(affectation.e_operation).then(op => {
+                        affectation['operation'] = op;
+                        delete affectation.e_operation;
+                    }).catch(err => next(err));
+                } return response(res, 200, `Chargement du panier de validation`, affectations);
+            }).catch(err => next(err));
+    }).catch(err => next(err));
+}
+
 module.exports = {
-    defautAgent,
+    // defautAgent,
     getAllAgents,
     createAgent,
     getAgent,
     updateAgent,
     // deleteAgent,
+    getAllAgentAffectation
 }

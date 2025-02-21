@@ -75,6 +75,7 @@ const Acteur = {
         r_date_creer, 
         r_date_modif, 
         r_date_activation,
+        e_agent,
         r_mdp 
       FROM ${this.tableName} WHERE r_email = $1`;
     const res = db.query(queryString, [email]);
@@ -133,7 +134,13 @@ const Acteur = {
     const queryString = `UPDATE ${this.tableName} SET ... WHERE r_i=$4 RETURNING r_civilite, r_nom, r_prenom, e_profil`;
     const res = db.query(queryString, [civilite, nom, prenom, id])
     return (await res).rows[0];
-  }
+  },
+
+  async findByAgentId(id) {
+    const queryString = `SELECT * FROM ${this.tableName} WHERE e_agent=$1`;
+    const res = db.query(queryString, [id]);
+    return (await res).rows[0];
+},
 
 }
 
