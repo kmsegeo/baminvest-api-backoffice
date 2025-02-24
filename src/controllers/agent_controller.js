@@ -59,7 +59,7 @@ const createAgent = async (req, res, next) => {
                                 adresse: adresse,
                                 agent: agent.r_i,
                                 mdp: hash
-                            }).then(() => response(res, 201, "Agent créé avec succès"))
+                            }).then(() => response(res, 201, "Agent créé avec succès", agent))
                             .catch(error => next(error));
                         }).catch(error => next(error));
                     }).catch(error => next(error));

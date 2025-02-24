@@ -31,12 +31,37 @@ const loadAllOperations = async (req, res, next) => {
     }).catch(err => next(err));
 }
 
-const loadAllByTypeOperation = async (req, res, next) => {
-    Utils.selectTypeOperation(req.params.op).then(async op_code => {
+const getOpSouscription = async (req, res, next) => {
+    console.log(`Chargement du type opération`);
+    // Utils.selectTypeOperation('souscription').then(async op_code => {
+        await loadAllByTypeOperation('TYOP-006', req, res, next);
+    // }).catch(err => response(res, 400, err));
+};
+
+const getOpRachat = async (req, res, next) => {
+    console.log(`Chargement du type opération`);
+    // Utils.selectTypeOperation('rachat').then(async op_code => {
+        await loadAllByTypeOperation('TYOP-007', req, res, next);
+    // }).catch(err => response(res, 400, err));
+};
+
+const getOpTransfert = async (req, res, next) => {
+    console.log(`Chargement du type opération`);
+    // Utils.selectTypeOperation('transfert').then(async op_code => {
+        await loadAllByTypeOperation('TYOP-008', req, res, next);
+    // }).catch(err => response(res, 400, err));
+};
+
+async function loadAllByTypeOperation (op_code, req, res, next) {
+    // Utils.selectTypeOperation(req.params.op).then(async op_code => {
         await TypeOperation.findByCode(op_code).then(async typeop => {
             if (!typeop) return response(res, 404, `Type opération inconnu !`);
             await Operation.findAllByTypeOperateur(typeop.r_i).then(async operations => {
                 if (operations) for(let operation of operations) {
+                    await Acteur.findById(operation.e_acteur).then(acteur => {
+                        operation['acteur'] = acteur;
+                        delete operation.e_acteur;
+                    }).catch(err => next(err));
                     await MoyPaiementActeur.findById(operation.e_moyen_paiement).then(moyen_paiement => {
                         operation['moyen_paiement'] = moyen_paiement;
                         delete operation.e_moyen_paiement;
@@ -45,13 +70,15 @@ const loadAllByTypeOperation = async (req, res, next) => {
                         operation['fonds'] = fonds;
                         delete operation.e_fonds;
                     }).catch(err => next(err));
-                    delete operation.e_acteur;
-                    delete operation.e_type_operation;
+                    await TypeOperation.findById(operation.e_type_operation).then(type_operation => {
+                        operation['type_operation'] = type_operation;
+                        delete operation.e_type_operation;
+                    }).catch(err => next(err));
                 }
                 return response(res, 200, `Chargement des opération de ${typeop.r_intitule}`, operations, 'operation_status');
             }).catch(err => next(err));
         }).catch(err => next(err));
-    }).catch(err => response(res, 400, err));
+    // }).catch(err => response(res, 400, err));
 }
 
 const loadAllByActeur = async (req, res, next) => {
@@ -144,7 +171,10 @@ const validOperationByCode = async(req, res, next) => {
 
 module.exports = {
     loadAllOperations,
-    loadAllByTypeOperation,
+    getOpSouscription,
+    getOpRachat,
+    getOpTransfert,
+    // loadAllByTypeOperation,
     loadAllByActeur,
     loadOperation,
     validOperation,

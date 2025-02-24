@@ -25,8 +25,8 @@ const Session = {
     },
 
     async findAllByActeur(acteur) {
-        const queryString = `SELECT * FROM ${this.tableName} WHERE e_acteur=$1`;
-        let res = db.query(queryString, [acteur]);
+        const queryString = `SELECT * FROM ${this.tableName} WHERE e_acteur=$1 AND r_statut=$2`;
+        let res = db.query(queryString, [acteur, 1]);
         return (await res).rows;
     },
     

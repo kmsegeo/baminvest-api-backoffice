@@ -21,7 +21,7 @@ const createProfil = async (req, res, next) => {
      * [x] Lancement de la création.
      */
     console.log("Creation de profil..");
-    const {session_ref, intitule} = req.body;
+    const {session_ref, intitule, habilitation} = req.body;
     
     console.log(`Vérification des paramètres`)
     Utils.expectedParameters({session_ref, intitule}).then(async () => {
@@ -56,7 +56,7 @@ const updateProfil = async (req, res, next) => {
      */
     
     console.log('Mise à jour de profil..');
-    const {session_ref, intitule, description} = req.body;
+    const {session_ref, intitule, description, habilitation} = req.body;
     
     console.log(`Vérification des paramètres`)
     Utils.expectedParameters({session_ref, intitule}).then(async () => {

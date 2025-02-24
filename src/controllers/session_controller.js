@@ -41,12 +41,8 @@ const login = async (req, res, next) => {
                             agent['profil'] = profil;
                             delete agent.e_profil;
                         }).catch(err => next(err));
-                        return response(res, 200, 'Nouvelle session', {
-                            auth_token: jwt.sign(
-                                {session: session.r_reference},
-                                process.env.SESSION_KEY,
-                                // { expiresIn: '24h' }
-                            ),
+                        return response(res, 200, 'Ouverture de session', {
+                            auth_token: jwt.sign({session: session.r_reference}, process.env.SESSION_KEY, /*{ expiresIn: '24h' }*/ ),
                             session: session,
                             agent: agent
                         });

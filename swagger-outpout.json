@@ -76,7 +76,7 @@
         }
       }
     },
-    "/api/v1/profils/": {
+    "/api/v1/config/sys/": {
       "get": {
         "description": "",
         "parameters": [
@@ -148,6 +148,12 @@
               "properties": {
                 "session_ref": {
                   "example": "any"
+                },
+                "tag": {
+                  "example": "any"
+                },
+                "valeur": {
+                  "example": "any"
                 }
               }
             }
@@ -160,7 +166,201 @@
         }
       }
     },
-    "/api/v1/profils/{code}": {
+    "/api/v1/config/sys/{tag}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "tag",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "tag",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "session_ref": {
+                  "example": "any"
+                },
+                "valeur": {
+                  "example": "any"
+                },
+                "description": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/config/canal/list": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/config/canal": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "session_ref": {
+                  "example": "any"
+                },
+                "intitule": {
+                  "example": "any"
+                },
+                "pass": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/config/canal/{code}": {
       "get": {
         "description": "",
         "parameters": [
@@ -247,521 +447,9 @@
                 },
                 "intitule": {
                   "example": "any"
-                },
-                "description": {
-                  "example": "any"
                 }
               }
             }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      },
-      "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "code",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "appauth",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "app_id",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "op_code",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "timestamp",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/v1/agents/": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "appauth",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "app_id",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "op_code",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "timestamp",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      },
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "appauth",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "app_id",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "op_code",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "timestamp",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "session_ref": {
-                  "example": "any"
-                },
-                "email": {
-                  "example": "any"
-                },
-                "mdp": {
-                  "example": "any"
-                },
-                "telephone": {
-                  "example": "any"
-                },
-                "adresse": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/v1/agents/{id}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "appauth",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "app_id",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "op_code",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "timestamp",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      },
-      "put": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "appauth",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "app_id",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "op_code",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "timestamp",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "civilite": {
-                  "example": "any"
-                },
-                "nom": {
-                  "example": "any"
-                },
-                "prenom": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/v1/agents/login": {
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "appauth",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "app_id",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "op_code",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "timestamp",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "os",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "adresse_ip",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "marque_device",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "model_device",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "example": "any"
-                },
-                "mdp": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/v1/agents/{id}/sessions": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "appauth",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "app_id",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "op_code",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "timestamp",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/v1/agents/{id}/sessions/{ref}": {
-      "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "ref",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "appauth",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "app_id",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "op_code",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "timestamp",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/v1/clients/inactif": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "appauth",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "app_id",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "op_code",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "timestamp",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/v1/clients/particulier": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "appauth",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "app_id",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "op_code",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "timestamp",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/v1/clients/entreprise": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "appauth",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "app_id",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "op_code",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "timestamp",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
           }
         ],
         "responses": {
@@ -842,6 +530,9 @@
               "type": "object",
               "properties": {
                 "session_ref": {
+                  "example": "any"
+                },
+                "intitule": {
                   "example": "any"
                 }
               }
@@ -1029,6 +720,9 @@
               "properties": {
                 "session_ref": {
                   "example": "any"
+                },
+                "intitule": {
+                  "example": "any"
                 }
               }
             }
@@ -1215,6 +909,9 @@
               "properties": {
                 "session_ref": {
                   "example": "any"
+                },
+                "intitule": {
+                  "example": "any"
                 }
               }
             }
@@ -1311,6 +1008,9 @@
               "properties": {
                 "session_ref": {
                   "example": "any"
+                },
+                "intitule": {
+                  "example": "any"
                 }
               }
             }
@@ -1323,50 +1023,7 @@
         }
       }
     },
-    "/api/v1/t-operations/{code}/circuit-val": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "code",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "appauth",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "app_id",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "op_code",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "timestamp",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/v1/config/sys/": {
+    "/api/v1/t-moypaiement/": {
       "get": {
         "description": "",
         "parameters": [
@@ -1439,7 +1096,10 @@
                 "session_ref": {
                   "example": "any"
                 },
-                "tag": {
+                "intitule": {
+                  "example": "any"
+                },
+                "type": {
                   "example": "any"
                 }
               }
@@ -1453,12 +1113,12 @@
         }
       }
     },
-    "/api/v1/config/sys/{tag}": {
+    "/api/v1/t-moypaiement/{code}": {
       "get": {
         "description": "",
         "parameters": [
           {
-            "name": "tag",
+            "name": "code",
             "in": "path",
             "required": true,
             "type": "string"
@@ -1499,7 +1159,7 @@
         "description": "",
         "parameters": [
           {
-            "name": "tag",
+            "name": "code",
             "in": "path",
             "required": true,
             "type": "string"
@@ -1538,14 +1198,1194 @@
                 "session_ref": {
                   "example": "any"
                 },
-                "valeur": {
+                "intitule": {
                   "example": "any"
                 },
-                "description": {
+                "type": {
                   "example": "any"
                 }
               }
             }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/profils/": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "session_ref": {
+                  "example": "any"
+                },
+                "intitule": {
+                  "example": "any"
+                },
+                "habilitation": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/profils/{code}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "session_ref": {
+                  "example": "any"
+                },
+                "intitule": {
+                  "example": "any"
+                },
+                "description": {
+                  "example": "any"
+                },
+                "habilitation": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/agents/": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "session_ref": {
+                  "example": "any"
+                },
+                "civilite": {
+                  "example": "any"
+                },
+                "nom": {
+                  "example": "any"
+                },
+                "prenom": {
+                  "example": "any"
+                },
+                "email": {
+                  "example": "any"
+                },
+                "telephone": {
+                  "example": "any"
+                },
+                "adresse": {
+                  "example": "any"
+                },
+                "profil_code": {
+                  "example": "any"
+                },
+                "mdp": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/agents/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "session_ref": {
+                  "example": "any"
+                },
+                "civilite": {
+                  "example": "any"
+                },
+                "nom": {
+                  "example": "any"
+                },
+                "prenom": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/agents/login": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "os",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "adresse_ip",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "marque_device",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "model_device",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "example": "any"
+                },
+                "mdp": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/agents/{id}/sessions": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/agents/{id}/sessions/{ref}": {
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "ref",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/agents/{id}/panier": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/agents/affectation/{id}/valider": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "session_ref": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/acteurs/particuliers": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/acteurs/particuliers/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/acteurs/entreprises": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/acteurs/entreprises/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/acteurs/portefeuilles": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/acteurs/{id}/portefeuilles": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/acteurs/operations": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/acteurs/{id}/operations": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/acteurs/operations/souscription": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/acteurs/operations/rachat": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/acteurs/operations/transfert": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/acteurs/operations/{ref}/details": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "ref",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
@@ -1626,6 +2466,21 @@
               "type": "object",
               "properties": {
                 "session_ref": {
+                  "example": "any"
+                },
+                "intitule": {
+                  "example": "any"
+                },
+                "periodicite": {
+                  "example": "any"
+                },
+                "date_debut": {
+                  "example": "any"
+                },
+                "date_fin": {
+                  "example": "any"
+                },
+                "cible": {
                   "example": "any"
                 }
               }
@@ -1723,6 +2578,21 @@
               "properties": {
                 "session_ref": {
                   "example": "any"
+                },
+                "intitule": {
+                  "example": "any"
+                },
+                "periodicite": {
+                  "example": "any"
+                },
+                "date_debut": {
+                  "example": "any"
+                },
+                "date_fin": {
+                  "example": "any"
+                },
+                "cible": {
+                  "example": "any"
                 }
               }
             }
@@ -1776,16 +2646,12 @@
             "description": ""
           }
         }
-      },
+      }
+    },
+    "/api/v1/p-risques/parties": {
       "post": {
         "description": "",
         "parameters": [
-          {
-            "name": "code",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
           {
             "name": "appauth",
             "in": "header",
@@ -1819,6 +2685,18 @@
               "properties": {
                 "session_ref": {
                   "example": "any"
+                },
+                "campagne_code": {
+                  "example": "any"
+                },
+                "ordre": {
+                  "example": "any"
+                },
+                "intitule": {
+                  "example": "any"
+                },
+                "points_totale": {
+                  "example": "any"
                 }
               }
             }
@@ -1831,16 +2709,10 @@
         }
       }
     },
-    "/api/v1/p-risques/{code}/parties/{p_ref}": {
+    "/api/v1/p-risques/parties/{p_ref}": {
       "get": {
         "description": "",
         "parameters": [
-          {
-            "name": "code",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
           {
             "name": "p_ref",
             "in": "path",
@@ -1883,12 +2755,6 @@
         "description": "",
         "parameters": [
           {
-            "name": "code",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
             "name": "p_ref",
             "in": "path",
             "required": true,
@@ -1926,6 +2792,18 @@
               "type": "object",
               "properties": {
                 "session_ref": {
+                  "example": "any"
+                },
+                "campagne_code": {
+                  "example": "any"
+                },
+                "ordre": {
+                  "example": "any"
+                },
+                "intitule": {
+                  "example": "any"
+                },
+                "points_totale": {
                   "example": "any"
                 }
               }
@@ -1980,16 +2858,12 @@
             "description": ""
           }
         }
-      },
+      }
+    },
+    "/api/v1/p-risques/parties/questions": {
       "post": {
         "description": "",
         "parameters": [
-          {
-            "name": "p_ref",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
           {
             "name": "appauth",
             "in": "header",
@@ -2023,6 +2897,21 @@
               "properties": {
                 "session_ref": {
                   "example": "any"
+                },
+                "partie_ref": {
+                  "example": "any"
+                },
+                "ordre": {
+                  "example": "any"
+                },
+                "intitule": {
+                  "example": "any"
+                },
+                "avec_colonne": {
+                  "example": "any"
+                },
+                "points_totale": {
+                  "example": "any"
                 }
               }
             }
@@ -2035,16 +2924,10 @@
         }
       }
     },
-    "/api/v1/p-risques/parties/{p_ref}/questions/{q_ref}": {
+    "/api/v1/p-risques/parties/questions/{q_ref}": {
       "get": {
         "description": "",
         "parameters": [
-          {
-            "name": "p_ref",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
           {
             "name": "q_ref",
             "in": "path",
@@ -2087,12 +2970,6 @@
         "description": "",
         "parameters": [
           {
-            "name": "p_ref",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
             "name": "q_ref",
             "in": "path",
             "required": true,
@@ -2130,6 +3007,21 @@
               "type": "object",
               "properties": {
                 "session_ref": {
+                  "example": "any"
+                },
+                "partie_ref": {
+                  "example": "any"
+                },
+                "ordre": {
+                  "example": "any"
+                },
+                "intitule": {
+                  "example": "any"
+                },
+                "avec_colonne": {
+                  "example": "any"
+                },
+                "points_totale": {
                   "example": "any"
                 }
               }
@@ -2184,16 +3076,12 @@
             "description": ""
           }
         }
-      },
+      }
+    },
+    "/api/v1/p-risques/questions/matrices": {
       "post": {
         "description": "",
         "parameters": [
-          {
-            "name": "q_ref",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
           {
             "name": "appauth",
             "in": "header",
@@ -2227,6 +3115,18 @@
               "properties": {
                 "session_ref": {
                   "example": "any"
+                },
+                "question_ref": {
+                  "example": "any"
+                },
+                "ordre": {
+                  "example": "any"
+                },
+                "intitule": {
+                  "example": "any"
+                },
+                "type": {
+                  "example": "any"
                 }
               }
             }
@@ -2239,16 +3139,10 @@
         }
       }
     },
-    "/api/v1/p-risques/questions/{q_ref}/matrices/{rm_ref}": {
+    "/api/v1/p-risques/questions/matrices/{rm_ref}": {
       "get": {
         "description": "",
         "parameters": [
-          {
-            "name": "q_ref",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
           {
             "name": "rm_ref",
             "in": "path",
@@ -2291,12 +3185,6 @@
         "description": "",
         "parameters": [
           {
-            "name": "q_ref",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
             "name": "rm_ref",
             "in": "path",
             "required": true,
@@ -2334,6 +3222,18 @@
               "type": "object",
               "properties": {
                 "session_ref": {
+                  "example": "any"
+                },
+                "question_ref": {
+                  "example": "any"
+                },
+                "ordre": {
+                  "example": "any"
+                },
+                "intitule": {
+                  "example": "any"
+                },
+                "type": {
                   "example": "any"
                 }
               }
@@ -2388,16 +3288,12 @@
             "description": ""
           }
         }
-      },
+      }
+    },
+    "/api/v1/p-risques/matrices/reponses": {
       "post": {
         "description": "",
         "parameters": [
-          {
-            "name": "rm_ref",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
           {
             "name": "appauth",
             "in": "header",
@@ -2431,6 +3327,18 @@
               "properties": {
                 "session_ref": {
                   "example": "any"
+                },
+                "matrice_ref": {
+                  "example": "any"
+                },
+                "ordre": {
+                  "example": "any"
+                },
+                "intitule": {
+                  "example": "any"
+                },
+                "points": {
+                  "example": "any"
                 }
               }
             }
@@ -2443,16 +3351,10 @@
         }
       }
     },
-    "/api/v1/p-risques/matrices/{rm_ref}/reponses/{_ref}": {
+    "/api/v1/p-risques/matrices/reponses/{_ref}": {
       "get": {
         "description": "",
         "parameters": [
-          {
-            "name": "rm_ref",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
           {
             "name": "_ref",
             "in": "path",
@@ -2495,12 +3397,6 @@
         "description": "",
         "parameters": [
           {
-            "name": "rm_ref",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
             "name": "_ref",
             "in": "path",
             "required": true,
@@ -2539,6 +3435,18 @@
               "properties": {
                 "session_ref": {
                   "example": "any"
+                },
+                "matrice_ref": {
+                  "example": "any"
+                },
+                "ordre": {
+                  "example": "any"
+                },
+                "intitule": {
+                  "example": "any"
+                },
+                "points": {
+                  "example": "any"
                 }
               }
             }
@@ -2551,7 +3459,42 @@
         }
       }
     },
-    "/api/v1/circuit-val/": {
+    "/api/v1/fonds/": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
       "post": {
         "description": "",
         "parameters": [
@@ -2589,7 +3532,16 @@
                 "session_ref": {
                   "example": "any"
                 },
-                "type_operation": {
+                "intitule": {
+                  "example": "any"
+                },
+                "description": {
+                  "example": "any"
+                },
+                "commission_souscription": {
+                  "example": "any"
+                },
+                "commission_sortie": {
                   "example": "any"
                 }
               }
@@ -2603,7 +3555,7 @@
         }
       }
     },
-    "/api/v1/circuit-val/{ref}": {
+    "/api/v1/fonds/{ref}": {
       "get": {
         "description": "",
         "parameters": [
@@ -2688,7 +3640,770 @@
                 "session_ref": {
                   "example": "any"
                 },
-                "type_operation": {
+                "intitule": {
+                  "example": "any"
+                },
+                "description": {
+                  "example": "any"
+                },
+                "commission_souscription": {
+                  "example": "any"
+                },
+                "commission_sortie": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "ref",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/fonds/{ref}/val_liquidatives": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "ref",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/fonds/val_liquidatives/ts": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/fonds/val_liquidatives": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "session_ref": {
+                  "example": "any"
+                },
+                "fonds_ref": {
+                  "example": "any"
+                },
+                "date": {
+                  "example": "any"
+                },
+                "date_precedente": {
+                  "example": "any"
+                },
+                "description": {
+                  "example": "any"
+                },
+                "valeur_actuelle": {
+                  "example": "any"
+                },
+                "valeur_precedente": {
+                  "example": "any"
+                },
+                "performance_hebdo": {
+                  "example": "any"
+                },
+                "performance_jour": {
+                  "example": "any"
+                },
+                "performance_mois": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/fonds/val_liquidatives/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "session_ref": {
+                  "example": "any"
+                },
+                "fonds_ref": {
+                  "example": "any"
+                },
+                "date": {
+                  "example": "any"
+                },
+                "date_precedente": {
+                  "example": "any"
+                },
+                "description": {
+                  "example": "any"
+                },
+                "valeur_actuelle": {
+                  "example": "any"
+                },
+                "valeur_precedente": {
+                  "example": "any"
+                },
+                "performance_hebdo": {
+                  "example": "any"
+                },
+                "performance_jour": {
+                  "example": "any"
+                },
+                "performance_mois": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/validations/circuits": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "session_ref": {
+                  "example": "any"
+                },
+                "type_op_code": {
+                  "example": "any"
+                },
+                "intitule": {
+                  "example": "any"
+                },
+                "scalable": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/validations/circuits/{ref}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "ref",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "ref",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "session_ref": {
+                  "example": "any"
+                },
+                "type_op_code": {
+                  "example": "any"
+                },
+                "intitule": {
+                  "example": "any"
+                },
+                "scalable": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/validations/circuits/{ref}/etapes": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "ref",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/validations/circuits/etapes": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "session_ref": {
+                  "example": "any"
+                },
+                "circuit_ref": {
+                  "example": "any"
+                },
+                "r_intitule": {
+                  "example": "any"
+                },
+                "r_ordre": {
+                  "example": "any"
+                },
+                "r_description": {
+                  "example": "any"
+                },
+                "r_type": {
+                  "example": "any"
+                },
+                "profil_code": {
+                  "example": "any"
+                },
+                "type_acteur_code": {
+                  "example": "any"
+                },
+                "e_acteur": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/validations/circuits/etapes/{ref}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "ref",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "ref",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "session_ref": {
+                  "example": "any"
+                },
+                "circuit_ref": {
+                  "example": "any"
+                },
+                "r_intitule": {
+                  "example": "any"
+                },
+                "r_ordre": {
+                  "example": "any"
+                },
+                "r_description": {
+                  "example": "any"
+                },
+                "r_type": {
+                  "example": "any"
+                },
+                "profil_code": {
+                  "example": "any"
+                },
+                "type_acteur_code": {
+                  "example": "any"
+                },
+                "e_acteur": {
                   "example": "any"
                 }
               }

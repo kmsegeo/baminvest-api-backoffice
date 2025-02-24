@@ -15,12 +15,15 @@ module.exports = async (req, res, next) => {
             if (error.name=='TokenExpiredError') throw "Token expiré !"
             if (error.name=='JsonWebTokenError') throw "Token invalide !"
             throw error;
-        } 
+        }
         
         console.log(`Vérification de session`)
         await Session.findByRef(decodedToken.session)
         .then(session => {
             if (!session) throw `Erreur de session !`;
+            if (session.r_statut==0) throw `Session inactive !`;
+            req.session = session.r_reference;
+            req.acteur = session.e_acteur;
             next();
         }).catch(error => response(res, 401, error));
         

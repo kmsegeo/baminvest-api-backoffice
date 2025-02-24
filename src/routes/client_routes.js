@@ -19,7 +19,9 @@ router.get('/:id/portefeuilles', app_auth, session_verify, portefeuilleControlle
 
 router.get('/operations', app_auth, session_verify, operationController.loadAllOperations)
 router.get('/:id/operations', app_auth, session_verify, operationController.loadAllByActeur);
-router.get('/operations/:op', app_auth, session_verify, operationController.loadAllByTypeOperation)
+router.get('/operations/souscription', app_auth, session_verify, operationController.getOpSouscription);
+router.get('/operations/rachat', app_auth, session_verify, operationController.getOpRachat);
+router.get('/operations/transfert', app_auth, session_verify, operationController.getOpTransfert);
 router.get('/operations/:ref/details', app_auth, session_verify, operationController.loadOperation);
 
 module.exports = router;

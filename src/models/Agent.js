@@ -14,10 +14,10 @@ const Agent = {
     return (await res).rows;
   },
 
-  async create({civilite, nom, prenom, profil}) {
+  async create({civilite, nom, prenom, profil_code}) {
     const queryString = `INSERT INTO ${this.tableName} (r_civilite, r_nom, r_prenom, e_profil)
       VALUES($1, $2, $3, (SELECT r_i FROM t_profil WHERE r_code=$4)) RETURNING *`;
-    const res = db.query(queryString, [civilite, nom, prenom, profil]);
+    const res = db.query(queryString, [civilite, nom, prenom, profil_code]);
     return (await res).rows[0];
   },
 

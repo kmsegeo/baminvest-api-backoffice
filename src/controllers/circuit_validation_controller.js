@@ -63,10 +63,16 @@ const createCircuit = async (req, res, next) => {
 const getOneCircuit = async (req, res, next) => {
     console.log(`Chargement de circuit de validation par reference..`)
     const ref = req.params.ref;
-    await CircuitValidation.findByRef(ref).then(result => {
+    await CircuitValidation.findByRef(ref).then(async result => {
         if (!result) return response(res, 404, `Circuit de validation ${ref} non trouvé !`, result)
-        result['scalable_intitule'] = scalable[result.r_scalable];
-        return response(res, 200, `Chargement de circuit de validation ${ref}`, result)
+        await TypeOperation.findAll().then(typeop => {
+            for(t of typeop)
+                if (result.e_type_operation==t.r_i)
+                    result['type_operation']=t;
+                delete result.e_type_operation;
+            result['scalable_intitule'] = scalable[result.r_scalable];
+            return response(res, 200, `Chargement de circuit de validation ${ref}`, result)
+        }).catch(err => next(err));
     }).catch(err => next(err));
 }
 const updateCircuit = async (req, res, next) => {
