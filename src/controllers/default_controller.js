@@ -9,6 +9,7 @@ const TypeDocument = require('../models/TypeDocument');
 const TypeOperation = require('../models/TypeOperation');
 const Utils = require('../utils/utils.methods');
 const bcrypt = require('bcryptjs');
+const Encryption = require('../utils/encryption.methods');
 
 const defaultCanals = async () => {
     /**
@@ -19,8 +20,8 @@ const defaultCanals = async () => {
     console.log(`Vérification des canaux par défaut..`);
     const canauxList = default_canal.defaultList;
     
-    console.log(`Chargement des canaux`)
     await Canal.findAll().then(async canaux => {
+        await Utils.sleep(1000);
         console.log(`Vérification des canaux inexistants`)
         for(let new_canal of canauxList) {
             let create = true;
@@ -33,17 +34,17 @@ const defaultCanals = async () => {
                 await Utils.generateCanalCode(Canal.code_prefix, Canal.tableName, Canal.code_colunm).then(code => {
                     Canal.findByCode(code).then(async exists => {
                         if(exists) return;
-                        let intitule = new_canal.intitule; let description = new_canal.description; let pass = new_canal.pass;
+                        let intitule = new_canal.intitule; 
+                        let description = new_canal.description; 
                         console.log("Cryptage du mot passe");
-                        await bcrypt.hash(pass, 10).then(async hash => {
-                            console.log(hash);
-                            await Canal.create(code, {intitule, description, pass:hash}).then(async canal => {
-                                console.log(canal);
-                            }).catch(err => console.log(err));
+                        let pass = Encryption.encrypt(new_canal.pass);
+                        console.log(pass);
+                        await Canal.create(code, {intitule, description, pass}).then(async canal => {
+                            console.log(canal);
                         }).catch(err => console.log(err));
                     }).catch(err=>console.log(err));
                 }).catch(err => console.log(err));
-                await Utils.sleep(3000);
+                await Utils.sleep(1000);
             }
         }
     }).catch(err => console.log(err));
@@ -61,6 +62,7 @@ const defaultAdmin = async () => {
     console.log(`Vérification du compte admin par défaut..`)
 
     await Agent.findAll().then(async results => {
+        await Utils.sleep(1000);
         if (results.length==0) {
             console.log("Création d'un profil par défaut: ");
             await Utils.generateCode("PRFA", Profil.tableName, 'r_code', '-').then(async code => {
@@ -108,11 +110,11 @@ const defaultOperations = async () => {
      */
 
     console.log(`Vérification des type-opérations par défaut..`)
-    
+
     const typeOperationsList = default_operation_type.defaultList;
 
-    console.log(`Chargement de la liste des type-opérations disponibles`)
     await TypeOperation.findAll().then(async type_operations => {
+        await Utils.sleep(1000);
         console.log(`Vérification des type-opérations inexistants`)
         for(let new_type_op of typeOperationsList) {
             let create = true;
@@ -144,6 +146,7 @@ const defaultTypeDocument = async () => {
     const typeDocumentList = default_document_type.defaultList
 
     await TypeDocument.findAll().then(async typeDocuments => {
+        await Utils.sleep(1000);
         console.log(`Vérification des types document existants`);
         for (let typedoc of typeDocumentList) {
             let create = true;
@@ -162,7 +165,7 @@ const defaultTypeDocument = async () => {
                         console.log(result);
                     }).catch(err => console.log(err));
                 }).catch(err => console.log(err));
-                await Utils.sleep(3000);
+                await Utils.sleep(1000);
             }
         }
         

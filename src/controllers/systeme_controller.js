@@ -21,7 +21,6 @@ const createSysteme = async (req, res, next) => {
     
     console.log(`Vérification des paramètres`)
     Utils.expectedParameters({session_ref, tag, valeur}).then(async () => {
-
         await Session.findByRef(session_ref).then(async () => {
             await Systeme.checkExists(tag).then(async exists => {
                 if (exists) return response(res, 409, `Le tag ${tag} est déjà utilisée !`, exists);

@@ -52,7 +52,6 @@ const createCampagne = async (req, res, next) => {
                 }).catch(err => next(err))
             }).catch(err => next(err));
         }).catch(error => response(res, 400, error));
-        
     }).catch(err => response(res, 400, err));
 }
 

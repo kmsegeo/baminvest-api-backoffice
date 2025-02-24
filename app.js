@@ -37,7 +37,7 @@ app.use(express.json());
 const base_path = '/api/v1'
 
 app.use(`${base_path}/auth`, authRoutes);
-app.use(`${base_path}/config/sys`, systemeRoutes);
+app.use(`${base_path}/config`, systemeRoutes);
 
 app.use(`${base_path}/t-acteurs`, typeActeurRoutes);
 app.use(`${base_path}/t-documents`, typeDocumentRoutes);
