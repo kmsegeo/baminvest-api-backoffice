@@ -17,11 +17,6 @@ router.get('/entreprises/:id', app_auth, session_verify, clientController.getCor
 router.get('/portefeuilles', app_auth, session_verify, portefeuilleController.loadAllPortefeuilles);
 router.get('/:id/portefeuilles', app_auth, session_verify, portefeuilleController.loadActeurPortefeuilles);
 
-router.get('/operations', app_auth, session_verify, operationController.loadAllOperations)
 router.get('/:id/operations', app_auth, session_verify, operationController.loadAllByActeur);
-router.get('/operations/souscription', app_auth, session_verify, operationController.getOpSouscription);
-router.get('/operations/rachat', app_auth, session_verify, operationController.getOpRachat);
-router.get('/operations/transfert', app_auth, session_verify, operationController.getOpTransfert);
-router.get('/operations/:ref/details', app_auth, session_verify, operationController.loadOperation);
 
 module.exports = router;

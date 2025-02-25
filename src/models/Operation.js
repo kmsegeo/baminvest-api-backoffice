@@ -10,13 +10,22 @@ const Operation = {
         return (await res).rows;
     },
 
+    async findAllBetween2Date(from, to) {
+        const start = from.toString() + ' 00:00';
+        const end = to.toString() +' 23:59';
+        const res = db.query(`SELECT * FROM ${this.tableName}  WHERE r_date_creer BETWEEN $1 AND $2`, [start, end]);
+        return (await res).rows;
+    },
+
     async findAllByActeur(id) {
         const res = db.query(`SELECT * FROM ${this.tableName} WHERE e_acteur=$1`, [id]);
         return (await res).rows;
     },
 
-    async findAllByTypeOperateur(id) {
-        const res = db.query(`SELECT * FROM ${this.tableName} WHERE e_type_operation=$1`, [id]);
+    async findAllByTypeOperateurBetween2Date(id, from, to) {
+        const start = from.toString() + ' 00:00';
+        const end = to.toString() +' 23:59';
+        const res = db.query(`SELECT * FROM ${this.tableName} WHERE e_type_operation=$1 AND r_date_creer BETWEEN $2 AND $3`, [id, start, end]);
         return (await res).rows;
     },
 

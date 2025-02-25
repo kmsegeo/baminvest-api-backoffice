@@ -7,6 +7,9 @@ const Session = require('../models/Session');
 const Utils = require('../utils/utils.methods');
 const CircuitAffectation = require('../models/CircuitAffectation');
 const Operation = require('../models/Operation');
+const TypeOperation = require('../models/TypeOperation');
+const MoyPaiementActeur = require('../models/MoyPaiementActeur');
+const Fonds = require('../models/Fonds');
 
 const getAllAgents = async (req, res, next) => {
     /**
@@ -15,14 +18,32 @@ const getAllAgents = async (req, res, next) => {
     console.log("Chargement des agents..");
     await Agent.findAll().then(async results => {
         await Profil.findAll().then(async profils => {
+
+            let pending = 0;
+            let valid = 0;
+            let disabled = 0;
+
             results.forEach(r =>{
+
+                if (r.r_statut==0) pending += 1;
+                if (r.r_statut==1) valid += 1;
+                if (r.r_statut==2) disabled += 1;
+
                 for(p of profils) 
                     if (p.r_i==r.e_profil) {
                         r['profil'] = p;
                     }
                 delete r.e_profil;
             })
-            return response(res, 200, "Chargement terminé", results);
+
+            analytics = {
+                "total": results.length,
+                "pending": pending,
+                "valid" : valid,
+                "disabled": disabled
+            };
+
+            return response(res, 200, "Chargement terminé", results, null, analytics);
         }).catch(error => next(error));
     }).catch(error => next(error));
 }
@@ -123,16 +144,43 @@ const getAllAgentAffectation = async (req, res, next) => {
     const id = req.params.id;
     await Acteur.findByAgentId(id).then(async acteur => {
         if (!acteur) return response(res, 404, `Acteur introuvable !`);
-        await CircuitAffectation.findByActeurId(acteur.r_i)
-            .then(async affectations => {
-                if (!affectations) return response(res, 404, `Panier vide !`)
-                for(let affectation of affectations) {
-                    await Operation.findById(affectation.e_operation).then(op => {
-                        affectation['operation'] = op;
-                        delete affectation.e_operation;
+        await CircuitAffectation.findByActeurId(acteur.r_i).then(async affectations => {
+            if (!affectations) return response(res, 404, `Panier vide !`)
+            
+            let analytics = {
+                total: affectations.length
+            }
+
+            for(let affectation of affectations) {
+                await Operation.findById(affectation.e_operation).then(async op => {
+
+                    await Acteur.findById(op.e_acteur).then(acteur => {
+                        op['acteur'] = acteur;
+                        delete op.e_acteur;
                     }).catch(err => next(err));
-                } return response(res, 200, `Chargement du panier de validation`, affectations);
-            }).catch(err => next(err));
+                    await TypeOperation.findById(op.e_type_operation).then(type_operation => {
+                        op['type_operation'] = type_operation;
+                        delete op.e_type_operation;
+                    }).catch(err => next(err));
+                    await MoyPaiementActeur.findById(op.e_moyen_paiement).then(moyen_paiement => {
+                        op['moyen_paiement'] = moyen_paiement;
+                        delete op.e_moyen_paiement;
+                    }).catch(err => next(err));
+                    await Fonds.findById(op.e_fonds).then(fonds => {
+                        op['fonds'] = fonds;
+                        delete op.e_fonds;
+                    }).catch(err => next(err));
+
+                    affectation['operation'] = op;
+                    delete affectation.e_operation;
+
+                }).catch(err => next(err));
+
+                delete affectation.r_statut
+            } 
+            
+            return response(res, 200, `Chargement du panier de validation`, affectations, null, analytics);
+        }).catch(err => next(err));
     }).catch(err => next(err));
 }
 

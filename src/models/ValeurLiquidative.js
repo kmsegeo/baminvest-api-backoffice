@@ -4,13 +4,21 @@ const ValeurLiquidative = {
 
     tableName: 't_val_liquidative_fonds',
 
-    async findAll() {
-        const res = db.query(`SELECT * FROM ${this.tableName}`, []);
+    async findAllBetween2Date(from, to) {
+        
+        const start = from.toString() + ' 00:00';
+        const end = to.toString() +' 23:59';
+
+        const res = db.query(`SELECT * FROM ${this.tableName} WHERE r_date_creer BETWEEN $1 AND $2`, [start, end]);
         return (await res).rows;
     },
 
-    async findAllByFonds(fonds) {
-        const res = db.query(`SELECT * FROM ${this.tableName} WHERE e_fonds=$1`, [fonds]);
+    async findAllByFondsBetween2Date(fonds, from, to) {
+
+        const start = from.toString() + ' 00:00';
+        const end = to.toString() +' 23:59';
+        
+        const res = db.query(`SELECT * FROM ${this.tableName} WHERE e_fonds=$1 AND r_date_creer BETWEEN $2 AND $3`, [fonds, start, end]);
         return (await res).rows;
     },
 

@@ -2,10 +2,12 @@ const response = require('../middlewares/response');
 const Acteur = require("../models/Acteur");
 const Fonds = require('../models/Fonds');
 const Portefeuille = require("../models/Portefeuille");
+const Analytics = require("../utils/analytics.methods");
 
 const loadAllPortefeuilles = async (req, res, next) => {
     
     await Portefeuille.findAll().then(async portefeuilles => {
+
         if (portefeuilles) for(let portefeuille of portefeuilles) {
             await Acteur.findById(portefeuille.e_acteur).then(acteur => {
                 portefeuille['acteur'] = acteur;
@@ -16,7 +18,14 @@ const loadAllPortefeuilles = async (req, res, next) => {
                 delete portefeuille.e_fonds;
             }).catch(err => next(err));
         }
-        return response(res, 200, `Chargement de tous les portefeuilles`, portefeuilles)
+        
+        let best = 0, average = 0, lowest = 0;
+        await Analytics.average(portefeuilles, 'r_val_placement').then(async result => {
+            best = result.best;  average = result.average; lowest = result.average;
+        }).catch(err => response(res, 400, err));
+        let analytics = { total: portefeuilles.length, best, average, lowest}
+
+        return response(res, 200, `Chargement de tous les portefeuilles`, portefeuilles, null, analytics)
     }).catch(err => next(err));
 }
 

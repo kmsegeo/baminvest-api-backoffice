@@ -6,7 +6,7 @@ const Agent = {
 
   async findAll() {
     const queryString = `
-      SELECT ag.*, ac.r_nom_complet, ac.r_email, ac.r_telephone_prp, ac.r_telephone_scd, ac.r_adresse, ac.r_date_activation, ac.r_langue
+      SELECT ag.*, ac.r_nom_complet, ac.r_email, ac.r_telephone_prp, ac.r_telephone_scd, ac.r_adresse, ac.r_date_activation, ac.r_langue, ac.r_statut
       FROM ${this.tableName} As ag 
       INNER JOIN t_acteur As ac
       ON ac.e_agent=ag.r_i`;
@@ -23,7 +23,7 @@ const Agent = {
 
   async findById(id) {
     const queryString = `
-      SELECT ag.*, ac.r_nom_complet, ac.r_email, ac.r_telephone_prp, ac.r_telephone_scd, ac.r_adresse, ac.r_date_activation, ac.r_langue 
+      SELECT ag.*, ac.r_nom_complet, ac.r_email, ac.r_telephone_prp, ac.r_telephone_scd, ac.r_adresse, ac.r_date_activation, ac.r_langue, ac.r_statut 
       FROM ${this.tableName} As ag 
       INNER JOIN t_acteur As ac
       ON ac.e_agent=ag.r_i

@@ -1,6 +1,6 @@
 const statuts = require('../config/default_statuts')
 
-const response = async (res, statut_code, message, data, data_status) => {
+const response = async (res, statut_code, message, data, data_status, analytics) => {
     
     console.log(message);
     const type = data_status ? data_status : 'default_status';
@@ -16,6 +16,7 @@ const response = async (res, statut_code, message, data, data_status) => {
     await res.status(statut_code).json({
         statut: statut_code==200 || statut_code==201 ? "SUCCESS" : "ERROR", 
         message, 
+        analytics,
         data
     })
 }

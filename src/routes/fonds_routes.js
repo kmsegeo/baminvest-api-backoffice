@@ -11,8 +11,8 @@ router.get('/:ref', app_auth, session_verify, fondsController.getFondsByRef);
 router.put('/:ref', app_auth, session_verify, fondsController.updateFonds);
 router.delete('/:ref', app_auth, session_verify, fondsController.deleteFondsByRef);
 
-router.get('/:ref/val_liquidatives', app_auth, session_verify, vlController.getAllFondsValLiquidative);
-router.get('/val_liquidatives/ts', app_auth, session_verify, vlController.getAllValLiquidative);
+// router.get('/:ref/val_liquidatives/:date_debut/:date_fin', app_auth, session_verify, vlController.getAllFondsValLiquidativeAtDate);
+router.get('/val_liquidatives/:date_debut/:date_fin', app_auth, session_verify, vlController.getAllValLiquidativeAtDate);
 router.post('/val_liquidatives', app_auth, session_verify, vlController.createValLiquidative);
 router.get('/val_liquidatives/:id', app_auth, session_verify, vlController.getOneValLiquidative);
 router.put('/val_liquidatives/:id', app_auth, session_verify, vlController.updateValLiquidative);

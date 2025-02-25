@@ -5,10 +5,16 @@ const Fonds = require('../models/Fonds');
 const MoyPaiementActeur = require('../models/MoyPaiementActeur');
 const Operation = require("../models/Operation");
 const TypeOperation = require("../models/TypeOperation");
+const Analytics = require('../utils/analytics.methods');
 const Utils = require("../utils/utils.methods");
 
-const loadAllOperations = async (req, res, next) => {
-    await Operation.findAll().then(async operations => {
+const loadAllOperationsAtDate = async (req, res, next) => {
+
+    const from = req.params.date_debut;
+    const to = req.params.date_fin;
+
+    await Operation.findAllBetween2Date(from, to).then(async operations => {
+        
         if (operations) for(let operation of operations) {
             await Acteur.findById(operation.e_acteur).then(acteur => {
                 operation['acteur'] = acteur;
@@ -27,25 +33,32 @@ const loadAllOperations = async (req, res, next) => {
                 delete operation.e_fonds;
             }).catch(err => next(err));
         }
-        return response(res, 200, `Chargement de la liste des opération`, operations, 'operation_status');
+        
+        let best = 0, average = 0, lowest = 0;
+        await Analytics.average(operations, 'r_montant').then(async result => {
+            best = result.best; average = result.average; lowest = result.lowest;
+        }).catch(err => response(res, 400, err));
+        let analytics = { total: operations.length, best, average, lowest }
+
+        return response(res, 200, `Chargement de la liste des opération`, operations, 'operation_status', analytics);
     }).catch(err => next(err));
 }
 
-const getOpSouscription = async (req, res, next) => {
+const getOpSouscriptionAtDate = async (req, res, next) => {
     console.log(`Chargement du type opération`);
     // Utils.selectTypeOperation('souscription').then(async op_code => {
         await loadAllByTypeOperation('TYOP-006', req, res, next);
     // }).catch(err => response(res, 400, err));
 };
 
-const getOpRachat = async (req, res, next) => {
+const getOpRachatAtDate = async (req, res, next) => {
     console.log(`Chargement du type opération`);
     // Utils.selectTypeOperation('rachat').then(async op_code => {
         await loadAllByTypeOperation('TYOP-007', req, res, next);
     // }).catch(err => response(res, 400, err));
 };
 
-const getOpTransfert = async (req, res, next) => {
+const getOpTransfertAtDate = async (req, res, next) => {
     console.log(`Chargement du type opération`);
     // Utils.selectTypeOperation('transfert').then(async op_code => {
         await loadAllByTypeOperation('TYOP-008', req, res, next);
@@ -53,32 +66,42 @@ const getOpTransfert = async (req, res, next) => {
 };
 
 async function loadAllByTypeOperation (op_code, req, res, next) {
-    // Utils.selectTypeOperation(req.params.op).then(async op_code => {
-        await TypeOperation.findByCode(op_code).then(async typeop => {
-            if (!typeop) return response(res, 404, `Type opération inconnu !`);
-            await Operation.findAllByTypeOperateur(typeop.r_i).then(async operations => {
-                if (operations) for(let operation of operations) {
-                    await Acteur.findById(operation.e_acteur).then(acteur => {
-                        operation['acteur'] = acteur;
-                        delete operation.e_acteur;
-                    }).catch(err => next(err));
-                    await MoyPaiementActeur.findById(operation.e_moyen_paiement).then(moyen_paiement => {
-                        operation['moyen_paiement'] = moyen_paiement;
-                        delete operation.e_moyen_paiement;
-                    }).catch(err => next(err));
-                    await Fonds.findById(operation.e_fonds).then(fonds => {
-                        operation['fonds'] = fonds;
-                        delete operation.e_fonds;
-                    }).catch(err => next(err));
-                    await TypeOperation.findById(operation.e_type_operation).then(type_operation => {
-                        operation['type_operation'] = type_operation;
-                        delete operation.e_type_operation;
-                    }).catch(err => next(err));
-                }
-                return response(res, 200, `Chargement des opération de ${typeop.r_intitule}`, operations, 'operation_status');
-            }).catch(err => next(err));
+
+    const from = req.params.date_debut;
+    const to = req.params.date_fin;
+
+    await TypeOperation.findByCode(op_code).then(async typeop => {
+        if (!typeop) return response(res, 404, `Type opération inconnu !`);
+        await Operation.findAllByTypeOperateurBetween2Date(typeop.r_i, from, to).then(async operations => {
+
+            if (operations) for(let operation of operations) {
+                await Acteur.findById(operation.e_acteur).then(acteur => {
+                    operation['acteur'] = acteur;
+                    delete operation.e_acteur;
+                }).catch(err => next(err));
+                await MoyPaiementActeur.findById(operation.e_moyen_paiement).then(moyen_paiement => {
+                    operation['moyen_paiement'] = moyen_paiement;
+                    delete operation.e_moyen_paiement;
+                }).catch(err => next(err));
+                await Fonds.findById(operation.e_fonds).then(fonds => {
+                    operation['fonds'] = fonds;
+                    delete operation.e_fonds;
+                }).catch(err => next(err));
+                await TypeOperation.findById(operation.e_type_operation).then(type_operation => {
+                    operation['type_operation'] = type_operation;
+                    delete operation.e_type_operation;
+                }).catch(err => next(err));
+            }
+
+            let best = 0, average = 0, lowest = 0;
+            await Analytics.average(operations, 'r_montant').then(async result => {
+                best = result.best; average = result.average; lowest = result.lowest;
+            }).catch(err => response(res, 400, err));
+            let analytics = { total: operations.length, best, average, lowest }
+
+            return response(res, 200, `Chargement des opération de ${typeop.r_intitule}`, operations, 'operation_status', analytics);
         }).catch(err => next(err));
-    // }).catch(err => response(res, 400, err));
+    }).catch(err => next(err));
 }
 
 const loadAllByActeur = async (req, res, next) => {
@@ -101,7 +124,14 @@ const loadAllByActeur = async (req, res, next) => {
                 }).catch(err => next(err));
                 delete operation.e_acteur;
             }
-            return response(res, 200, `Chargement des opération d'un acteur`, operations, 'operation_status');
+
+            let best = 0, average = 0, lowest = 0;
+            await Analytics.average(operations, 'r_montant').then(async result => {
+                best = result.best; average = result.average; lowest = result.lowest;
+            }).catch(err => response(res, 400, err));
+            let analytics = { total: operations.length, best, average, lowest }
+
+            return response(res, 200, `Chargement des opération d'un acteur`, operations, 'operation_status', analytics);
         }).catch(err => next(err));
     }).catch(err => next(err));
 }
@@ -169,14 +199,42 @@ const validOperationByCode = async(req, res, next) => {
 
 }
 
+const getCommissionsAtDate = async (req, res, next) => {
+
+    const from = req.params.date_debut;
+    const to = req.params.date_fin;
+
+    await Operation.findAllBetween2Date(from, to).then(async operations => {
+        
+        let frais_operation = 0;
+        let frais_operateur = 0;
+        
+        for (let operation of operations) {
+            frais_operation += Number(operation.r_frais_operation);
+            frais_operateur += Number(operation.r_frais_operateur);
+        }
+
+        const frais = {frais_operation, frais_operateur};
+
+        let best = 0, average = 0, lowest = 0;
+        await Analytics.average(operations, 'r_frais_operation').then(async result => {
+            best = result.best; average = result.average; lowest = result.lowest;
+        }).catch(err => response(res, 400, err));
+        let analytics = { total: operations.length, best, average, lowest }
+
+        return response(res, 200, `Chargement des commissions du ${from} au ${to}`, frais, null, analytics);
+
+    }).catch(err => next(err));
+}
+
 module.exports = {
-    loadAllOperations,
-    getOpSouscription,
-    getOpRachat,
-    getOpTransfert,
-    // loadAllByTypeOperation,
+    loadAllOperationsAtDate,
+    getOpSouscriptionAtDate,
+    getOpRachatAtDate,
+    getOpTransfertAtDate,
     loadAllByActeur,
     loadOperation,
     validOperation,
     validOperationByCode,
+    getCommissionsAtDate
 }
