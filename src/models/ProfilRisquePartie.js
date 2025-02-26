@@ -3,6 +3,9 @@ const db = require('../config/database');
 const ProfilRisquePartie = {
 
     tableName: `t_profil_risque_partie`,
+    codePrefix: 'PRPT',
+    codeColumn: 'r_reference',
+    codeSpliter: '-',
 
     async findAll() {
         const queryString = `
@@ -19,7 +22,7 @@ const ProfilRisquePartie = {
         return (await res).rows[0];
     },
 
-    async create(ref, campagne, acteur, {ordre, intitule, description, points_totale}) {
+    async create(ref, e_campagne, e_acteur, {r_ordre, r_intitule, r_description, r_points_totale}) {
         const queryString = `
             INSERT INTO ${this.tableName} (
                 r_reference, 
@@ -35,7 +38,7 @@ const ProfilRisquePartie = {
             VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
             RETURNING *`;
         const date = new Date();
-        const res = db.query(queryString, [ref, ordre, intitule, description, points_totale, date, date, 1, campagne, acteur]);
+        const res = db.query(queryString, [ref, r_ordre, r_intitule, r_description, r_points_totale, date, date, 1, e_campagne, e_acteur]);
         return (await res).rows;
     },
 
@@ -63,13 +66,13 @@ const ProfilRisquePartie = {
         return (await res).rows;
     },
 
-    async update(ref, campagne, {ordre, intitule, description, points_totale}) {
+    async update(ref, e_campagne, {r_ordre, r_intitule, r_description, r_points_totale}) {
         const queryString = `
             UPDATE ${this.tableName} 
-            SET r_ordre=$1, r_intitule=$2, r_description=$3, r_points_totale=$4, e_campagne=$5
-            WHERE r_reference=$6
+            SET r_ordre=$1, r_intitule=$2, r_description=$3, r_points_totale=$4, e_campagne=$5, r_date_modif=$6
+            WHERE r_reference=$7
             RETURNING r_reference, r_ordre, r_intitule, r_description, r_points_totale, r_statut, e_campagne, e_acteur`;
-        const res = db.query(queryString, [ordre, intitule, description, points_totale, campagne, ref]);
+        const res = db.query(queryString, [r_ordre, r_intitule, r_description, r_points_totale, e_campagne, new Date(), ref]);
         return (await res).rows[0];
     }
 }

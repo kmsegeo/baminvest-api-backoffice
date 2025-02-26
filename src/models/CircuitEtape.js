@@ -3,6 +3,9 @@ const db = require('../config/database');
 const CircuitEtape = {
 
     tableName: 't_etape_validation',
+    codePrefix: 'CETP',
+    codeColumn: 'r_reference',
+    codeSpliter: '-',
 
     async findAllByCircuitId(id) {
         const res = db.query(`SELECT * FROM ${this.tableName} WHERE e_circuit_validation=$1`, [id]);

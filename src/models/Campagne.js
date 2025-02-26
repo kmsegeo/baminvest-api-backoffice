@@ -3,6 +3,9 @@ const db = require('../config/database');
 const Campagne = {
 
     tableName: `t_campagne_demande`,
+    codePrefix: 'CAMP',
+    codeColumn: 'r_code',
+    codeSpliter: '-',
 
     async findAll() {
         const queryString = `
@@ -19,7 +22,7 @@ const Campagne = {
         return (await res).rows[0];
     },
 
-    async create(code, acteur, {intitule, description, periodicite, date_debut, date_fin, cible}) {
+    async create(code, e_acteur, {r_intitule, r_description, r_periodicite, r_date_debut, r_date_fin, r_cible}) {
         const queryString = `
             INSERT INTO ${this.tableName} (
                 r_code, 
@@ -36,7 +39,7 @@ const Campagne = {
             VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
             RETURNING *`;
         const date = new Date();
-        const res = db.query(queryString, [code, intitule, description, periodicite, date_debut, date_fin, cible, date, date, 1, acteur]);
+        const res = db.query(queryString, [code, r_intitule, r_description, r_periodicite, r_date_debut, r_date_fin, r_cible, date, date, 1, e_acteur]);
         return (await res).rows;
     },
 
@@ -52,13 +55,13 @@ const Campagne = {
         return (await res).rows[0];
     },
 
-    async update(code, {intitule, description, periodicite, date_debut, date_fin, cible}) {
+    async update(code, {r_intitule, r_description, r_periodicite, r_date_debut, r_date_fin, r_cible}) {
         const queryString = `
             UPDATE ${this.tableName} 
-            SET r_intitule=$1, r_description=$2, r_periodicite=$3, r_date_debut=$4, r_date_fin=$5, r_cible=$6  
-            WHERE r_code=$7
+            SET r_intitule=$1, r_description=$2, r_periodicite=$3, r_date_debut=$4, r_date_fin=$5, r_cible=$6, r_date_modif=$7  
+            WHERE r_code=$8
             RETURNING r_code, r_intitule, r_description, r_periodicite, r_date_debut, r_date_fin, r_cible, r_statut`;
-        const res = db.query(queryString, [intitule, description, periodicite, date_debut, date_fin, cible, code]);
+        const res = db.query(queryString, [r_intitule, r_description, r_periodicite, r_date_debut, r_date_fin, r_cible, new Date(), code]);
         return (await res).rows[0];
     }
 }

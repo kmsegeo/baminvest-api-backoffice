@@ -17,14 +17,14 @@ const getAllTypeMoypaiement = async (req, res, next) => {
 const createTypeMoypaiement = async (req, res, next) => {
 
     console.log(`Creation de type moyen de paiement..`);
-    const {session_ref, intitule, type} = req.body;
+    const {session_ref, r_intitule, r_type} = req.body;
     
     console.log(`Vérification des paramètres`);
-    Utils.expectedParameters({session_ref, intitule, type}).then( async () => {
+    Utils.expectedParameters({session_ref, r_intitule, r_type}).then( async () => {
         console.log(`Chargement de session`);
         await Session.findByRef(session_ref).then( async () => {
             console.log(`Création de code de type moyen de paiement`);
-            Utils.generateCode('TMOP', TypeMoypaiement.tableName, 'r_code', '-').then(async code => {
+            Utils.generateCode(TypeMoypaiement.codePrefix, TypeMoypaiement.tableName, TypeMoypaiement.codeColumn, TypeMoypaiement.codeSpliter).then(async code => {
                 console.log(`Enregistrement de type moyen de paiement`);
                 await TypeMoypaiement.create(code, {...req.body})
                 .then(typemp => {
@@ -48,10 +48,10 @@ const getTypeMoypaiement = async (req, res, next) => {
 const updateTypeMoypaiement = async (req, res, next) => {
 
     console.log(`Mise à jour de type moyen de paiement..`);
-    const {session_ref, intitule, type} = req.body;
+    const {session_ref, r_intitule, r_type} = req.body;
     
     console.log(`Vérification des paramètres`);
-    Utils.expectedParameters({session_ref, intitule, type}).then( async () => {
+    Utils.expectedParameters({session_ref, r_intitule, r_type}).then( async () => {
         console.log(`Chargement de session`);
         await Session.findByRef(session_ref).then( async () => {
             const code = req.params.code;

@@ -21,13 +21,13 @@ const createProfil = async (req, res, next) => {
      * [x] Lancement de la création.
      */
     console.log("Creation de profil..");
-    const {session_ref, intitule, habilitation} = req.body;
+    const {session_ref, r_intitule, r_habilitation} = req.body;
     
     console.log(`Vérification des paramètres`)
-    Utils.expectedParameters({session_ref, intitule}).then(async () => {
+    Utils.expectedParameters({session_ref, r_intitule}).then(async () => {
         if (!session_ref) return response(res, 400, 'session_ref attendu');
         await Session.findByRef(session_ref).then(async () => {
-            await Utils.generateCode("PRFA", 't_profil', 'r_code', '-').then(async code => {
+            await Utils.generateCode(Profil.codePrefix, Profil.tableName, Profil.codeColumn, Profil.codeSpliter).then(async code => {
                 await Profil.create(code, {...req.body})
                 .then(result => response(res, 201, 'Profil créé avec succès', result))
                 .catch(error => next(error));
@@ -56,14 +56,14 @@ const updateProfil = async (req, res, next) => {
      */
     
     console.log('Mise à jour de profil..');
-    const {session_ref, intitule, description, habilitation} = req.body;
+    const {session_ref, r_intitule, r_description, r_habilitation} = req.body;
     
     console.log(`Vérification des paramètres`)
-    Utils.expectedParameters({session_ref, intitule}).then(async () => {
+    Utils.expectedParameters({session_ref, r_intitule}).then(async () => {
 
         const code = req.params.code;
         await Session.findByRef(session_ref).then(async () => {
-            await Profil.update(code, {intitule, description, habilitation}).then(result => {
+            await Profil.update(code, {r_intitule, r_description, r_habilitation}).then(result => {
                 if (!result) return response(res, 400, `Une erreur s'est produite !`);
                 return response(res, 200, `Mise à jour du profil ${code} terminé`, result);
             }).catch(error => next(error));

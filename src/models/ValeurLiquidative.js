@@ -22,7 +22,7 @@ const ValeurLiquidative = {
         return (await res).rows;
     },
 
-    async create(fonds, {date, date_precedente, description, valeur_actuelle, valeur_precedente, performance_hebdo, performance_jour, performance_mois}) {
+    async create(e_fonds, {r_date, r_date_precedente, r_description, r_valeur_actuelle, r_valeur_precedente, r_performance_hebdo, r_performance_jour, r_performance_mois}) {
         const now = new Date();
         const res = db.query(`
             INSERT INTO ${this.tableName} (
@@ -39,18 +39,18 @@ const ValeurLiquidative = {
                 r_performance_jour,
                 r_performance_mois
             ) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *`, [
-                date,
-                date_precedente,
-                description,
+                r_date,
+                r_date_precedente,
+                r_description,
                 now,
                 now,
                 1,
-                fonds,
-                valeur_actuelle,
-                valeur_precedente,
-                performance_hebdo,
-                performance_jour,
-                performance_mois
+                e_fonds,
+                r_valeur_actuelle,
+                r_valeur_precedente,
+                r_performance_hebdo,
+                r_performance_jour,
+                r_performance_mois
             ]);
         return (await res).rows[0];
     },
@@ -60,7 +60,7 @@ const ValeurLiquidative = {
         return (await res).rows[0]
     },
     
-    async update(id, fonds, {date, date_precedente, description, valeur_actuelle, valeur_precedente, performance_hebdo, performance_jour, performance_mois}) {
+    async update(id, e_fonds, {r_date, r_date_precedente, r_description, r_valeur_actuelle, r_valeur_precedente, r_performance_hebdo, r_performance_jour, r_performance_mois}) {
         const res = db.query(`
             UPDATE ${this.tableName} 
             SET r_date=$1,
@@ -74,16 +74,16 @@ const ValeurLiquidative = {
                 r_performance_jour=$9,
                 r_performance_mois=$10
             WHERE r_i=$11 RETURNING *`, [
-                date, 
-                date_precedente, 
-                description, 
+                r_date, 
+                r_date_precedente, 
+                r_description, 
                 new Date(), 
-                fonds, 
-                valeur_actuelle, 
-                valeur_precedente, 
-                performance_hebdo, 
-                performance_jour, 
-                performance_mois, 
+                e_fonds, 
+                r_valeur_actuelle, 
+                r_valeur_precedente, 
+                r_performance_hebdo, 
+                r_performance_jour, 
+                r_performance_mois, 
                 id]);
         return (await res).rows[0];
     }

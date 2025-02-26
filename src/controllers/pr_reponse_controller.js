@@ -35,19 +35,18 @@ const createMReponse = async (req, res, next) => {
      */
 
     console.log(`Création de reponse..`);
-    const {session_ref, matrice_ref, ordre, intitule, points} = req.body;
+    const {session_ref, matrice_ref, r_ordre, r_intitule, r_points} = req.body;
     
     console.log(`Vérification des paramètres`)
-    Utils.expectedParameters({session_ref, matrice_ref, ordre, intitule, points}).then(async () => {
+    Utils.expectedParameters({session_ref, matrice_ref, r_ordre, r_intitule, r_points}).then(async () => {
 
         await Session.findByRef(session_ref).then(async session => {
-            Utils.generateCode("MTRP", 't_risque_reponses', 'r_reference', '-').then(async ref => {
+            Utils.generateCode(MReponse.codePrefix, MReponse.tableName, MReponse.codeColumn, MReponse.codeSpliter).then(async ref => {
                 await MReponse.checkExists(ref).then(async exists => {
                     if (exists) return response(res, 409, `La reférence ${ref} est déjà utilisée !`, exists);
                     console.log(`Récupération de la question`)
                     await RMatrice.findByRef(matrice_ref).then(async matrice => {  
                         if (!matrice) return response(res, 404, 'Matrice non trouvé !');
-                        console.log(matrice)
                         await MReponse.create(ref, matrice.r_i, session.e_acteur, {...req.body})
                         .then(result => response(res, 201, `Réponse créé avec succès`, result))
                         .catch(err => next(err))
@@ -80,16 +79,15 @@ const updateMReponse = async (req, res, next) => {
      */
 
     console.log(`Mise à jour de la réponse..`);
-    const {session_ref, matrice_ref, ordre, intitule, points} = req.body;
+    const {session_ref, matrice_ref, r_ordre, r_intitule, r_points} = req.body;
     
     console.log(`Vérification des paramètres`)
-    Utils.expectedParameters({session_ref, matrice_ref, ordre, intitule, points}).then(async () => {
+    Utils.expectedParameters({session_ref, matrice_ref, r_ordre, r_intitule, r_points}).then(async () => {
         await Session.findByRef(req.body.session_ref).then(async () => {
             const _ref = req.params._ref;
             await RMatrice.findByRef(matrice_ref).then(async matrice => {
                 if (!matrice) return response(res, 404, 'Matrice non trouvé !');
-                await MReponse.update(_ref, matrice.r_i, {...req.body})
-                .then(result => {
+                await MReponse.update(_ref, matrice.r_i, {...req.body}).then(result => {
                     if (!result) return response(res, 409, `Une erreur s'est produite !`);
                     return response(res, 200, `Mise à jour de la réponse ${_ref} terminé`, result);
                 }).catch(error => next(error));

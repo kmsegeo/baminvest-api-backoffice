@@ -41,12 +41,12 @@ const createPrQuestion = async (req, res, next) => {
      */
 
     console.log(`Création de question..`);
-    const {session_ref, partie_ref, ordre, intitule, avec_colonne, points_totale} = req.body;
+    const {session_ref, partie_ref, r_ordre, r_intitule, r_avec_colonne, r_points_totale} = req.body;
     
     console.log(`Vérification des paramètres`)
-    Utils.expectedParameters({session_ref, partie_ref, ordre, intitule, avec_colonne, points_totale}).then(async () => {
+    Utils.expectedParameters({session_ref, partie_ref, r_ordre, r_intitule, r_avec_colonne, r_points_totale}).then(async () => {
         await Session.findByRef(session_ref).then(async session => {
-            Utils.generateCode("PRQS", 't_risque_questions', 'r_reference', '-').then(async ref => {
+            Utils.generateCode(PrQuestion.codePrefix, PrQuestion.tableName, PrQuestion.codeColumn, PrQuestion.codeSpliter).then(async ref => {
                 await PrQuestion.checkExists(ref).then(async exists => {
                     if (exists) return response(res, 409, `La reférence ${ref} est déjà utilisée !`, exists);
                     console.log(`Récupération de la partie`)
@@ -82,10 +82,10 @@ const updatePrQuestion = async (req, res, next) => {
      */
 
     console.log(`Mise à jour de la question..`);
-    const {session_ref, partie_ref, ordre, intitule, avec_colonne, points_totale} = req.body;
+    const {session_ref, partie_ref, r_ordre, r_intitule, r_avec_colonne, r_points_totale} = req.body;
     
     console.log(`Vérification des paramètres`)
-    Utils.expectedParameters({session_ref, partie_ref, ordre, intitule, avec_colonne, points_totale}).then(async () => {
+    Utils.expectedParameters({session_ref, partie_ref, r_ordre, r_intitule, r_avec_colonne, r_points_totale}).then(async () => {
 
         await Session.findByRef(session_ref).then(async () => {
             

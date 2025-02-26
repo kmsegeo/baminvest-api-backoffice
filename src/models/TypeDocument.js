@@ -21,13 +21,13 @@ const TypeDocument = {
         return (await res).rows[0];
     },
 
-    async create(code, {intitule, description, format}) {
+    async create(code, {r_intitule, r_description, r_format}) {
         const queryString = `
             INSERT INTO ${this.tableName} (r_code, r_intitule, r_description, r_date_creer, r_date_modif, r_statut, r_format) 
             VALUES($1, $2, $3, $4, $5, $6, $7)
             RETURNING *`;
         const date = new Date();
-        const res = db.query(queryString, [code, intitule, description, date, date, 1, format]);
+        const res = db.query(queryString, [code, r_intitule, r_description, date, date, 1, r_format]);
         return (await res).rows;
     },
 
@@ -47,13 +47,13 @@ const TypeDocument = {
         return (await res).rows[0];
     },
 
-    async update(code, {intitule, description, format}) {
+    async update(code, {r_intitule, r_description, r_format}) {
         const queryString = `
             UPDATE ${this.tableName} 
-            SET r_intitule=$1, r_description=$2, r_format=$3 
-            WHERE r_code=$4
+            SET r_intitule=$1, r_description=$2, r_format=$3, r_date_modif=$4
+            WHERE r_code=$5
             RETURNING *`;
-        const res = db.query(queryString, [intitule, description, format, code]);
+        const res = db.query(queryString, [r_intitule, r_description, r_format, new Date(), code]);
         return (await res).rows[0];
     }
 }

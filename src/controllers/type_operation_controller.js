@@ -18,13 +18,13 @@ const createTypeOperation = async (req, res, next) => {
      * [x] Lancement de la création.
      */
     console.log(`Création de type operation..`)
-    const {session_ref, intitule} = req.body;
+    const {session_ref, r_intitule} = req.body;
     
     console.log(`Vérification des paramètres`)
-    Utils.expectedParameters({session_ref, intitule}).then(async () => {
+    Utils.expectedParameters({session_ref, r_intitule}).then(async () => {
         
         await Session.findByRef(session_ref).then(async () => {
-            Utils.generateCode("TYOP", 't_type_operation', 'r_code', '-').then(async code => {
+            Utils.generateCode(TypeOperation.code_prefix, TypeOperation.tableName, TypeOperation.code_colunm, TypeOperation.code_spliter).then(async code => {
                 await TypeOperation.checkExists(code).then(async exists => {
                     if (exists) return response(res, 409, `La reference ${code} est déjà utilisée !`, exists);
                     await TypeOperation.create(code, {...req.body})
@@ -53,10 +53,10 @@ const updateTypeOperation = async (req, res, next) => {
      */
 
     console.log(`Mise à jour de type operation..`);
-    const {session_ref, intitule} = req.body;
+    const {session_ref, r_intitule} = req.body;
     
     console.log(`Vérification des paramètres`)
-    Utils.expectedParameters({session_ref, intitule}).then(async () => {
+    Utils.expectedParameters({session_ref, r_intitule}).then(async () => {
         
         const code = req.params.code;
         await Session.findByRef(session_ref).then(async () => {

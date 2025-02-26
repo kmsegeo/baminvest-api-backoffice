@@ -2,6 +2,7 @@ const response = require('../middlewares/response');
 const Fonds = require("../models/Fonds");
 const Session = require("../models/Session");
 const ValeurLiquidative = require("../models/ValeurLiquidative");
+const Analytics = require('../utils/analytics.methods');
 const Utils = require("../utils/utils.methods");
 
 const getAllValLiquidativeAtDate = async (req, res, next) => {
@@ -10,16 +11,27 @@ const getAllValLiquidativeAtDate = async (req, res, next) => {
     const to = req.params.date_fin;
 
     await ValeurLiquidative.findAllBetween2Date(from, to).then(async results => {
-        for (let result of results) {
-            await Fonds.findById(result.e_fonds).then(async fonds => {
-                if (fonds) {
-                    result['fonds'] = fonds;
-                    delete result.e_fonds;
+
+        let fond_list = {};
+
+        await Fonds.findAll().then(async fonds => {
+            
+            for (let result of results) {
+                for(let fd of fonds) {
+                    if (result.e_fonds==fd.r_i) {
+                        result['fonds'] = fd;
+                        delete result.e_fonds;
+                    }
                 }
-            }).catch(err => next(err));
-        }
-        return response(res, 200, `Chargement de toutes les valeurs liquidatives`, results)})
-    .catch(err => next(err));
+            }
+
+            for(let fd of fonds)
+                fond_list[fd.r_intitule] = 0;       // ## A faire : Recupérer la dernière valeur du fond 
+            
+        }).catch(err => next(err));
+
+        return response(res, 200, `Chargement de toutes les valeurs liquidatives`, results, null, fond_list);
+    }).catch(err => next(err));
 }
 
 const getAllFondsValLiquidativeAtDate = async (req, res, next) => {
@@ -33,7 +45,7 @@ const getAllFondsValLiquidativeAtDate = async (req, res, next) => {
 
     console.log(`Récupération du FCP via la reférence`);
     const fonds_ref = req.params.ref;
-    
+
     await Fonds.findByRef(fonds_ref).then(async fonds => {
         if (!fonds) return response(res, 404, `FCP introuvable`);
         await ValeurLiquidative.findAllByFondsBetween2Date(fonds.r_i, from, to)
@@ -50,9 +62,9 @@ const createValLiquidative = async (req, res, next) => {
      * [x] Enregistrement de la valeur liquidative
      */
     console.log(`Création de valeur liquidative de fonds`);
-    const {session_ref, fonds_ref, date, date_precedente, description, valeur_actuelle, valeur_precedente, performance_hebdo, performance_jour, performance_mois} = req.body;
+    const {session_ref, fonds_ref, r_date, r_date_precedente, r_description, r_valeur_actuelle, r_valeur_precedente, r_performance_hebdo, r_performance_jour, r_performance_mois} = req.body;
     console.log(`Vérification des paramètres`);
-    Utils.expectedParameters({session_ref, fonds_ref, date, date_precedente, valeur_actuelle, valeur_precedente, performance_hebdo, performance_jour, performance_mois}).then(async () => {
+    Utils.expectedParameters({session_ref, fonds_ref, r_date, r_date_precedente, r_valeur_actuelle, r_valeur_precedente, r_performance_hebdo, r_performance_jour, r_performance_mois}).then(async () => {
         await Session.findByRef(session_ref).then(async () => {
             await Fonds.findByRef(fonds_ref).then(async fonds => {
                 if (!fonds) return response(res, 404, `FCP introuvable`);
@@ -86,9 +98,9 @@ const updateValLiquidative = async (req, res, next) => {
      * [x] Mise à jour de la valeur liquidative
      */
         console.log(`Création de valeur liquidative de fonds`);
-        const {session_ref, fonds_ref, date, date_precedente, description, valeur_actuelle, valeur_precedente, performance_hebdo, performance_jour, performance_mois} = req.body;
+        const {session_ref, fonds_ref, r_date, r_date_precedente, r_description, r_valeur_actuelle, r_valeur_precedente, r_performance_hebdo, r_performance_jour, r_performance_mois} = req.body;
         console.log(`Vérification des paramètres`);
-        Utils.expectedParameters({session_ref, fonds_ref, date, date_precedente, valeur_actuelle, valeur_precedente, performance_hebdo, performance_jour, performance_mois}).then(async () => {
+        Utils.expectedParameters({session_ref, fonds_ref, r_date, r_date_precedente, r_valeur_actuelle, r_valeur_precedente, r_performance_hebdo, r_performance_jour, r_performance_mois}).then(async () => {
             await Session.findByRef(session_ref).then(async () => {
                 await Fonds.findByRef(fonds_ref).then(async fonds => {
                     if (!fonds) return response(res, 404, `FCP introuvable`);

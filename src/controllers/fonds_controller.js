@@ -11,22 +11,22 @@ const getAllFonds = async (req, res, next) => {
 
 const createFonds = async (req, res, next) => {
     console.log(`Création d'un FCP..`);
-    const {session_ref, intitule, description, commission_souscription, commission_sortie} = req.body;
+    const {session_ref, r_intitule, r_description, commission_souscription, commission_sortie} = req.body;
     console.log(`Vérification des paramètres`);
-    Utils.expectedParameters({session_ref, intitule, commission_souscription, commission_sortie}).then( async () => {
-        // await Session.findByRef(session_ref).then(async session => {
-        console.log(`Création de code de reference`);
-        Utils.generateCode("FCP", 't_fonds', 'r_reference', '-').then(async ref => {
-            console.log(`Vérification de la reférence du FCP`);
-            await Fonds.findByRef(ref).then(async exists => {
-                if (exists) return response(res, 409, `La reférence du FCP exite déjà !`);
-                console.log(`Début de création du FCP`);
-                await Fonds.create(ref, {...req.body})
-                .then(async fonds => response(res, 200, `Création de fonds terminé`, fonds))
-                .catch(err => next(err));
-            }).catch(error => next(error));
-        }).catch(err => next(err));
-        // }).catch(err => response(res, 400, err));
+    Utils.expectedParameters({session_ref, r_intitule, commission_souscription, commission_sortie}).then( async () => {
+        await Session.findByRef(session_ref).then(async session => {
+            console.log(`Création de code de reference`);
+            Utils.generateCode(Fonds.codePrefix, Fonds.tableName, Fonds.codeColumn, Fonds.codeSpliter).then(async ref => {
+                console.log(`Vérification de la reférence du FCP`);
+                await Fonds.findByRef(ref).then(async exists => {
+                    if (exists) return response(res, 409, `La reférence du FCP exite déjà !`);
+                    console.log(`Début de création du FCP`);
+                    await Fonds.create(ref, {...req.body})
+                    .then(async fonds => response(res, 200, `Création de fonds terminé`, fonds))
+                    .catch(err => next(err));
+                }).catch(error => next(error));
+            }).catch(err => next(err));
+        }).catch(err => response(res, 400, err));
     }).catch(err => response(res, 400, err));
 }
 
@@ -46,21 +46,21 @@ const getFondsByRef = async (req, res, next) => {
 }
 const updateFonds = (req, res, next) => {
     console.log(`Mise à jour d'un FCP..`);
-    const {session_ref, intitule, description, commission_souscription, commission_sortie} = req.body;
+    const {session_ref, r_intitule, r_description, commission_souscription, commission_sortie} = req.body;
     console.log(`Vérification des paramètres`);
-    Utils.expectedParameters({session_ref, intitule, commission_souscription, commission_sortie}).then( async () => {
-        // await Session.findByRef(session_ref).then(async session => {
-        console.log(`Création de code de reference`);
-        const ref = req.params.ref;
-        console.log(`Vérification de la reférence du FCP`);
-        await Fonds.findByRef(ref).then(async exists => {
-            if (!exists) return response(res, 404, `Le FCP n'existe pas !`);
-            console.log(`Début de mise à jours du FCP`);
-            await Fonds.update(ref, {...req.body})
-            .then(async fonds => response(res, 200, `Mise à jours de fonds terminé`, fonds))
-            .catch(err => next(err));
-        }).catch(error => next(error));
-        // }).catch(err => response(res, 400, err));
+    Utils.expectedParameters({session_ref, r_intitule, commission_souscription, commission_sortie}).then( async () => {
+        await Session.findByRef(session_ref).then(async session => {
+            console.log(`Création de code de reference`);
+            const ref = req.params.ref;
+            console.log(`Vérification de la reférence du FCP`);
+            await Fonds.findByRef(ref).then(async exists => {
+                if (!exists) return response(res, 404, `Le FCP n'existe pas !`);
+                console.log(`Début de mise à jours du FCP`);
+                await Fonds.update(ref, {...req.body})
+                .then(async fonds => response(res, 200, `Mise à jours de fonds terminé`, fonds))
+                .catch(err => next(err));
+            }).catch(error => next(error));
+        }).catch(err => response(res, 400, err));
     }).catch(err => response(res, 400, err));
 }
 const deleteFondsByRef = async (req, res, next) => {

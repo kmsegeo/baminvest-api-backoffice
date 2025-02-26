@@ -3,6 +3,9 @@ const db = require('../config/database');
 const TypeActeur = {
 
     tableName: `t_type_acteur`,
+    codePrefix: 'TYAC',
+    codeSpliter: '-',
+    codeColumn: 'r_code',
 
     async findAll() {
         const queryString = `SELECT * FROM ${this.tableName}`;
@@ -18,13 +21,13 @@ const TypeActeur = {
         return (await res).rows[0];
     },
 
-    async create(code, {intitule, description}) {
+    async create(code, {r_intitule, r_description}) {
         const queryString = `
             INSERT INTO ${this.tableName} (r_code, r_intitule, r_description, r_date_creer, r_date_modif, r_statut) 
             VALUES($1, $2, $3, $4, $5, $6)
             RETURNING *`;
         const date = new Date();
-        const res = db.query(queryString, [code, intitule, description, date, date, 1]);
+        const res = db.query(queryString, [code, r_intitule, r_description, date, date, 1]);
         return (await res).rows;
     },
 
@@ -46,13 +49,13 @@ const TypeActeur = {
         return (await res).rows[0];
     },
 
-    async update(code, {intitule, description}) {
+    async update(code, {r_intitule, r_description}) {
         const queryString = `
             UPDATE ${this.tableName} 
-            SET r_intitule=$1, r_description=$2 
-            WHERE r_code=$3
+            SET r_intitule=$1, r_description=$2, r_date_modif=$3
+            WHERE r_code=$4
             RETURNING *`;
-        const res = db.query(queryString, [intitule, description, code]);
+        const res = db.query(queryString, [r_intitule, r_description, new Date(), code]);
         return (await res).rows[0];
     }
 }

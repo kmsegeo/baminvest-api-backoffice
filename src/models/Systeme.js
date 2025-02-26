@@ -22,13 +22,13 @@ const Systeme = {
         return (await res).rows[0];
     },
 
-    async create( {tag, valeur, description}) {
+    async create( {r_tag, r_valeur, r_description}) {
         const queryString = `
             INSERT INTO ${this.tableName} (r_tag, r_valeur, r_description, r_date_creer, r_date_modif, r_statut) 
             VALUES($1, $2, $3, $4, $5, $6)
             RETURNING *`;
         const date = new Date();
-        const res = db.query(queryString, [tag, valeur, description, date, date, 1]);
+        const res = db.query(queryString, [r_tag, r_valeur, r_description, date, date, 1]);
         return (await res).rows;
     },
 
@@ -51,13 +51,13 @@ const Systeme = {
         return (await res).rows[0];
     },
 
-    async update(tag, {valeur, description}) {
+    async update(r_tag, {r_valeur, r_description}) {
         const queryString = `
             UPDATE ${this.tableName} 
-            SET r_valeur=$1, r_description=$2 
-            WHERE r_tag=$3
+            SET r_valeur=$1, r_description=$2, r_date_modif=$3 
+            WHERE r_tag=$4
             RETURNING *`;
-        const res = db.query(queryString, [valeur, description, tag]);
+        const res = db.query(queryString, [r_valeur, r_description, new Date(), r_tag]);
         return (await res).rows[0];
     }
 }

@@ -17,13 +17,13 @@ const createSysteme = async (req, res, next) => {
      * [x] Lancement de la création.
      */
     console.log(`Création d'un élément système..`)
-    const {session_ref, tag, valeur} = req.body;
+    const {session_ref, r_tag, r_valeur} = req.body;
     
     console.log(`Vérification des paramètres`)
-    Utils.expectedParameters({session_ref, tag, valeur}).then(async () => {
+    Utils.expectedParameters({session_ref, r_tag, r_valeur}).then(async () => {
         await Session.findByRef(session_ref).then(async () => {
-            await Systeme.checkExists(tag).then(async exists => {
-                if (exists) return response(res, 409, `Le tag ${tag} est déjà utilisée !`, exists);
+            await Systeme.checkExists(r_tag).then(async exists => {
+                if (exists) return response(res, 409, `Le tag ${r_tag} est déjà utilisée !`, exists);
                 await Systeme.create({...req.body}).then(result => response(res, 201, `Elément système créé avec succès`, result))
                 .catch(err => next(err))
             }).catch(err => next(err))
@@ -48,15 +48,15 @@ const updateSysteme = async (req, res, next) => {
      */
     
     console.log(`Mise à jour d'un élément système..`);
-    const {session_ref, valeur, description} = req.body;
-    const tag = req.params.tag;
+    const {session_ref, r_valeur, r_description} = req.body;
+    const r_tag = req.params.tag;
     
     console.log(`Vérification des paramètres`)
-    Utils.expectedParameters({session_ref, tag, valeur}).then(async () => {
+    Utils.expectedParameters({session_ref, r_tag, r_valeur}).then(async () => {
         await Session.findByRef(session_ref).then(async () => {
-            await Systeme.update(tag, {valeur, description}).then(result => {
+            await Systeme.update(r_tag, {r_valeur, r_description}).then(result => {
                 if (!result) return response(res, 400, `Une erreur s'est produite !`);
-                return response(res, 200, `Mise à jour d'élément système ${tag} terminé`, result);
+                return response(res, 200, `Mise à jour d'élément système ${r_tag} terminé`, result);
             }).catch(error => next(error));
     
         }).catch(error => response(res, 400, error));

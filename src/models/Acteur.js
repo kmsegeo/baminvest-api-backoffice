@@ -4,7 +4,7 @@ const Acteur = {
 
   tableName: 't_acteur',
 
-  async createAgent({nom_complet, email, telephone, adresse, agent, mdp }) {
+  async createAgent({r_nom_complet, r_email, r_telephone, r_adresse, e_agent, r_mdp }) {
     
     const createDate = new Date();
     const queryString = `
@@ -32,7 +32,7 @@ const Acteur = {
         r_date_modif, 
         r_date_activation, 
         e_agent`;
-      const res = db.query(queryString, [nom_complet, email, telephone, telephone, adresse, 1, createDate, createDate, createDate, agent, mdp]);
+      const res = db.query(queryString, [r_nom_complet, r_email, r_telephone, r_telephone, r_adresse, 1, createDate, createDate, createDate, e_agent, r_mdp]);
       return (await res).rows[0];
   },
 

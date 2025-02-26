@@ -55,10 +55,10 @@ const createAgent = async (req, res, next) => {
      * [x] Si Effectué: Lancer la création du compte acteur attaché
      */
     console.log("Création d'un agent..");
-    const {session_ref, civilite, nom, prenom, email, telephone, adresse, profil_code, mdp} = req.body;
+    const {session_ref, r_civilite, r_nom, r_prenom, r_email, r_telephone, r_adresse, profil_code, r_mdp} = req.body;
 
     console.log(`Vérification des paramètres`)
-    await Utils.expectedParameters({session_ref, civilite, nom, prenom, email, telephone, profil_code, mdp}).then(async () => {
+    await Utils.expectedParameters({session_ref, r_civilite, r_nom, r_prenom, r_email, r_telephone, profil_code, r_mdp}).then(async () => {
 
         console.log(`Vérification de session`);
         await Session.findByRef(session_ref).then(async () => {
@@ -74,12 +74,12 @@ const createAgent = async (req, res, next) => {
                         bcrypt.hash(mdp, 10).then(async hash => {
                             console.log("Mise en place du compte acteur");
                             await Acteur.createAgent({
-                                nom_complet: agent.r_nom + ' ' + agent.r_prenom,
-                                email: email,
-                                telephone: telephone,
-                                adresse: adresse,
-                                agent: agent.r_i,
-                                mdp: hash
+                                r_nom_complet: agent.r_nom + ' ' + agent.r_prenom,
+                                r_email: r_email,
+                                r_telephone: r_telephone,
+                                r_adresse: r_adresse,
+                                e_agent: agent.r_i,
+                                r_mdp: hash
                             }).then(() => response(res, 201, "Agent créé avec succès", agent))
                             .catch(error => next(error));
                         }).catch(error => next(error));
@@ -112,15 +112,15 @@ const updateAgent = async (req, res) => {
      * [ ] Mise à jour sistématique des information acteur de l'agent
      */
     console.log("Mise à jour d'un agent..");
-    const {session_ref, civilite, nom, prenom} = req.body;
+    const {session_ref, r_civilite, r_nom, r_prenom} = req.body;
 
     console.log(`Vérification des paramètres`)
-    await Utils.expectedParameters({session_ref, civilite, nom, prenom}).then(async () => {
+    await Utils.expectedParameters({session_ref, r_civilite, r_nom, r_prenom}).then(async () => {
         
         console.log(`Vérification de session`);
         await Session.findByRef(session_ref).then(async () => {
 
-            await Agent.update(req.params.id, {civilite, nom, prenom}).then(result => {
+            await Agent.update(req.params.id, {r_civilite, r_nom, r_prenom}).then(result => {
                 if (!result) return response(res, 400, `Une erreur s'est produite !`);
                 return response(res, 200, "Mise à jour de l'agent terminé", result)
             }).catch(error => next(error));

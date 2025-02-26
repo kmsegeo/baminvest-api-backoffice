@@ -18,7 +18,7 @@ const CircuitValidation = {
         return (await res).rows[0];
     },
 
-    async create(ref, type_operation, {intitule, description, scalable}) {
+    async create(ref, e_type_operation, {r_intitule, r_description, r_scalable}) {
         const queryString = `
             INSERT INTO ${this.tableName} (
                 r_reference, 
@@ -32,7 +32,7 @@ const CircuitValidation = {
             VALUES($1, $2, $3, $4, $5, $6, $7, $8)
             RETURNING *`;
         const date = new Date();
-        const res = db.query(queryString, [ref, intitule, description, scalable, date, date, 1, type_operation]);
+        const res = db.query(queryString, [ref, r_intitule, r_description, r_scalable, date, date, 1, e_type_operation]);
         return (await res).rows;
     },
 
@@ -64,16 +64,17 @@ const CircuitValidation = {
         return (await res).rows;
     },
 
-    async update(ref, type_operation, {intitule, description, scalable}) {
+    async update(ref, e_type_operation, {r_intitule, r_description, r_scalable}) {
         const queryString = `
             UPDATE ${this.tableName} 
             SET r_intitule=$1, 
                 r_description=$2, 
                 r_scalable=$3, 
-                e_type_operation=$4
-            WHERE r_reference=$5
+                e_type_operation=$4,
+                r_date_modif=$5
+            WHERE r_reference=$6
             RETURNING *`;
-        const res = db.query(queryString, [intitule, description, scalable, type_operation, ref]);
+        const res = db.query(queryString, [r_intitule, r_description, r_scalable, e_type_operation, new Date(), ref]);
         return (await res).rows[0];
     }
 }

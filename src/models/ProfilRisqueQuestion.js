@@ -3,6 +3,9 @@ const db = require('../config/database');
 const ProfilRisqueQuestion = {
 
     tableName: `t_risque_questions`,
+    codePrefix: 'PRQS',
+    codeColumn: 'r_reference',
+    codeSpliter: '-',
 
     async findAll() {
         const queryString = `
@@ -19,7 +22,7 @@ const ProfilRisqueQuestion = {
         return (await res).rows[0];
     },
 
-    async create(ref, partie, acteur, {ordre, intitule, description, avec_colonne, points_totale}) {
+    async create(ref, e_profil_partie, e_acteur, {r_ordre, r_intitule, r_description, r_avec_colonne, r_points_totale}) {
         const queryString = `
             INSERT INTO ${this.tableName} (
                 r_reference, 
@@ -36,8 +39,7 @@ const ProfilRisqueQuestion = {
             VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
             RETURNING *`;
         const date = new Date();
-        const res = db.query(queryString, [
-            ref, ordre, intitule, description, avec_colonne, points_totale, date, date, 1, partie, acteur]);
+        const res = db.query(queryString, [ref, r_ordre, r_intitule, r_description, r_avec_colonne, r_points_totale, date, date, 1, e_profil_partie, e_acteur]);
         return (await res).rows;
     },
 
@@ -70,7 +72,7 @@ const ProfilRisqueQuestion = {
         return (await res).rows;
     },
 
-    async update(ref, partie, {ordre, intitule, description, avec_colonne, points_totale}) {
+    async update(ref, e_profil_partie, {r_ordre, r_intitule, r_description, r_avec_colonne, r_points_totale}) {
         const queryString = `
             UPDATE ${this.tableName} 
             SET r_ordre=$1, 
@@ -78,10 +80,11 @@ const ProfilRisqueQuestion = {
                 r_description=$3, 
                 r_avec_colonne=$4, 
                 r_points_totale=$5, 
-                e_profil_partie=$6
-            WHERE r_reference=$7
+                e_profil_partie=$6,
+                r_date_modif=$7
+            WHERE r_reference=$8
             RETURNING *`;
-        const res = db.query(queryString, [ordre, intitule, description, avec_colonne, points_totale, partie, ref]);
+        const res = db.query(queryString, [r_ordre, r_intitule, r_description, r_avec_colonne, r_points_totale, e_profil_partie, new Date(), ref]);
         return (await res).rows[0];
     }
 }

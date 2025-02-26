@@ -18,10 +18,10 @@ const createTypeDocument = async (req, res, next) => {
      * [x] Lancement de la création.
      */
     console.log(`Création de type document..`)
-    const {session_ref, intitule} = req.body;
+    const {session_ref, r_intitule, r_format} = req.body;
     
     console.log(`Vérification des paramètres`)
-    Utils.expectedParameters({session_ref, intitule, format}).then(async () => {
+    Utils.expectedParameters({session_ref, r_intitule, r_format}).then(async () => {
 
         await Session.findByRef(session_ref).then(async () => {
             Utils.generateCode(TypeDocument.code_prefix, TypeDocument.tableName, TypeDocument.code_colunm, TypeDocument.code_spliter).then(async code => {
@@ -54,14 +54,14 @@ const updateTypeDocument = async (req, res, next) => {
      */
 
     console.log(`Mise à jour de type document..`);
-    const {session_ref, intitule, description} = req.body;
+    const {session_ref, r_intitule, r_description, r_format} = req.body;
     
     console.log(`Vérification des paramètres`)
-    Utils.expectedParameters({session_ref, intitule, format}).then(async () => {
+    Utils.expectedParameters({session_ref, r_intitule, r_format}).then(async () => {
         
         const code = req.params.code;
         await Session.findByRef(session_ref).then(async () => {
-            await TypeDocument.update(code, {intitule, description, format}).then(result => {
+            await TypeDocument.update(code, {r_intitule, r_description, r_format}).then(result => {
                 if (!result) return response(res, 400, `Une erreur s'est produite !`);
                 return response(res, 200, `Mise à jour du type document ${code} terminé`, result);
             }).catch(error => next(error));

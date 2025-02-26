@@ -33,13 +33,13 @@ const createCampagne = async (req, res, next) => {
      * [x] Lancement de la création.
      */
     console.log(`Création de campagne..`)
-    const {session_ref, intitule, periodicite, date_debut, date_fin, cible} = req.body;
+    const {session_ref, r_intitule, r_periodicite, r_date_debut, r_date_fin, r_cible} = req.body;
 
     console.log(`Vérification des paramètres`)
-    Utils.expectedParameters({session_ref, intitule, periodicite, date_debut, date_fin, cible}).then(async () => {
+    Utils.expectedParameters({session_ref, r_intitule, r_periodicite, r_date_debut, r_date_fin, r_cible}).then(async () => {
 
         await Session.findByRef(req.body.session_ref).then(async session => {
-            Utils.generateCode("CAMP", 't_campagne_demande', 'r_code', '-').then(async code => {
+            Utils.generateCode(Campagne.codePrefix, Campagne.tableName, Campagne.codeColumn, Campagne.codeSpliter).then(async code => {
                 await Campagne.checkExists(code).then(async exists => {
                     if (exists) return response(res, 409, `Le code ${code} est déjà utilisée !`, exists);
                     await Campagne.create(code, session.e_acteur, {...req.body})
@@ -79,14 +79,13 @@ const updateCampagne = async (req, res, next) => {
     console.log(`Mise à jour de campagne..`);
 
     const code = req.params.code;
-    const {session_ref, intitule, periodicite, date_debut, date_fin, cible} = req.body;
+    const {session_ref, r_intitule, r_periodicite, r_date_debut, r_date_fin, r_cible} = req.body;
 
     console.log(`Vérification des paramètres..`);
-    Utils.expectedParameters({session_ref, intitule, periodicite, date_debut, date_fin, cible}).then(async () => {
+    Utils.expectedParameters({session_ref, r_intitule, r_periodicite, r_date_debut, r_date_fin, r_cible}).then(async () => {
 
         await Session.findByRef(session_ref).then(async () => {
-            await Campagne.update(code, {...req.body})
-            .then(result => {
+            await Campagne.update(code, {...req.body}).then(result => {
                 if (!result) return response(res, 400, `Une erreur s'est produite !`);
                 result['periodicite_intitule'] = periodicite[result.r_periodicite];
                 result['cible_intitule'] = cible[result.r_cible];

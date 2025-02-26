@@ -50,13 +50,13 @@ const createPrPartie = async (req, res, next) => {
      * [x] Lancement de la création.
      */
     console.log(`Création de profil risque partie..`);
-    const {session_ref, campagne_code, ordre, intitule, points_totale} = req.body;
+    const {session_ref, campagne_code, r_ordre, r_intitule, r_points_totale} = req.body;
     
     console.log(`Vérification des paramètres`)
-    Utils.expectedParameters({session_ref, campagne_code, ordre, intitule, points_totale}).then(async () => {
+    Utils.expectedParameters({session_ref, campagne_code, r_ordre, r_intitule, r_points_totale}).then(async () => {
         
         await Session.findByRef(session_ref).then(async session => {
-            Utils.generateCode("PRPT", 't_profil_risque_partie', 'r_reference', '-').then(async ref => {
+            Utils.generateCode(PrPartie.codePrefix, PrPartie.tableName, PrPartie.codeColumn, PrPartie.codeSpliter).then(async ref => {
                 await PrPartie.checkExists(ref).then(async exists => {
                     if (exists) return response(res, 409, `La reférence ${ref} est déjà utilisée !`, exists);
                     console.log(`Récupération de la campagne`)
@@ -92,17 +92,16 @@ const updatePrPartie = async (req, res, next) => {
      */
 
     console.log(`Mise à jour de profil risque partie..`);
-    const {session_ref, campagne_code, ordre, intitule, points_totale} = req.body;
+    const {session_ref, campagne_code, r_ordre, r_intitule, r_points_totale} = req.body;
     
     console.log(`Vérification des paramètres`)
-    Utils.expectedParameters({session_ref, campagne_code, ordre, intitule, points_totale}).then(async () => {
+    Utils.expectedParameters({session_ref, campagne_code, r_ordre, r_intitule, r_points_totale}).then(async () => {
         
         const ref = req.params.p_ref;
         await Session.findByRef(session_ref).then(async () => {
             await Campagne.findByCode(campagne_code).then(async campagne => {
                 if (!campagne) return response(res, 404, `Campagne non trouvé !`);
-                await PrPartie.update(ref, campagne.r_i, {...req.body})
-                .then(result => {
+                await PrPartie.update(ref, campagne.r_i, {...req.body}).then(result => {
                     if (!result) return response(res, 400, `Une erreur s'est produite !`);
                     return response(res, 200, `Mise à jour de PRP ${ref} terminé`, result);
                 }).catch(error => next(error));

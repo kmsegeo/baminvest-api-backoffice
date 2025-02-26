@@ -51,12 +51,12 @@ const createRepMatrice = async (req, res, next) => {
      */
 
     console.log(`Création de reponse..`);
-    const {session_ref, question_ref, ordre, intitule, type} = req.body;
+    const {session_ref, question_ref, r_ordre, r_intitule, r_type} = req.body;
     
     console.log(`Vérification des paramètres`)
-    Utils.expectedParameters({session_ref, question_ref, ordre, intitule, type}).then(async () => {
+    Utils.expectedParameters({session_ref, question_ref, r_ordre, r_intitule, r_type}).then(async () => {
         await Session.findByRef(session_ref).then(async session => {
-            Utils.generateCode("PRRM", 't_reponse_matrice', 'r_reference', '-').then(async ref => {
+            Utils.generateCode(RepMatrice.codePrefix, RepMatrice.tableName, RepMatrice.codeColumn, RepMatrice.codeSpliter).then(async ref => {
                 await RepMatrice.checkExists(ref).then(async exists => {
                     if (exists) return response(res, 409, `La reférence ${ref} est déjà utilisée !`, exists);
                     console.log(`Récupération de la question`)
@@ -93,13 +93,11 @@ const updateRepMatrice = async (req, res, next) => {
      */
 
     console.log(`Mise à jour de la réponse matricée..`);
-    const {session_ref, question_ref, ordre, intitule, type} = req.body;
+    const {session_ref, question_ref, r_ordre, r_intitule, r_type} = req.body;
     
     console.log(`Vérification des paramètres`)
-    Utils.expectedParameters({session_ref, question_ref, ordre, intitule, type}).then(async () => {
-    
+    Utils.expectedParameters({session_ref, question_ref, r_ordre, r_intitule, r_type}).then(async () => {
         await Session.findByRef(session_ref).then(async () => {
-            
             const rm_ref = req.params.rm_ref;
             await PrQuestion.findByRef(question_ref).then(async question => {
                 if (!question) return response(res, 404, `Question non trouvé !`);
@@ -108,7 +106,6 @@ const updateRepMatrice = async (req, res, next) => {
                     return response(res, 200, `Mise à jour de la réponse ${rm_ref} terminé`, result);
                 }).catch(error => next(error));
             }).catch(error => next(error));
-
         }).catch(error => response(res, 400, error));
     }).catch(error => response(res, 400, error));
 }

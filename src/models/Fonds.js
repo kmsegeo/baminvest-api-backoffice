@@ -3,13 +3,16 @@ const db = require('../config/database');
 const Fonds = {
 
     tableName: 't_fonds',
+    codePrefix: 'FCP',
+    codeColumn: 'r_reference',
+    codeSpliter: '-',
 
     async findAll() {
         const res = db.query(`SELECT * FROM ${this.tableName}`, []);
         return (await res).rows;
     },
 
-    async create(ref, {intitule, description, commission_souscription, commission_sortie}) {
+    async create(ref, {r_intitule, r_description, commission_souscription, commission_sortie}) {
         const create_date = new Date();
         const res = db.query(`INSERT INTO ${this.tableName}
             (r_reference,
@@ -20,7 +23,7 @@ const Fonds = {
             r_statut,
             commission_souscription,
             commission_sortie)
-            VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`, [ref, intitule, description, create_date, create_date, 1, commission_souscription, commission_sortie]);
+            VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`, [ref, r_intitule, r_description, create_date, create_date, 1, commission_souscription, commission_sortie]);
 
         return (await res).rows[0];
     },
@@ -53,16 +56,16 @@ const Fonds = {
         return (await res).rows[0];
     },
 
-    async update(ref, {intitule, description, commission_souscription, commission_sortie}) {
+    async update(ref, {r_intitule, r_description, commission_souscription, commission_sortie}) {
 
         const res = db.query(`UPDATE ${this.tableName} 
             SET r_intitule = $1,
                 r_description = $2,
-                r_date_modif = $4,
-                commission_souscription = $5,
-                commission_sortie = $6
-            WHERE r_reference=$7 
-            RETURNING *`, [intitule, description, new Date(), commission_souscription, commission_sortie, ref]);
+                r_date_modif = $3,
+                commission_souscription = $4,
+                commission_sortie = $5
+            WHERE r_reference=$6 
+            RETURNING *`, [r_intitule, r_description, new Date(), commission_souscription, commission_sortie, ref]);
     },
     
     async delete(ref) {

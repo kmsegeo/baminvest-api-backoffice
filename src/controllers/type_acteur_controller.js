@@ -18,13 +18,13 @@ const createTypeActeur = async (req, res, next) => {
      * [x] Lancement de la création.
      */
     console.log(`Création de type acteur..`)
-    const {session_ref, intitule} = req.body;
+    const {session_ref, r_intitule} = req.body;
     
     console.log(`Vérification des paramètres`)
-    Utils.expectedParameters({session_ref, intitule}).then(async () => {
+    Utils.expectedParameters({session_ref, r_intitule}).then(async () => {
         
         await Session.findByRef(session_ref).then(async () => {
-            Utils.generateCode("TYAC", 't_type_acteur', 'r_code', '-').then(async code => {
+            Utils.generateCode(TypeActeur.codePrefix, TypeActeur.tableName, TypeActeur.codeColumn, TypeActeur.codeSpliter).then(async code => {
                 await TypeActeur.checkExists(code).then(async exists => {
                     if (exists) return response(res, 409, `La reference ${code} est déjà utilisée !`, exists);
                     await TypeActeur.create(code, {...req.body})
@@ -52,14 +52,14 @@ const updateTypeActeur = async (req, res, next) => {
      */
 
     console.log(`Mise à jour de type acteur..`);
-    const {session_ref, intitule, description} = req.body;
+    const {session_ref, r_intitule, r_description} = req.body;
     
     console.log(`Vérification des paramètres`)
-    Utils.expectedParameters({session_ref, intitule}).then(async () => {
+    Utils.expectedParameters({session_ref, r_intitule}).then(async () => {
 
         const code = req.params.code;
         await Session.findByRef(session_ref).then(async () => {
-            await TypeActeur.update(code, {intitule, description}).then(result => {
+            await TypeActeur.update(code, {r_intitule, r_description}).then(result => {
                 if (!result) return response(res, 400, `Une erreur s'est produite !`);
                 return response(res, 200, `Mise à jour du type acteur ${code} terminé`, result);
             }).catch(error => next(error));

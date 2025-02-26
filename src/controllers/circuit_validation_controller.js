@@ -36,10 +36,10 @@ const createCircuit = async (req, res, next) => {
      * [x] Lancement de la création.
      */
     console.log(`Création de circuit de validation..`);
-    const {session_ref, type_op_code, intitule, scalable} = req.body;
+    const {session_ref, type_op_code, r_intitule, r_scalable} = req.body;
     
     console.log(`Vérification des paramètres`)
-    Utils.expectedParameters({session_ref, type_op_code, intitule, scalable}).then(async () => {
+    Utils.expectedParameters({session_ref, type_op_code, r_intitule, r_scalable}).then(async () => {
         
         await Session.findByRef(req.body.session_ref).then(async () => {
             Utils.generateCode("CVAL", 't_circuit_validation', 'r_reference', '-').then(async ref => {
@@ -82,10 +82,10 @@ const updateCircuit = async (req, res, next) => {
      */
 
     console.log(`Mise à jour de circuit de validation..`);
-    const {session_ref, type_op_code, intitule, scalable} = req.body;
+    const {session_ref, type_op_code, r_intitule, r_scalable} = req.body;
     
     console.log(`Vérification des paramètres`)
-    Utils.expectedParameters({session_ref, type_op_code, intitule, scalable}).then(async () => {
+    Utils.expectedParameters({session_ref, type_op_code, r_intitule, r_scalable}).then(async () => {
 
         await Session.findByRef(session_ref).then(async () => {
             await TypeOperation.findByCode(type_op_code).then(async type_operation => {
@@ -153,7 +153,7 @@ const createCircuitEtape = async (req, res, next) => {
                 }
 
                 console.log(`Création du code d'enregistrement`)
-                Utils.generateCode('CETP', CircuitEtape.tableName, 'r_reference', '-').then(async ref => {
+                Utils.generateCode(CircuitEtape.codePrefix, CircuitEtape.tableName, CircuitEtape.codeColumn, CircuitEtape.codeSpliter).then(async ref => {
                     console.log(`Enregistrement de l'étape de circuit`)
                     await CircuitEtape.create(circuit.r_i, ref, e_profil, e_type_acteur, {r_intitule, r_ordre, r_description, r_type, e_acteur})
                         .then(etape => {

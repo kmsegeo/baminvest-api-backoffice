@@ -14,10 +14,10 @@ const Agent = {
     return (await res).rows;
   },
 
-  async create({civilite, nom, prenom, profil_code}) {
+  async create({r_civilite, r_nom, r_prenom, profil_code}) {
     const queryString = `INSERT INTO ${this.tableName} (r_civilite, r_nom, r_prenom, e_profil)
       VALUES($1, $2, $3, (SELECT r_i FROM t_profil WHERE r_code=$4)) RETURNING *`;
-    const res = db.query(queryString, [civilite, nom, prenom, profil_code]);
+    const res = db.query(queryString, [r_civilite, r_nom, r_prenom, profil_code]);
     return (await res).rows[0];
   },
 
@@ -32,9 +32,9 @@ const Agent = {
     return (await res).rows[0];
   },
   
-  async update(id, {civilite, nom, prenom}) {
+  async update(id, {r_civilite, r_nom, r_prenom}) {
     const queryString = `UPDATE ${this.tableName} SET r_civilite=$1, r_nom=$2, r_prenom=$3 WHERE r_i=$4 RETURNING *`;
-    const res = db.query(queryString, [civilite, nom, prenom, id])
+    const res = db.query(queryString, [r_civilite, r_nom, r_prenom, id])
     return (await res).rows[0];
   }
 

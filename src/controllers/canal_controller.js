@@ -12,18 +12,18 @@ const getAllCanals = async (req, res, next) => {
 const createCanal = async (req, res, next) => {
 
     console.log(`Création de canal..`);
-    const {session_ref, intitule, pass} = req.body;
+    const {session_ref, r_intitule, r_description, r_pass} = req.body;
 
-    await Utils.expectedParameters({session_ref, intitule, pass}).then(async () => {
+    await Utils.expectedParameters({session_ref, r_intitule, r_pass}).then(async () => {
         await Session.findByRef(session_ref).then(async session => {
             await Utils.generateCanalCode(Canal.code_prefix, Canal.tableName, Canal.code_colunm).then(code => {
                 Canal.findByCode(code).then(async exists => {
                     if(exists) return response(res, 409, `Le code du canal existe déjà !`);
                     console.log("Cryptage du mot passe");
-                    await bcrypt.hash(pass, 10).then(async hash => {
+                    await bcrypt.hash(r_pass, 10).then(async hash => {
                         console.log(hash);
                         console.log(`Creation du canal`);
-                        await Canal.create(code, {intitule, description, pass:hash}).then(async canal => {
+                        await Canal.create(code, {r_intitule, r_description, r_pass:hash}).then(async canal => {
                             if (canal) delete canal.r_pass;
                             return response(res, 201, `Création du canal effcetuée`, canal);
                         }).catch(err => next(err));
@@ -46,14 +46,14 @@ const getOneCanal = async (req, res, next) => {
 const updateCanal = async (req, res, next) => {
     
     console.log(`Mise à jour de canal..`);
-    const {session_ref, intitule} = req.body;
+    const {session_ref, r_intitule, r_description} = req.body;
 
-    await Utils.expectedParameters({session_ref, intitule}).then(async () => {
+    await Utils.expectedParameters({session_ref, r_intitule}).then(async () => {
         await Session.findByRef(session_ref).then(async session => {
             await Canal.findByCode(code).then(async canal => {
                 if(!canal) return response(res, 404, `Canal non trouvé !`);
                 console.log(`Mise à jour du canal`);
-                await Canal.update(code, {intitule, description}).then(async result => {
+                await Canal.update(code, {r_intitule, r_description}).then(async result => {
                     if (result) delete result.r_pass;
                     return response(res, 201, `Mise à jour du canal effcetuée`, result);
                 }).catch(err => next(err));

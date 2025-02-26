@@ -3,6 +3,9 @@ const db = require('../config/database');
 const ProfilRisqueReponse = {
 
     tableName: `t_risque_reponses`,
+    codePrefix: 'MTRP',
+    codeColumn: 'r_reference',
+    codeSpliter: '-',
 
     async checkExists(ref) {
         const res = db.query(`
@@ -10,7 +13,7 @@ const ProfilRisqueReponse = {
         return (await res).rows[0];
     },
 
-    async create(ref, matrice, acteur, {ordre, intitule, details, points}) {
+    async create(ref, e_ligne_colonne, e_acteur, {r_ordre, r_intitule, r_details, r_points}) {
         const queryString = `
             INSERT INTO ${this.tableName} (
                 r_reference, 
@@ -26,7 +29,7 @@ const ProfilRisqueReponse = {
             VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
             RETURNING *`;
         const date = new Date();
-        const res = db.query(queryString, [ref, ordre, intitule, details, points, date, date, 1, matrice, acteur]);
+        const res = db.query(queryString, [ref, ordre, intitule, details, points, date, date, 1, e_ligne_colonne, e_acteur]);
         return (await res).rows;
     },
 
@@ -59,17 +62,18 @@ const ProfilRisqueReponse = {
         return (await res).rows;
     },
 
-    async update(ref, matrice, {ordre, intitule, details, points}) {
+    async update(ref, e_ligne_colonne, {r_ordre, r_intitule, r_details, r_points}) {
         const queryString = `
             UPDATE ${this.tableName} 
             SET r_ordre=$1, 
                 r_intitule=$2, 
                 r_details=$3, 
                 r_points=$4, 
-                e_ligne_colonne=$5
-            WHERE r_reference=$6
+                e_ligne_colonne=$5,
+                r_date_modif=$6
+            WHERE r_reference=$7
             RETURNING *`;
-        const res = db.query(queryString, [ordre, intitule, details, points, matrice, ref]);
+        const res = db.query(queryString, [r_ordre, r_intitule, r_details, r_points, e_ligne_colonne, new Date(), ref]);
         return (await res).rows[0];
     }
 }
