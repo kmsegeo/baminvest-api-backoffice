@@ -107,9 +107,9 @@ const loadCorporateClients = async (req, res, next) => {
 
         for(let entreprise of clients) {
 
-            if (particulier.r_statut==0) pending += 1;
-            if (particulier.r_statut==1) valid += 1;
-            if (particulier.r_statut==2) disabled += 1;
+            if (entreprise.r_statut==0) pending += 1;
+            if (entreprise.r_statut==1) valid += 1;
+            if (entreprise.r_statut==2) disabled += 1;
 
             console.log(`Chargement des représentants`);
             entreprise['representants'] = [];

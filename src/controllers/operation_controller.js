@@ -4,7 +4,9 @@ const CircuitAffectation = require('../models/CircuitAffectation');
 const Fonds = require('../models/Fonds');
 const MoyPaiementActeur = require('../models/MoyPaiementActeur');
 const Operation = require("../models/Operation");
+const TypeMoypaiement = require('../models/TypeMoypaiement');
 const TypeOperation = require("../models/TypeOperation");
+const Validaton = require('../models/Validation');
 const Analytics = require('../utils/analytics.methods');
 const Utils = require("../utils/utils.methods");
 
@@ -175,8 +177,8 @@ const validOperation = async(req, res, next) => {
      */
 
     console.log(`Vérification des paramètres`)
-    const { session_ref } = req.body;
-    
+    const { session_ref, r_description, r_motif } = req.body;
+    const acteur_id = req.session.e_acteur;
     console.log(`Vérification des paramètres`)
     Utils.expectedParameters({session_ref}).then(async session => {
         console.log(`Charger l'affectation`)
@@ -188,11 +190,50 @@ const validOperation = async(req, res, next) => {
                     if (!result) return response(res, 400, `Erreur d'affectation !`);
                     result['operation'] = operation;
                     delete result.e_operation;
-                    if (operation.r_statut==1 && result.r_statut==0) return response(res, 200, `Mise à jour terminé`, result);
+                    Validaton.create(acteur_id, affectation.r_i, {r_description, r_motif}).then(async validation => {
+                        if (!validation) return response(res, 400, `Enregistrement de l'historique echoué !`);
+                        if (operation.r_statut==1 && result.r_statut==2) return response(res, 200, `Mise à jour terminé`, validation);
+                    }).catch(err => next(err));
                 }).catch(err => next(err));
             }).catch(err => next(err));
         }).catch(err => next(arr));
     }).catch(err => next(err));
+}
+
+const validHistorique = async (req, res, next) => {
+    const acteur_id = req.session.e_acteur;
+    await Validaton.findAllByActeur(acteur_id)
+        .then(async validations => {
+            for (let validation of validations) {
+                await CircuitAffectation.findById(validation.e_affectation).then(async affectation => {
+                    if (!affectation) return response(res, 404, `Affectation introuvable !`);
+                    await Operation.valid(affectation.e_operation).then(async operation => {
+                        await TypeOperation.findById(operation.e_type_operation).then(async type_operation => {
+                            operation['type_operation'] = type_operation;
+                        }).catch(err => next(err));
+                        await Acteur.findById(operation.e_acteur).then(async acteur => {
+                            operation['acteur'] = acteur;
+                        }).catch(err => next(err));
+                        await Fonds.findById(operation.e_fonds).then(async fonds => {
+                            operation['fonds'] = fonds;
+                        }).catch(err => next(err));
+                        await MoyPaiementActeur.findById(operation.e_moyen_paiement).then(async moyen_paiement => {
+                            operation['moyen_paiement'] = moyen_paiement;
+                        }).catch(err => next(err));
+                        validation['operation'] = operation;
+                        delete operation.e_type_operation;
+                        delete operation.e_acteur;
+                        delete operation.e_fonds;
+                        delete operation.e_moyen_paiement;
+                    }).catch(err => next(err));
+                }).catch(err => next(err));
+
+                delete validation.e_affectation;
+                delete validation.e_acteur;
+            }
+            return response(res, 200, `Chargement de l'hitorique de validation`, validations)
+        })
+        .catch(err => next(err));
 }
 
 const validOperationByCode = async(req, res, next) => {
@@ -235,6 +276,7 @@ module.exports = {
     loadAllByActeur,
     loadOperation,
     validOperation,
+    validHistorique,
     validOperationByCode,
     getCommissionsAtDate
 }

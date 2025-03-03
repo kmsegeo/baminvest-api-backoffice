@@ -5,6 +5,8 @@ const PrQuestion = require('../models/ProfilRisqueQuestion');
 const Utils = require('../utils/utils.methods');
 const Acteur = require('../models/Acteur');
 
+const type_matrice = ['ligne', 'colonne']
+
 const getAllRepMatrices = async (req, res, next) => {
     console.log(`Chargement de la liste des réponses matricées..`)
     await RepMatrice.findAll()
@@ -35,6 +37,7 @@ const getAllPrQuestRepMatrice = async (req, res, next) => {
                             delete result.e_acteur;
                         }).catch(err => next(err));
                         delete result.e_risques_questions;
+                        result['type_matrice'] = type_matrice[result.r_type]
                     }
                 }
                 return response(res, 200, `Chargement terminé`, results)

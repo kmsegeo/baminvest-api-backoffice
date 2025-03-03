@@ -3,6 +3,9 @@ const Session = require('../models/Session');
 const Campagne = require('../models/Campagne');
 const Utils = require('../utils/utils.methods');
 const Acteur = require('../models/Acteur');
+const ProfilRisquePartie = require('../models/ProfilRisquePartie');
+const ProfilRisqueQuestion = require('../models/ProfilRisqueQuestion');
+const ProfilRisqueReponse = require('../models/ProfilRisqueReponse');
 
 const periodicite = ['Indeterminée', 'Limitée'];
 const cible = ['Particulier', 'Entreprise', 'Les deux'];
@@ -36,7 +39,7 @@ const createCampagne = async (req, res, next) => {
     const {session_ref, r_intitule, r_periodicite, r_date_debut, r_date_fin, r_cible} = req.body;
 
     console.log(`Vérification des paramètres`)
-    Utils.expectedParameters({session_ref, r_intitule, r_periodicite, r_date_debut, r_date_fin, r_cible}).then(async () => {
+    Utils.expectedParameters({session_ref, r_intitule}).then(async () => {
 
         await Session.findByRef(req.body.session_ref).then(async session => {
             Utils.generateCode(Campagne.codePrefix, Campagne.tableName, Campagne.codeColumn, Campagne.codeSpliter).then(async code => {
@@ -82,7 +85,7 @@ const updateCampagne = async (req, res, next) => {
     const {session_ref, r_intitule, r_periodicite, r_date_debut, r_date_fin, r_cible} = req.body;
 
     console.log(`Vérification des paramètres..`);
-    Utils.expectedParameters({session_ref, r_intitule, r_periodicite, r_date_debut, r_date_fin, r_cible}).then(async () => {
+    Utils.expectedParameters({session_ref, r_intitule}).then(async () => {
 
         await Session.findByRef(session_ref).then(async () => {
             await Campagne.update(code, {...req.body}).then(result => {
@@ -96,9 +99,41 @@ const updateCampagne = async (req, res, next) => {
     }).catch(err => response(res, 400, err));
 }
 
+const getCampagneDetails = async (req, res, next) => {
+    const code = req.params.code;
+    console.log(`Chargement de campagne par code..`)
+    await Campagne.findByCode(code).then(async campagne => {
+        if (!campagne) return response(res, 404, `Campagne ${code} non trouvé !`, campagne)
+        console.log(`Chargement des parties de la campagne`)
+        await ProfilRisquePartie.findAllByCampgagne(campagne.r_i).then(async parties => {
+            console.log(`Charger les question de chaque parties`);
+            for(let partie of parties) {
+                await ProfilRisqueQuestion.findAllByPartie(partie.r_i).then(async questions => {
+                    for (let question of questions) {
+                        await ProfilRisqueReponse.findAllByLineColumn(question.r_i).then(async reponses => {
+                            // if (question.r_avec_colonne==1) {       // Matrice
+                            // await CampagneRepMatrice.findAllByQuestion(question.r_i).then(async matrices => {
+                                // for (let matrice of matrices) {
+                                // }
+                            // } else {                                // Reponses simple
+                            // }
+                            // }).catch(err => next(err));
+                            question['proposition_reponses'] = reponses;
+                        }).catch(err => next(err));
+                    }
+                    partie['questions'] = questions;
+                }).catch(err => next(err));
+            }
+            campagne['parties'] = parties;
+            return response(res, 200, `Chargement des questionnaires ${campagne.r_code}`, campagne);
+        }).catch(err => next(err));
+    }).catch(err => next(err));
+}
+
 module.exports = {
     getAllCampagnes,
     createCampagne,
     getCampagne,
-    updateCampagne
+    updateCampagne,
+    getCampagneDetails
 }

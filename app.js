@@ -60,6 +60,7 @@ app.use(errorhandling);
 
 // Default data
 defaultController.defaultCanals();
+defaultController.defaultTypeActeur();
 defaultController.defaultAdmin();
 defaultController.defaultOperations();
 defaultController.defaultTypeDocument();

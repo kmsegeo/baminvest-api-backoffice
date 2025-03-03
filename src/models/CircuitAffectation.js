@@ -60,8 +60,8 @@ const CircuitAffectation = {
         return (await res).rows[0];
     },
 
-    async delete (id) {
-        const res = db.query(`UPDATE ${this.tableName} SET r_statut=$1 WHERE r_i=$2 RETURNING *`, [0, id]);
+    async delete(id) {
+        const res = db.query(`UPDATE ${this.tableName} SET r_statut=$1 WHERE r_i=$2 RETURNING *`, [2, id]);
         return (await res).rows[0];
     },
 

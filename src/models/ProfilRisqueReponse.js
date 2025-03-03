@@ -3,7 +3,7 @@ const db = require('../config/database');
 const ProfilRisqueReponse = {
 
     tableName: `t_risque_reponses`,
-    codePrefix: 'MTRP',
+    codePrefix: 'QREP',
     codeColumn: 'r_reference',
     codeSpliter: '-',
 
@@ -29,7 +29,7 @@ const ProfilRisqueReponse = {
             VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
             RETURNING *`;
         const date = new Date();
-        const res = db.query(queryString, [ref, ordre, intitule, details, points, date, date, 1, e_ligne_colonne, e_acteur]);
+        const res = db.query(queryString, [ref, r_ordre, r_intitule, r_details, r_points, date, date, 1, e_ligne_colonne, e_acteur]);
         return (await res).rows;
     },
 
@@ -56,9 +56,15 @@ const ProfilRisqueReponse = {
         return (await res).rows[0];
     },
 
-    async findAllByMatrice(matrice) {
+    // async findAllByMatrice(matrice) {
+    //     const queryString = `SELECT * FROM ${this.tableName} WHERE e_ligne_colonne=$1`;
+    //     const res = db.query(queryString, [matrice]);
+    //     return (await res).rows;
+    // },
+
+    async findAllByLineColumn(q) {
         const queryString = `SELECT * FROM ${this.tableName} WHERE e_ligne_colonne=$1`;
-        const res = db.query(queryString, [matrice]);
+        const res = db.query(queryString, [q]);
         return (await res).rows;
     },
 

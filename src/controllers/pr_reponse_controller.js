@@ -4,6 +4,7 @@ const MReponse = require('../models/ProfilRisqueReponse');
 const RMatrice = require('../models/ProfilRisqueRepMatrice');
 const Utils = require('../utils/utils.methods');
 const Acteur = require('../models/Acteur');
+const ProfilRisqueQuestion = require('../models/ProfilRisqueQuestion');
 
 const getAllMReponses = async (req, res, next) => {
     console.log(`Chargement des réponses de matrice..`)
@@ -35,21 +36,21 @@ const createMReponse = async (req, res, next) => {
      */
 
     console.log(`Création de reponse..`);
-    const {session_ref, matrice_ref, r_ordre, r_intitule, r_points} = req.body;
+    const {session_ref, question_ref, r_ordre, r_intitule, r_points} = req.body;
     
     console.log(`Vérification des paramètres`)
-    Utils.expectedParameters({session_ref, matrice_ref, r_ordre, r_intitule, r_points}).then(async () => {
+    Utils.expectedParameters({session_ref, question_ref, r_ordre, r_intitule, r_points}).then(async () => {
 
         await Session.findByRef(session_ref).then(async session => {
             Utils.generateCode(MReponse.codePrefix, MReponse.tableName, MReponse.codeColumn, MReponse.codeSpliter).then(async ref => {
                 await MReponse.checkExists(ref).then(async exists => {
                     if (exists) return response(res, 409, `La reférence ${ref} est déjà utilisée !`, exists);
                     console.log(`Récupération de la question`)
-                    await RMatrice.findByRef(matrice_ref).then(async matrice => {  
-                        if (!matrice) return response(res, 404, 'Matrice non trouvé !');
-                        await MReponse.create(ref, matrice.r_i, session.e_acteur, {...req.body})
-                        .then(result => response(res, 201, `Réponse créé avec succès`, result))
-                        .catch(err => next(err))
+                    await ProfilRisqueQuestion.findByRef(question_ref).then(async question => {  
+                        if (!question) return response(res, 404, 'Question non trouvé !');
+                        await MReponse.create(ref, question.r_i, session.e_acteur, {...req.body})
+                            .then(result => response(res, 201, `Réponse créé avec succès`, result))
+                            .catch(err => next(err))
                     }).catch(err => next(err))
                 }).catch(err => next(err))
             }).catch(err => next(err));
@@ -79,15 +80,15 @@ const updateMReponse = async (req, res, next) => {
      */
 
     console.log(`Mise à jour de la réponse..`);
-    const {session_ref, matrice_ref, r_ordre, r_intitule, r_points} = req.body;
+    const {session_ref, question_ref, r_ordre, r_intitule, r_points} = req.body;
     
     console.log(`Vérification des paramètres`)
-    Utils.expectedParameters({session_ref, matrice_ref, r_ordre, r_intitule, r_points}).then(async () => {
+    Utils.expectedParameters({session_ref, question_ref, r_ordre, r_intitule, r_points}).then(async () => {
         await Session.findByRef(req.body.session_ref).then(async () => {
-            const _ref = req.params._ref;
-            await RMatrice.findByRef(matrice_ref).then(async matrice => {
-                if (!matrice) return response(res, 404, 'Matrice non trouvé !');
-                await MReponse.update(_ref, matrice.r_i, {...req.body}).then(result => {
+            const _ref = req.params._ref;            
+            await ProfilRisqueQuestion.findByRef(question_ref).then(async question => {
+                if (!question) return response(res, 404, 'Question non trouvé !');
+                await MReponse.update(_ref, question.r_i, {...req.body}).then(result => {
                     if (!result) return response(res, 409, `Une erreur s'est produite !`);
                     return response(res, 200, `Mise à jour de la réponse ${_ref} terminé`, result);
                 }).catch(error => next(error));

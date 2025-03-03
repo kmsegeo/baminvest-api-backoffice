@@ -63,7 +63,7 @@ const createAgent = async (req, res, next) => {
         console.log(`Vérification de session`);
         await Session.findByRef(session_ref).then(async () => {
             console.log("Vérification de l'existance de l'acteur");
-            await Acteur.findByEmail(email).then(async acteur =>  {
+            await Acteur.findByEmail(r_email).then(async acteur =>  {
                 if (acteur) return response(res, 409, "Cet agent existe déjà !");
                 console.log("Vérification de l'existance du profil");
                 await Profil.findByCode(profil_code).then(async profil => {
@@ -71,7 +71,7 @@ const createAgent = async (req, res, next) => {
                     console.log("Début de création");
                     await Agent.create({ ...req.body }).then(agent => {
                         console.log("Cryptage du mot passe");
-                        bcrypt.hash(mdp, 10).then(async hash => {
+                        bcrypt.hash(r_mdp, 10).then(async hash => {
                             console.log("Mise en place du compte acteur");
                             await Acteur.createAgent({
                                 r_nom_complet: agent.r_nom + ' ' + agent.r_prenom,
@@ -175,11 +175,9 @@ const getAllAgentAffectation = async (req, res, next) => {
                     delete affectation.e_operation;
 
                 }).catch(err => next(err));
-
-                delete affectation.r_statut
             } 
             
-            return response(res, 200, `Chargement du panier de validation`, affectations, null, analytics);
+            return response(res, 200, `Chargement du panier de validation`, affectations, 'default_status', analytics);
         }).catch(err => next(err));
     }).catch(err => next(err));
 }

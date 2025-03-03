@@ -50,6 +50,8 @@ const defaultCanals = async () => {
     }).catch(err => console.log(err));
 }
 
+const defaultTypeActeur = async () => {}
+
 const defaultAdmin = async () => {
 
     /**
@@ -174,6 +176,7 @@ const defaultTypeDocument = async () => {
 
 module.exports = {
     defaultCanals,
+    defaultTypeActeur,
     defaultAdmin,
     defaultTypeDocument,
     defaultOperations,

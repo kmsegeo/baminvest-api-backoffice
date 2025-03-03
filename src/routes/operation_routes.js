@@ -8,7 +8,7 @@ router.get('/:date_debut/:date_fin', app_auth, session_verify, operationControll
 router.get('/souscription/:date_debut/:date_fin', app_auth, session_verify, operationController.getOpSouscriptionAtDate);
 router.get('/rachat/:date_debut/:date_fin', app_auth, session_verify, operationController.getOpRachatAtDate);
 router.get('/transfert/:date_debut/:date_fin', app_auth, session_verify, operationController.getOpTransfertAtDate);
-router.get('/:ref/details', app_auth, session_verify, operationController.loadOperation);
+router.get('/:ref', app_auth, session_verify, operationController.loadOperation);
 
 router.get('/:date_debut/:date_fin/commissions', app_auth, session_verify, operationController.getCommissionsAtDate);
 

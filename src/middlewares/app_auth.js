@@ -1,7 +1,6 @@
-const { Console } = require("console");
-const Canal = require("../models/Canal");
-const TypeOperation = require("../models/TypeOperation");
 const response = require("./response");
+const Canal = require('../models/Canal');
+const TypeOperation = require('../models/TypeOperation');
 const crypto = require('crypto');
 const Encryption = require("../utils/encryption.methods");
 
@@ -15,7 +14,6 @@ module.exports = async (req, res, next) => {
         if (app_hash!=req_hash) 
             throw `Authentification de l'application à échoué !`;
         next(); 
-
     } catch(error) {
         return response(res, 401, error);
     }
