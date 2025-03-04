@@ -140,11 +140,39 @@ const updateAgent = async (req, res) => {
 //     }).catch(error => next(error));
 // }
 
+const setpassword = async (req, res, next) => {
+
+    console.log("Mise à jour de mot de passe..");
+    const {session_ref, ancien_mdp, nouveau_mdp} = req.body;
+
+    console.log(`Vérification des paramètres`)
+    await Utils.expectedParameters({session_ref, ancien_mdp, nouveau_mdp}).then(async () => {
+        await Acteur.findByAgentId(req.params.id).then(async acteur => {
+            if (!acteur) return response(res, 404, `Cet agent n'existe pas !`);
+            if (req.session.e_acteur!=acteur.r_i) return response(res, 401, `L'agent ne correspond pas à l'acteur connecté !`)
+            const acteur_id = req.session.e_acteur;
+            console.log(`Vérification de mot de passe`);
+            bcrypt.compare(req.body.ancien_mdp, acteur.r_mdp).then(async valid => {
+                if(!valid) return response(res, 401, `Mot de passe incorrect !`);
+                console.log("Cryptage du nouveau mot passe");
+                bcrypt.hash(req.body.nouveau_mdp, 10).then(async hash => {
+                    await Acteur.updateMdp(acteur_id, hash);
+                    return response(res, 200, `Mise à jour du mot de passe terminé`);
+                }).catch(err => next(err));
+            }).catch(err => next(err));
+        }).catch(err => next(err));
+    }).catch(err => response(res, 400, err));
+}
+
 const getAllAgentAffectation = async (req, res, next) => {
-    const id = req.params.id;
-    await Acteur.findByAgentId(id).then(async acteur => {
-        if (!acteur) return response(res, 404, `Acteur introuvable !`);
-        await CircuitAffectation.findByActeurId(acteur.r_i).then(async affectations => {
+    
+    // const id = req.params.id;
+
+    await Acteur.findByAgentId(req.params.id).then(async acteur => {
+        if (!acteur) return response(res, 404, `Cet agent n'existe pas !`);
+        if (req.session.e_acteur!=acteur.r_i) return response(res, 401, `L'agent ne correspond pas à l'acteur connecté !`)
+        const acteur_id = req.session.e_acteur;
+        await CircuitAffectation.findByActeurId(acteur_id).then(async affectations => {
             if (!affectations) return response(res, 404, `Panier vide !`)
             
             let analytics = {
@@ -188,6 +216,7 @@ module.exports = {
     createAgent,
     getAgent,
     updateAgent,
+    setpassword,
     // deleteAgent,
     getAllAgentAffectation
 }

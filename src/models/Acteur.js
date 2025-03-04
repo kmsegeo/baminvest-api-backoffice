@@ -140,8 +140,36 @@ const Acteur = {
     const queryString = `SELECT * FROM ${this.tableName} WHERE e_agent=$1`;
     const res = db.query(queryString, [id]);
     return (await res).rows[0];
-},
+  },
 
+  // async findMdpById(id) {
+  //   const queryString = `SELECT r_email, r_mdp FROM ${this.tableName} WHERE r_i=$1`;
+  //   const res = db.query(queryString, [id]);
+  //   return (await res).rows[0];
+  // },
+
+  async updateMdp(acteur_id, mdp) {
+    const queryString = `UPDATE ${this.tableName} SET r_mdp=$1 WHERE r_i=$2 
+    RETURNING  r_nom_complet, 
+        r_email, 
+        r_telephone_prp, 
+        r_telephone_scd, 
+        r_adresse, 
+        r_statut,
+        r_rib, 
+        profil_investisseur,
+        r_langue,
+        r_date_creer, 
+        r_date_modif, 
+        r_date_activation,
+        e_type_acteur,
+        e_signataire,
+        e_particulier,
+        e_entreprise,
+        e_represantant`;
+    const res = db.query(queryString, [mdp, acteur_id]);
+    return (await res).rows[0];
+  }
 }
 
 module.exports = Acteur;

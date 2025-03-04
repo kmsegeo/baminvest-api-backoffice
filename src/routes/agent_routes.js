@@ -7,14 +7,19 @@ const agentController = require('../controllers/agent_controller');
 const sessionController = require('../controllers/session_controller');
 const operationController = require('../controllers/operation_controller')
 
-router.get('/', app_auth, session_verify, agentController.getAllAgents);
-router.post('/', app_auth, session_verify, agentController.createAgent);
-router.get('/:id', app_auth, session_verify, agentController.getAgent);
-router.put('/:id', app_auth, session_verify, agentController.updateAgent);
+// ACTEUR AGENT 
 
 router.post('/login', app_auth, sessionController.login);
 router.get('/:id/sessions', app_auth, session_verify, sessionController.loadActiveSsessions);
 router.delete('/:id/sessions/:ref', app_auth, session_verify, sessionController.destroySession);
+
+// AGENT
+
+router.get('/', app_auth, session_verify, agentController.getAllAgents);
+router.post('/', app_auth, session_verify, agentController.createAgent);
+router.get('/:id', app_auth, session_verify, agentController.getAgent);
+router.put('/:id', app_auth, session_verify, agentController.updateAgent);
+router.put('/:id/motdepasse', app_auth, session_verify, agentController.setpassword);
 
 router.get('/:id/panier', app_auth, session_verify, agentController.getAllAgentAffectation);
 router.put('/affectation/:id/valider', app_auth, session_verify, operationController.validOperation);
