@@ -57,7 +57,13 @@ const TypeActeur = {
             RETURNING *`;
         const res = db.query(queryString, [r_intitule, r_description, new Date(), code]);
         return (await res).rows[0];
+    },
+
+    async updateStatus(id, status) {
+        const res = db.query(`UPDATE ${this.tableName} SET r_statut=$1 WHERE r_i=$2 RETURNING *`, [status, id]);
+        return (await res).rows[0];
     }
+    
 }
 
 module.exports = TypeActeur;

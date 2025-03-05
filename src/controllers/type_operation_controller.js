@@ -41,8 +41,8 @@ const getTypeOperation = async (req, res, next) => {
     console.log(`Chargement de type operation par code..`)
     const code = req.params.code;
     await TypeOperation.findByCode(code).then(result => {
-        if (!result) return response(res, 404, `Type operation ${code} non trouvé !`, result)
-        response(res, 200, `Chargement du type operation ${code}`, result)
+        if (!result) return response(res, 404, `Type operation ${code} non trouvé !`)
+        return response(res, 200, `Chargement du type operation ${code}`, result)
     }).catch(err => next(err));
 }
 
@@ -69,9 +69,30 @@ const updateTypeOperation = async (req, res, next) => {
     }).catch(error => response(res, 400, error));
 }
 
+const disableTypeOperation = async (req, res, next) => {
+    const code = req.params.code;
+    await TypeOperation.findByCode(code).then(async result => {
+        if (!result) return response(res, 404, `Type operation ${code} non trouvé !`);
+        await TypeOperation.updateStatus(result.r_i, 2).catch(err => next(err));
+        return response(res, 200, `Type operation ${code} désactivé`)
+    }).catch(err => next(err));
+}
+
+const enableTypeOperation = async (req, res, next) => {
+    const code = req.params.code;
+    await TypeOperation.findByCode(code).then(async result => {
+        if (!result) return response(res, 404, `Type operation ${code} non trouvé !`);
+        await TypeOperation.updateStatus(result.r_i, 1).catch(err => next(err));
+        return response(res, 200, `Type operation ${code} activé`);
+    }).catch(err => next(err));
+}
+
+
 module.exports = {
     getAllTypeOperations,
     createTypeOperation,
     getTypeOperation,
-    updateTypeOperation
+    updateTypeOperation,
+    disableTypeOperation,
+    enableTypeOperation
 }

@@ -40,6 +40,16 @@ const TypeMoypaiement = {
     async update(code, {r_intitule, r_type}) {
         const res = db.query(`UPDATE ${this.tableName} SET r_intitule=$1, r_type=$2, r_date_modif=$3 WHERE r_code=$4 RETURNING *`, [r_intitule, r_type, new Date(), code]);
         return (await res).rows[0];
+    },
+
+    async updateStatus(id, status) {
+        const res = db.query(`UPDATE ${this.tableName} SET r_statut=$1 WHERE r_i=$2 RETURNING *`, [status, id]);
+        return (await res).rows[0];
+    },
+
+    async updateStatus(id, status) {
+        const res = db.query(`UPDATE ${this.tableName} SET r_statut=$1 WHERE r_i=$2 RETURNING *`, [status, id]);
+        return (await res).rows[0];
     }
 }
 

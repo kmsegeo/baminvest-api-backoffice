@@ -184,7 +184,7 @@ const validOperation = async(req, res, next) => {
         console.log(`Charger l'affectation`)
         await CircuitAffectation.findById(req.params.id).then(async affectation => {
             if (!affectation) return response(res, 404, `Affectation introuvable !`);
-            await Operation.valid(affectation.e_operation).then(async operation => {
+            await Operation.updateStatus(affectation.e_operation, 1).then(async operation => {
                 if (!operation) return response(res, 404, `Opération introuvable !`);
                 await CircuitAffectation.delete(affectation.r_i).then(result => {
                     if (!result) return response(res, 400, `Erreur d'affectation !`);
@@ -207,7 +207,7 @@ const validHistorique = async (req, res, next) => {
             for (let validation of validations) {
                 await CircuitAffectation.findById(validation.e_affectation).then(async affectation => {
                     if (!affectation) return response(res, 404, `Affectation introuvable !`);
-                    await Operation.valid(affectation.e_operation).then(async operation => {
+                    await Operation.updateStatus(affectation.e_operation, 1).then(async operation => {
                         await TypeOperation.findById(operation.e_type_operation).then(async type_operation => {
                             operation['type_operation'] = type_operation;
                         }).catch(err => next(err));

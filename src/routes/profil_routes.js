@@ -8,6 +8,8 @@ router.get('/', app_auth, session_verify, profilCotroller.getAllProfils);
 router.post('/', app_auth, session_verify, profilCotroller.createProfil);
 router.get('/:code', app_auth, session_verify, profilCotroller.getProfil);
 router.put('/:code', app_auth, session_verify, profilCotroller.updateProfil);
-router.delete('/:code', app_auth, session_verify, profilCotroller.deleteProfil);
+
+router.put('/:code/desactiver', app_auth, session_verify, profilCotroller.disableProfil);
+router.put('/:code/activer', app_auth, session_verify, profilCotroller.enableProfil);
 
 module.exports = router;

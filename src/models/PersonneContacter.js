@@ -1,6 +1,6 @@
 const db = require('../config/database');
 
-const Personne = {
+const PersonneContacter = {
 
     tableName: 't_personne_contacter',
 
@@ -10,4 +10,4 @@ const Personne = {
     }
 }
 
-module.exports = Personne;
+module.exports = PersonneContacter;

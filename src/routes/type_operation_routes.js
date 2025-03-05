@@ -9,4 +9,7 @@ router.post('/', app_auth, session_verify, typeOperationController.createTypeOpe
 router.get('/:code', app_auth, session_verify, typeOperationController.getTypeOperation);
 router.put('/:code', app_auth, session_verify, typeOperationController.updateTypeOperation);
 
+router.put('/:code/desactiver', app_auth, session_verify, typeOperationController.disableTypeOperation);
+router.put('/:code/activer', app_auth, session_verify, typeOperationController.enableTypeOperation);
+
 module.exports = router;

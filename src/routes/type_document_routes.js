@@ -9,4 +9,7 @@ router.post('/', app_auth, session_verify, typeDocumentController.createTypeDocu
 router.get('/:code', app_auth, session_verify, typeDocumentController.getTypeDocument);
 router.put('/:code', app_auth, session_verify, typeDocumentController.updateTypeDocument);
 
+router.put('/:code/desactiver', app_auth, session_verify, typeDocumentController.disableTypeDocument);
+router.put('/:code/activer', app_auth, session_verify, typeDocumentController.enableTypeDocument);
+
 module.exports = router;

@@ -62,13 +62,31 @@ const updateTypeMoypaiement = async (req, res, next) => {
                     return response(res, 200, `Mise à jour de type moyen de paiement ${code}`, typemp)})
                 .catch(err => next(err));
         }).catch(err => response(res, 400, err));
-    }).catch(err => response(res, 400, err));
-    
+    }).catch(err => response(res, 400, err));   
+}
+
+const disableTypeMoypaiement = async (req, res, next) => {
+    const code = req.params.code;
+    await TypeMoypaiement.findByCode(code).then(async typemp => {
+        if (!typemp) return response(res, 404, `Type moyen de paiement non trouvé !`);
+        await TypeMoypaiement.updateStatus(typemp.r_i, 2).catch(err => next(err));
+        return response(res, 200, `Type moyen de paiement ${code} désactivé`);
+    }).catch(err => next(err));
+}
+const enableTypeMoypaiement = async (req, res, next) => {
+    const code = req.params.code;
+    await TypeMoypaiement.findByCode(code).then(async typemp => {
+        if (!typemp) return response(res, 404, `Type moyen de paiement non trouvé !`);
+        await TypeMoypaiement.updateStatus(typemp.r_i, 1).catch(err => next(err));
+        return response(res, 200, `Type moyen de paiement ${code} activé`);
+    }).catch(err => next(err));
 }
 
 module.exports = {
     getAllTypeMoypaiement,
     createTypeMoypaiement,
     getTypeMoypaiement,
-    updateTypeMoypaiement
+    updateTypeMoypaiement,
+    disableTypeMoypaiement,
+    enableTypeMoypaiement
 }

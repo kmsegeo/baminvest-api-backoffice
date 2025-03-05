@@ -53,13 +53,9 @@ const Profil = {
     return (await res).rows[0];
   },
 
-  async delete(code) {
-    const queryString = `
-      UPDATE ${this.tableName} 
-      SET r_statut=$1 
-      WHERE r_code=$2`;
-    db.query(queryString, [2, code])
-    return null;
+  async updateStatus(id, status) {
+    const res = db.query(`UPDATE ${this.tableName} SET r_statut=$1 WHERE r_i=$2 RETURNING *`, [status, id]);
+    return (await res).rows[0];
   }
 
 }

@@ -9,4 +9,7 @@ router.post('/', app_auth, session_verify, typeMoypaiementController.createTypeM
 router.get('/:code', app_auth, session_verify, typeMoypaiementController.getTypeMoypaiement);
 router.put('/:code', app_auth, session_verify, typeMoypaiementController.updateTypeMoypaiement);
 
+router.put('/:code/desactiver', app_auth, session_verify, typeMoypaiementController.disableTypeMoypaiement);
+router.put('/:code/activer', app_auth, session_verify, typeMoypaiementController.enableTypeMoypaiement);
+
 module.exports = router;

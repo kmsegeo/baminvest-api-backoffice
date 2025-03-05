@@ -61,6 +61,11 @@ const TypeOperation = {
         const row = result.rows[0];
         if (!row) return;
         return row['r_code'];
+    },
+
+    async updateStatus(id, status) {
+        const res = db.query(`UPDATE ${this.tableName} SET r_statut=$1 WHERE r_i=$2 RETURNING *`, [status, id]);
+        return (await res).rows[0];
     }
 }
 

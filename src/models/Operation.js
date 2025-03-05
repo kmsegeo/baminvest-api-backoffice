@@ -39,8 +39,13 @@ const Operation = {
         return (await res).rows[0];
     },
 
-    async valid(id) {
-        const res = db.query(`UPDATE ${this.tableName} SET r_statut=$1 WHERE r_i=$2 RETURNING *`, [1, id]);
+    // async valid(id) {
+    //     const res = db.query(`UPDATE ${this.tableName} SET r_statut=$1 WHERE r_i=$2 RETURNING *`, [1, id]);
+    //     return (await res).rows[0];
+    // },
+
+    async updateStatus(id, status) {
+        const res = db.query(`UPDATE ${this.tableName} SET r_statut=$1 WHERE r_i=$2 RETURNING *`, [status, id]);
         return (await res).rows[0];
     }
 }

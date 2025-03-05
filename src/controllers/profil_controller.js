@@ -73,25 +73,32 @@ const updateProfil = async (req, res, next) => {
 
 }
 
-const deleteProfil = async (req, res, next) => {
-    /**
-     * [x] Vérifier que le profil existe 
-     * [x] Suppresion d'un profil 
-     */
+const disableProfil = async (req, res, next) => {
     const code = req.params.code;
     console.log('Suppression de profil..');
     await Profil.findByCode(code).then(async result => {
         if (!result) return response(res, 404, `Profil ${code} non trouvé !`);
-        await Profil.delete(code).then(() => {
-            return response(res, 200, `Suppression du profil ${code} terminé`);
-        }).catch(error => next(error));
+        await Profil.updateStatus(result.r_i, 2).then().catch(error => next(error));
+        return response(res, 200, `Profil ${code} désactivé`);
     }).catch(error => next(error));    
 }
+
+const enableProfil = async (req, res, next) => {
+    const code = req.params.code;
+    console.log('Suppression de profil..');
+    await Profil.findByCode(code).then(async result => {
+        if (!result) return response(res, 404, `Profil ${code} non trouvé !`);
+        await Profil.updateStatus(result.r_i, 1).then().catch(error => next(error));
+        return response(res, 200, `Profil ${code} activé`);
+    }).catch(error => next(error));    
+}
+
 
 module.exports = {
     getAllProfils,
     createProfil,
     getProfil,
     updateProfil,
-    deleteProfil,
+    disableProfil,
+    enableProfil
 }

@@ -40,8 +40,8 @@ const getTypeActeur = async (req, res, next) => {
     console.log(`Chargement de type acteur par code..`)
     const code = req.params.code;
     await TypeActeur.findByCode(code).then(result => {
-        if (!result) return response(res, 404, `Type acteur ${code} non trouvé !`, result);
-        response(res, 200, `Chargement du type acteur ${code}`, result)
+        if (!result) return response(res, 404, `Type acteur ${code} non trouvé !`);
+        return response(res, 200, `Chargement du type acteur ${code}`, result)
     }).catch(err => next(err));
 }
 
@@ -68,9 +68,29 @@ const updateTypeActeur = async (req, res, next) => {
     }).catch(error => response(res, 400, error));
 }
 
+const enableTypeActeur = async (req, res, next) => {
+    const code = req.params.code;
+    await TypeActeur.findByCode(code).then(async typeacteur => {
+        if (!typeacteur) return response(res, 404, `Type acteur ${code} non trouvé !`);
+        await TypeActeur.updateStatus(typeacteur.r_i, 1).catch(err => next(err));
+        return response(res, 200, `Type acteur ${code} activé`)
+    }).catch(err => next(err));
+}
+
+const disableTypeActeur = async (req, res, next) => {
+    const code = req.params.code;
+    await TypeActeur.findByCode(code).then(async typeacteur => {
+        if (!typeacteur) return response(res, 404, `Type acteur ${code} non trouvé !`);
+        await TypeActeur.updateStatus(typeacteur.r_i, 2).catch(err => next(err));
+        return response(res, 200, `Type acteur ${code} désactivé`)
+    }).catch(err => next(err));
+}
+
 module.exports = {
     getAllTypeActeurs,
     createTypeActeur,
     getTypeActeur,
-    updateTypeActeur
+    updateTypeActeur,
+    enableTypeActeur,
+    disableTypeActeur,
 }

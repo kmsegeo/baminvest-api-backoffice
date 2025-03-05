@@ -41,8 +41,8 @@ const getTypeDocument = async (req, res, next) => {
     console.log(`Chargement de type document par code..`)
     const code = req.params.code;
     await TypeDocument.findByCode(code).then(result => {
-        if (!result) return response(res, 404, `Type document ${code} non trouvé !`, result)
-        response(res, 200, `Chargement du type document ${code}`, result)
+        if (!result) return response(res, 404, `Type document ${code} non trouvé !`)
+        return response(res, 200, `Chargement du type document ${code}`, result)
     })
     .catch(err => next(err));
 }
@@ -70,9 +70,29 @@ const updateTypeDocument = async (req, res, next) => {
     }).catch(error => response(res, 400, error));
 }
 
+const disableTypeDocument = async (req, res, next) => {
+    const code = req.params.code;
+    await TypeDocument.findByCode(code).then(async result => {
+        if (!result) return response(res, 404, `Type document ${code} non trouvé !`);
+        await TypeDocument.updateStatus(result.r_i, 2).catch(err => next(err));
+        return response(res, 200, `Type document ${code} désactivé`)
+    }).catch(err => next(err));
+}
+
+const enableTypeDocument = async (req, res, next) => {
+    const code = req.params.code;
+    await TypeDocument.findByCode(code).then(async result => {
+        if (!result) return response(res, 404, `Type document ${code} non trouvé !`);
+        await TypeDocument.updateStatus(result.r_i, 1).catch(err => next(err));
+        return response(res, 200, `Type document ${code} activé`)
+    }).catch(err => next(err));
+}
+
 module.exports = {
     getAllTypeDocuments,
     createTypeDocument,
     getTypeDocument,
-    updateTypeDocument
+    updateTypeDocument,
+    disableTypeDocument,
+    enableTypeDocument
 }

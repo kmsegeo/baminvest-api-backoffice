@@ -44,7 +44,6 @@ const Acteur = {
         r_telephone_scd, 
         r_adresse, 
         r_statut,
-        r_rib, 
         profil_investisseur,
         r_langue,
         r_date_creer, 
@@ -69,7 +68,6 @@ const Acteur = {
         r_telephone_scd, 
         r_adresse, 
         r_statut,
-        r_rib, 
         profil_investisseur,
         r_langue,
         r_date_creer, 
@@ -84,13 +82,13 @@ const Acteur = {
 
   async findByIndividualId(clientId) {
     const queryString = `SELECT 
+        r_i,
         r_nom_complet, 
         r_email, 
         r_telephone_prp, 
         r_telephone_scd, 
         r_adresse, 
         r_statut,
-        r_rib, 
         profil_investisseur,
         r_langue,
         r_date_creer, 
@@ -108,13 +106,13 @@ const Acteur = {
   
   async findByCorporateId(clientId) {
     const queryString = `SELECT 
+        r_i,
         r_nom_complet, 
         r_email, 
         r_telephone_prp, 
         r_telephone_scd, 
         r_adresse, 
         r_statut,
-        r_rib, 
         profil_investisseur,
         r_langue,
         r_date_creer, 
@@ -137,8 +135,7 @@ const Acteur = {
   },
 
   async findByAgentId(id) {
-    const queryString = `SELECT * FROM ${this.tableName} WHERE e_agent=$1`;
-    const res = db.query(queryString, [id]);
+    const res = db.query(`SELECT * FROM ${this.tableName} WHERE e_agent=$1`, [id]);
     return (await res).rows[0];
   },
 
@@ -156,7 +153,6 @@ const Acteur = {
         r_telephone_scd, 
         r_adresse, 
         r_statut,
-        r_rib, 
         profil_investisseur,
         r_langue,
         r_date_creer, 
@@ -168,6 +164,11 @@ const Acteur = {
         e_entreprise,
         e_represantant`;
     const res = db.query(queryString, [mdp, acteur_id]);
+    return (await res).rows[0];
+  },
+
+  async updateStatus(id, status) {
+    const res = db.query(`UPDATE ${this.tableName} SET r_statut=$1 WHERE r_i=$2 RETURNING *`, [status, id]);
     return (await res).rows[0];
   }
 }

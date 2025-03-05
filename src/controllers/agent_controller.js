@@ -210,6 +210,25 @@ const getAllAgentAffectation = async (req, res, next) => {
     }).catch(err => next(err));
 }
 
+const disableAgent = async (req, res, next) => {
+    const agentId = req.params.id;
+    await Acteur.findByAgentId(agentId).then(async result => {
+        if (!result) return response(res, 404, "Acteur introuvale !")  
+        if (req.session.e_acteur==result.r_i) return response(res, 400, `Compte en cours d'utilisation`);
+        await Acteur.updateStatus(result.r_i, 2).catch(error => next(error));
+        return response(res, 200, `Agent ${agentId} désactivé`)
+    }).catch(error => next(error));
+}
+
+const enableAgent = async (req, res, next) => {
+    const agentId = req.params.id;
+    await Acteur.findByAgentId(agentId).then(async result => {
+        if (!result) return response(res, 404, "Acteur introuvale !")
+        await Acteur.updateStatus(result.r_i, 1).catch(error => next(error));
+        return response(res, 200, `Agent ${agentId} activé`)
+    }).catch(error => next(error));
+}
+
 module.exports = {
     // defautAgent,
     getAllAgents,
@@ -217,6 +236,7 @@ module.exports = {
     getAgent,
     updateAgent,
     setpassword,
-    // deleteAgent,
-    getAllAgentAffectation
+    getAllAgentAffectation,
+    disableAgent,
+    enableAgent,
 }
