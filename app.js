@@ -19,15 +19,9 @@ const campagneRoutes = require('./src/routes/campagne_routes');
 const circuitRoutes = require('./src/routes/circuit_validation_routes');
 const fondsRoutes = require('./src/routes/fonds_routes');
 const operationRoutes = require('./src/routes/operation_routes');
+const atsgoDefaultController = require('./src/controllers/atsgo_default_controller');
 
 const app = express();
-
-// app.use((req, res, next) => {
-//     res.setHeader('Access-Control-Allow-Origin', '*');
-//     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization, AppAuth');
-//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-//     next();
-// });
 
 app.use(cors());
 app.use(express.json());
@@ -59,10 +53,12 @@ app.use(base_path + '/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocumen
 app.use(errorhandling);
 
 // Default data
+
 defaultController.defaultCanals();
 defaultController.defaultTypeActeur();
 defaultController.defaultAdmin();
 defaultController.defaultOperations();
 defaultController.defaultTypeDocument();
+atsgoDefaultController.iniAuthData();
 
 module.exports = app;
