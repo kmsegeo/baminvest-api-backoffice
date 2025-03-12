@@ -59,6 +59,7 @@ defaultController.defaultTypeActeur();
 defaultController.defaultAdmin();
 defaultController.defaultOperations();
 defaultController.defaultTypeDocument();
+defaultController.defaultCampagneRisque();
 atsgoDefaultController.iniAuthData();
 
 module.exports = app;

@@ -32,9 +32,9 @@ const Agent = {
     return (await res).rows[0];
   },
   
-  async update(id, {r_civilite, r_nom, r_prenom}) {
-    const queryString = `UPDATE ${this.tableName} SET r_civilite=$1, r_nom=$2, r_prenom=$3 WHERE r_i=$4 RETURNING *`;
-    const res = db.query(queryString, [r_civilite, r_nom, r_prenom, id])
+  async update(id, {r_civilite, r_nom, r_prenom, e_profil}) {
+    const queryString = `UPDATE ${this.tableName} SET r_civilite=$1, r_nom=$2, r_prenom=$3, e_profil=$4 WHERE r_i=$5 RETURNING *`;
+    const res = db.query(queryString, [r_civilite, r_nom, r_prenom, e_profil, id])
     return (await res).rows[0];
   }
 

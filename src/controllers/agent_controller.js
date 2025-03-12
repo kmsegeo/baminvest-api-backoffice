@@ -112,7 +112,7 @@ const updateAgent = async (req, res) => {
      * [ ] Mise à jour sistématique des information acteur de l'agent
      */
     console.log("Mise à jour d'un agent..");
-    const {session_ref, r_civilite, r_nom, r_prenom} = req.body;
+    const {session_ref, r_civilite, r_nom, r_prenom, e_profil} = req.body;
 
     console.log(`Vérification des paramètres`)
     await Utils.expectedParameters({session_ref, r_civilite, r_nom, r_prenom}).then(async () => {
@@ -120,9 +120,9 @@ const updateAgent = async (req, res) => {
         console.log(`Vérification de session`);
         await Session.findByRef(session_ref).then(async () => {
 
-            await Agent.update(req.params.id, {r_civilite, r_nom, r_prenom}).then(result => {
+            await Agent.update(req.params.id, {r_civilite, r_nom, r_prenom, e_profil}).then(result => {
                 if (!result) return response(res, 400, `Une erreur s'est produite !`);
-                return response(res, 200, "Mise à jour de l'agent terminé", result)
+                return response(res, 200, "Mise à jour de l'agent terminé", result);
             }).catch(error => next(error));
 
         }).catch(error => response(res, 400, error));

@@ -31,8 +31,8 @@ const defaultCanals = async () => {
             }
             if (create) {
                 console.log(`Creation du canal`, new_canal.intitule);
-                await Utils.generateCanalCode(Canal.code_prefix, Canal.tableName, Canal.code_colunm).then(code => {
-                    Canal.findByCode(code).then(async exists => {
+                await Utils.generateCanalCode(Canal.code_prefix, Canal.tableName, Canal.code_colunm).then(async code => {
+                    await Canal.findByCode(code).then(async exists => {
                         if(exists) return;
                         let intitule = new_canal.intitule; 
                         let description = new_canal.description; 
@@ -69,17 +69,17 @@ const defaultAdmin = async () => {
             console.log("Création d'un profil par défaut: ");
             await Utils.generateCode("PRFA", Profil.tableName, 'r_code', '-').then(async code => {
                 await Profil.create(code, {
-                    intitule: `Admin`, 
-                    description: `Administrateur principal`,
-                    habilitation: ''
+                    r_intitule: `Admin`, 
+                    r_description: `Administrateur principal`,
+                    r_habilitation: ''
                 }).then(async profil => {
                     console.log(profil);
                     console.log(`Création d'un agent par défaut: `);
                     await Agent.create({
-                        civilite : 1, 
-                        nom : `Médiasoft`, 
-                        prenom : `Admin`, 
-                        profil : profil.r_code
+                        r_civilite : 1, 
+                        r_nom : `Médiasoft`, 
+                        r_prenom : `Admin`, 
+                        profil_code : profil.r_code
                     }).then(async admin => {
                         console.log(admin);
                         console.log("Cryptage du mot passe");
@@ -148,7 +148,6 @@ const defaultTypeDocument = async () => {
     const typeDocumentList = default_document_type.defaultList
 
     await TypeDocument.findAll().then(async typeDocuments => {
-        await Utils.sleep(1000);
         console.log(`Vérification des types document existants`);
         for (let typedoc of typeDocumentList) {
             let create = true;
@@ -158,11 +157,11 @@ const defaultTypeDocument = async () => {
 
             if (create) {
                 console.log(`Creation du type document`, typedoc.intitule);
-                await Utils.generateCanalCode(TypeDocument.code_prefix, TypeDocument.tableName, TypeDocument.code_colunm, TypeDocument.code_spliter).then(async code => {
+                await Utils.generateCode(TypeDocument.code_prefix, TypeDocument.tableName, TypeDocument.code_colunm, TypeDocument.code_spliter).then(async code => {
                     await TypeDocument.create(code, {
-                        intitule: typedoc.intitule, 
-                        description: typedoc.description,
-                        format: typedoc.format
+                        r_intitule: typedoc.intitule, 
+                        r_description: typedoc.description,
+                        r_format: typedoc.format
                     }).then(async result => {
                         console.log(result);
                     }).catch(err => console.log(err));
@@ -170,8 +169,12 @@ const defaultTypeDocument = async () => {
                 await Utils.sleep(1000);
             }
         }
-        
+        await Utils.sleep(1000);
     }).catch(err => console.log(err));
+}
+
+const defaultCampagneRisque = async () => {
+    
 }
 
 module.exports = {
@@ -180,4 +183,5 @@ module.exports = {
     defaultAdmin,
     defaultTypeDocument,
     defaultOperations,
+    defaultCampagneRisque,
 }
