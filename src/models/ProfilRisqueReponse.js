@@ -56,11 +56,11 @@ const ProfilRisqueReponse = {
         return (await res).rows[0];
     },
 
-    // async findAllByMatrice(matrice) {
-    //     const queryString = `SELECT * FROM ${this.tableName} WHERE e_ligne_colonne=$1`;
-    //     const res = db.query(queryString, [matrice]);
-    //     return (await res).rows;
-    // },
+    async findAllByMatrice(matrice) {
+        const queryString = `SELECT * FROM ${this.tableName} WHERE e_ligne_colonne=$1`;
+        const res = db.query(queryString, [matrice]);
+        return (await res).rows;
+    },
 
     async findAllByLineColumn(q) {
         const queryString = `SELECT * FROM ${this.tableName} WHERE e_ligne_colonne=$1 ORDER BY r_i ASC`;

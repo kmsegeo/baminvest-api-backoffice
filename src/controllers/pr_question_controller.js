@@ -20,10 +20,10 @@ const getAllPrPartieQuestions = async (req, res, next) => {
             .then(async results => {
                 if (results) {
                     for(let result of results) {
-                        await Acteur.findById(result.e_acteur).then(acteur => {
-                            result['acteur'] = acteur;
+                        // await Acteur.findById(result.e_acteur).then(acteur => {
+                            // result['acteur'] = acteur;
                             delete result.e_acteur;
-                        }).catch(err => next(err));
+                        // }).catch(err => next(err));
                         delete result.e_profil_partie;
                     }
                 }
