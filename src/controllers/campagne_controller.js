@@ -6,6 +6,7 @@ const Acteur = require('../models/Acteur');
 const ProfilRisquePartie = require('../models/ProfilRisquePartie');
 const ProfilRisqueQuestion = require('../models/ProfilRisqueQuestion');
 const ProfilRisqueReponse = require('../models/ProfilRisqueReponse');
+const ProfilRisqueRepMatrice = require('../models/ProfilRisqueRepMatrice');
 
 const periodicite = ['Indeterminée', 'Limitée'];
 const cible = ['Particulier', 'Entreprise', 'Les deux'];
@@ -110,15 +111,24 @@ const getCampagneDetails = async (req, res, next) => {
             for(let partie of parties) {
                 await ProfilRisqueQuestion.findAllByPartie(partie.r_i).then(async questions => {
                     for (let question of questions) {
-                        await ProfilRisqueReponse.findAllByLineColumn(question.r_i).then(async reponses => {
-                            // if (question.r_avec_colonne==1) {       // Matrice
-                            // await CampagneRepMatrice.findAllByQuestion(question.r_i).then(async matrices => {
-                                // for (let matrice of matrices) {
-                                // }
-                            // } else {                                // Reponses simple
-                            // }
-                            // }).catch(err => next(err));
-                            question['proposition_reponses'] = reponses;
+                        await ProfilRisqueRepMatrice.findAllByQuestion(question.r_i).then(async matrices => {
+                            for(let matrice of matrices) {
+                                await ProfilRisqueReponse.findAllByLineColumn(matrice.r_i).then(async reponses => {
+                                    if (question.r_avec_colonne==1) {       // Matrice
+                                        console.log(matrice.r_type)
+                                        if (matrice.r_type==1) {
+                                            matrice.r_type='colonnes' 
+                                            matrice['proposition_reponses'] = reponses;
+                                        } else {
+                                            matrice.r_type='lignes' 
+                                            matrice['proposition_reponses'] = reponses;
+                                        }
+                                        question['matrice'] = matrices
+                                    } else {                                // Reponses simple
+                                        question['proposition_reponses'] = reponses;
+                                    }
+                                }).catch(err => next(err));
+                            }
                         }).catch(err => next(err));
                     }
                     partie['questions'] = questions;

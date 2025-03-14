@@ -66,7 +66,7 @@ const ProfilRisqueRepMatrice = {
     },
 
     async findAllByQuestion(question) {
-        const queryString = `SELECT * FROM ${this.tableName} WHERE e_risques_questions=$1`;
+        const queryString = `SELECT * FROM ${this.tableName} WHERE e_risques_questions=$1 ORDER BY r_i ASC`;
         const res = db.query(queryString, [question]);
         return (await res).rows;
     },

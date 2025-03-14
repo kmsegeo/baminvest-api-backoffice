@@ -67,7 +67,7 @@ const ProfilRisqueQuestion = {
     },
 
     async findAllByPartie(partie) {
-        const queryString = `SELECT * FROM ${this.tableName} WHERE e_profil_partie=$1`;
+        const queryString = `SELECT * FROM ${this.tableName} WHERE e_profil_partie=$1 ORDER BY r_i ASC`;
         const res = db.query(queryString, [partie]);
         return (await res).rows;
     },

@@ -61,7 +61,7 @@ const ProfilRisquePartie = {
     },
 
     async findAllByCampgagne(campagne) {
-        const queryString = `SELECT * FROM ${this.tableName} WHERE e_campagne=$1`;
+        const queryString = `SELECT * FROM ${this.tableName} WHERE e_campagne=$1 ORDER BY r_i ASC`;
         const res = db.query(queryString, [campagne]);
         return (await res).rows;
     },
