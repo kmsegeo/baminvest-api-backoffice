@@ -1,6 +1,7 @@
 const default_canal = require('../config/default_canals');
 const default_document_type = require('../config/default_document_type');
 const default_operation_type = require('../config/default_operation_type');
+const default_acteur_type = require('../config/default_acteur_type');
 const Acteur = require('../models/Acteur');
 const Agent = require('../models/Agent');
 const Canal = require('../models/Canal');
@@ -10,6 +11,8 @@ const TypeOperation = require('../models/TypeOperation');
 const Utils = require('../utils/utils.methods');
 const bcrypt = require('bcryptjs');
 const Encryption = require('../utils/encryption.methods');
+const TypeActeur = require('../models/TypeActeur');
+const Campagne = require('../models/Campagne');
 
 const defaultCanals = async () => {
     /**
@@ -50,7 +53,36 @@ const defaultCanals = async () => {
     }).catch(err => console.log(err));
 }
 
-const defaultTypeActeur = async () => {}
+const defaultTypeActeur = async () => {
+    /**
+     * [x] Vérifier un par un que les type acteur par défauts listés existent dans la base de données
+     * [x] Si oui: ne rien faire ; Sinon: Créer les type acteur par défaut inexistant
+     */
+
+    console.log(`Vérification des type-opérations par défaut..`)
+
+    const typeActeursList = default_acteur_type.defaultList;
+
+    await TypeActeur.findAll().then(async type_acteurs => {
+        console.log(`Vérification des type-acteurs inexistants`);
+        for(let new_type_acteur of typeActeursList) {
+            let create = true;
+            for(let cur_type_acteur of type_acteurs) {
+                if (cur_type_acteur.r_intitule && new_type_acteur.intitule.toLowerCase()==cur_type_acteur.r_intitule.toLowerCase())
+                    create = false;
+            }
+            if (create) {
+                console.log(`Creation du type-opération`, new_type_acteur.intitule);
+                await Utils.generateCode(TypeActeur.codePrefix, TypeActeur.tableName, TypeActeur.codeColumn, TypeActeur.codeSpliter).then(async code => {
+                    let intitule = new_type_acteur.intitule; 
+                    let description = new_type_acteur.description;
+                    await TypeActeur.create(code, {intitule, description}).catch(err => console.log(err));
+                }).catch(err => console.log(err));
+                await Utils.sleep(1000);
+            }
+        }
+    }).catch(err => console.log(err));
+}
 
 const defaultAdmin = async () => {
 
@@ -67,7 +99,7 @@ const defaultAdmin = async () => {
         await Utils.sleep(1000);
         if (results.length==0) {
             console.log("Création d'un profil par défaut: ");
-            await Utils.generateCode("PRFA", Profil.tableName, 'r_code', '-').then(async code => {
+            await Utils.generateCode(Profil.codePrefix, Profil.tableName, Profil.codeColumn, Profil.codeSpliter).then(async code => {
                 await Profil.create(code, {
                     r_intitule: `Admin`, 
                     r_description: `Administrateur principal`,
@@ -89,7 +121,7 @@ const defaultAdmin = async () => {
                             await Acteur.createAgent({
                                 nom_complet: admin.r_nom + ' ' + admin.r_prenom,
                                 email: `admin@mediasoftci.net`,
-                                telephone: `+0000000000`,
+                                telephone: `2250000000000`,
                                 adresse: "Abidjan - Deux plateaux les vallons",
                                 agent: admin.r_i,
                                 mdp : hash
@@ -116,7 +148,6 @@ const defaultOperations = async () => {
     const typeOperationsList = default_operation_type.defaultList;
 
     await TypeOperation.findAll().then(async type_operations => {
-        await Utils.sleep(1000);
         console.log(`Vérification des type-opérations inexistants`)
         for(let new_type_op of typeOperationsList) {
             let create = true;
@@ -132,6 +163,7 @@ const defaultOperations = async () => {
                         console.log(tyop)
                     }).catch(err => console.log(err));
                 }).catch(err => console.log(err));
+                await Utils.sleep(1000);
             }
         }
     }).catch(err => console.log(err.stack));
@@ -169,12 +201,37 @@ const defaultTypeDocument = async () => {
                 await Utils.sleep(1000);
             }
         }
-        await Utils.sleep(1000);
+        // await Utils.sleep(1000);
     }).catch(err => console.log(err));
 }
 
 const defaultCampagneRisque = async () => {
-    
+    /**
+     * [x] Vérifier un par un que les campagnes par défauts listés existent dans la base de données
+     * [x] Si oui: ne rien faire ; Sinon: Créer les campagnes par défaut inexistant
+     */
+
+    console.log(`Vérification des campagnes par défaut..`)
+
+    const new_intitule = 'agent';
+    const new_description = 'Description du type agent';
+
+    await Campagne.findAll().then(async campagnes => {
+        console.log(`Vérification des campagnes inexistants`);
+        for(let cur_campagne of campagnes) {
+            if (cur_campagne.r_intitule && new_intitule.toLowerCase()==cur_campagne.r_intitule.toLowerCase())
+                create = false;
+        }
+        if (create) {
+            console.log(`Creation du type-opération`, new_intitule);
+            await Utils.generateCode(Campagne.codePrefix, Campagne.tableName, Campagne.codeColumn, Campagne.codeSpliter).then(async code => {
+                let intitule = new_intitule; 
+                let description = new_description;
+                await Campagne.create(code, {intitule, description}).catch(err => console.log(err));
+            }).catch(err => console.log(err));
+            await Utils.sleep(1000);
+        }
+    }).catch(err => console.log(err));
 }
 
 module.exports = {

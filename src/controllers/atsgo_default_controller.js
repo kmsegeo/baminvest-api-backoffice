@@ -8,8 +8,8 @@ const iniAuthData = async () => {
         if (authdata) return;
 
         const data = {
-            "userNameOrEmailAddress": "inexa.api.expose",
-            "password": "Api@inexa2025"
+            "userNameOrEmailAddress": process.env.ATSGO_AUTH_USER,
+            "password": process.env.ATSGO_AUTH_PASSWORD
         }
 
         fetch(process.env.ATSGO_URL_AUTHENTICATE, { 
