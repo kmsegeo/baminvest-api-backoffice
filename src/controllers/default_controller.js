@@ -25,7 +25,7 @@ const defaultCanals = async () => {
     
     await Canal.findAll().then(async canaux => {
         await Utils.sleep(1000);
-        console.log(`Vérification des canaux inexistants`)
+        console.log(`Vérification des canaux`)
         for(let new_canal of canauxList) {
             let create = true;
             for(let cur_canal of canaux) {
@@ -64,7 +64,7 @@ const defaultTypeActeur = async () => {
     const typeActeursList = default_acteur_type.defaultList;
 
     await TypeActeur.findAll().then(async type_acteurs => {
-        console.log(`Vérification des type-acteurs inexistants`);
+        console.log(`Vérification des type-acteurs`);
         for(let new_type_acteur of typeActeursList) {
             let create = true;
             for(let cur_type_acteur of type_acteurs) {
@@ -148,7 +148,7 @@ const defaultOperations = async () => {
     const typeOperationsList = default_operation_type.defaultList;
 
     await TypeOperation.findAll().then(async type_operations => {
-        console.log(`Vérification des type-opérations inexistants`)
+        console.log(`Vérification des type-opérations`)
         for(let new_type_op of typeOperationsList) {
             let create = true;
             for(let cur_type_op of type_operations) {
@@ -180,7 +180,7 @@ const defaultTypeDocument = async () => {
     const typeDocumentList = default_document_type.defaultList
 
     await TypeDocument.findAll().then(async typeDocuments => {
-        console.log(`Vérification des types document existants`);
+        console.log(`Vérification des types document`);
         for (let typedoc of typeDocumentList) {
             let create = true;
             for (let td of typeDocuments) 
@@ -217,7 +217,8 @@ const defaultCampagneRisque = async () => {
     const new_description = 'Description du type agent';
 
     await Campagne.findAll().then(async campagnes => {
-        console.log(`Vérification des campagnes inexistants`);
+        console.log(`Vérification des campagnes`);
+        let create = true;
         for(let cur_campagne of campagnes) {
             if (cur_campagne.r_intitule && new_intitule.toLowerCase()==cur_campagne.r_intitule.toLowerCase())
                 create = false;
@@ -225,9 +226,10 @@ const defaultCampagneRisque = async () => {
         if (create) {
             console.log(`Creation du type-opération`, new_intitule);
             await Utils.generateCode(Campagne.codePrefix, Campagne.tableName, Campagne.codeColumn, Campagne.codeSpliter).then(async code => {
-                let intitule = new_intitule; 
-                let description = new_description;
-                await Campagne.create(code, {intitule, description}).catch(err => console.log(err));
+                let acteur_id = 1
+                let r_intitule = new_intitule; 
+                let r_description = new_description;
+                await Campagne.create(code, acteur_id, {r_intitule, r_description}).catch(err => console.log(err));
             }).catch(err => console.log(err));
             await Utils.sleep(1000);
         }

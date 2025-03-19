@@ -5,6 +5,19 @@ const ValeurLiquidative = require("../models/ValeurLiquidative");
 const Analytics = require('../utils/analytics.methods');
 const Utils = require("../utils/utils.methods");
 
+const getAllValeurLiquidatives = async (req, res, next) => {
+    
+    const apikey = req.apikey.r_valeur;
+    const url  = `${process.env.ATSGO_URL_VL_HISTORY}?ApiKey=${apikey}`;
+
+    await fetch(url)
+        .then(async res => res.json())
+        .then(async data => {
+            if (data.status!=200) return response(res, data.status, `Une erreur lors de la récupération des fonds !`)
+            return response(res, 200, `Chargement de fonds terminé`, data.payLoad)
+    }).catch(err => next(err));
+}
+
 const getAllValLiquidativeAtDate = async (req, res, next) => {
 
     const from = req.params.date_debut;
@@ -114,6 +127,7 @@ const updateValLiquidative = async (req, res, next) => {
 
 
 module.exports = {
+    getAllValeurLiquidatives,
     getAllValLiquidativeAtDate,
     getAllFondsValLiquidativeAtDate,
     createValLiquidative,

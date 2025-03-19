@@ -3,12 +3,12 @@ const Client = require("../models/Client");
 const TypeActeur = require("../models/TypeActeur");
 const Signataire = require("../models/Signataire");
 const KYC = require('../models/KYC');
-const ActeurReponse = require("../models/ProfilRisqueActeurReponse");
 const Document = require("../models/Document");
 const Representant = require("../models/Representant");
 const PersonneContacter = require('../models/PersonneContacter');
 const PersonnelEntreprise = require('../models/PersonnelEntreprise');
 const Acteur = require('../models/Acteur');
+const Data = require('../utils/data.methods');
 
 const type_piece = [``, `cni`,`Passport`,`permis`];
 const type_compte = [``, `Compte Individuel`, `Compte indivis`, `Compte conjoint`];
@@ -59,7 +59,7 @@ const loadIndividualClients = async (req, res, next) => {
             
             console.log(`Chargement du KYC de compte particulier`);
             await KYC.Particulier.findByParticulierId(particulier.e_particulier).then(async kyc => {
-                particulier['kyc'] = kyc ? kyc : {};
+                particulier['kyc'] = Data.replaceIndividualKYCNumeriques(kyc);
             }).catch(err => next(err));
 
             console.log(`Chargement des documents du particulier`)
@@ -123,7 +123,7 @@ const loadCorporateClients = async (req, res, next) => {
             
             console.log(`Chargement du KYC de compte entreprise`);
             await KYC.Entreprise.findByEntrepriseId(entreprise.e_entreprise).then(async kyc => {
-                entreprise['kyc'] = kyc ? kyc : {};
+                entreprise['kyc'] = Data.replaceCorporateKYCNumeriques(kyc);
             }).catch(err => next(err));
 
             console.log(`Chargement des documents du entreprise`)
@@ -180,7 +180,7 @@ const getIndividualClientData = async (req, res, next) => {
         
         console.log(`Chargement du KYC de compte particulier`);
         await KYC.Particulier.findByParticulierId(particulier.e_particulier).then(kyc => {
-            particulier['kyc'] = kyc ? kyc : {};
+            particulier['kyc'] = Data.replaceIndividualKYCNumeriques(kyc);
         }).catch(err => next(err));
 
         console.log(`Chargement des documents du particulier`)
@@ -224,7 +224,7 @@ const getCorporateClientData = async (req, res, next) => {
 
         console.log(`Chargement du KYC de compte entreprise`);
         await KYC.Entreprise.findByEntrepriseId(entreprise.e_entreprise).then(kyc => {
-            entreprise['kyc'] = kyc ? kyc : {};
+            entreprise['kyc'] = Data.replaceCorporateKYCNumeriques(kyc);
         }).catch(err => next(err));
         
         console.log(`Chargement des documents du entreprise`)

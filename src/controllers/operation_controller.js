@@ -107,10 +107,10 @@ async function loadAllByTypeOperation (op_code, req, res, next) {
 }
 
 const loadAllByActeur = async (req, res, next) => {
-    const id = req.params.id;
-    await Acteur.findById(id).then(async acteur => {
+    const acteur_id = req.params.id;
+    await Acteur.findById(acteur_id).then(async acteur => {
         if (!acteur) return response(res, 404, `Acteur inconnu !`);
-        await Operation.findAllByActeur(id).then(async operations => {
+        await Operation.findAllByActeur(acteur_id).then(async operations => {
             if (operations) for(let operation of operations) {
                 await TypeOperation.findById(operation.e_type_operation).then(type_operation => {
                     operation['type_operation'] = type_operation;

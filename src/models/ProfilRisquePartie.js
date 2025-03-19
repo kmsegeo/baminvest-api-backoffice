@@ -9,7 +9,7 @@ const ProfilRisquePartie = {
 
     async findAll() {
         const queryString = `
-            SELECT * FROM ${this.tableName}`;
+            SELECT * FROM ${this.tableName} ORDER BY r_i ASC`;
         const res = db.query(queryString, []);
         return (await res).rows;
     },
@@ -39,7 +39,7 @@ const ProfilRisquePartie = {
             RETURNING *`;
         const date = new Date();
         const res = db.query(queryString, [ref, r_ordre, r_intitule, r_description, r_points_totale, date, date, 1, e_campagne, e_acteur]);
-        return (await res).rows;
+        return (await res).rows[0];
     },
 
     async findById(id) {

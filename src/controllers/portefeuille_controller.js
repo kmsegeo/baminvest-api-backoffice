@@ -30,10 +30,10 @@ const loadAllPortefeuilles = async (req, res, next) => {
 }
 
 const loadActeurPortefeuilles = async (req, res, next) => {
-    const id = req.params.id;
-    await Acteur.findById(id).then(async acteur => {
+    const acteur_id = req.params.id;
+    await Acteur.findById(acteur_id).then(async acteur => {
         if (!acteur) response(res, 404, `Acteur inconnu`);
-        await Portefeuille.findAllByActeur(id).then(async portefeuilles => {
+        await Portefeuille.findAllByActeur(acteur_id).then(async portefeuilles => {
             if (portefeuilles) for(let portefeuille of portefeuilles) {
                 await Fonds.findById(portefeuille.e_fonds).then(fonds => {
                     portefeuille['fonds'] = fonds;

@@ -19,8 +19,8 @@ router.put('/entreprises/:id/desactiver', app_auth, session_verify, clientContro
 router.put('/entreprises/:id/activer', app_auth, session_verify, clientController.enableEntreprise);
 
 router.get('/portefeuilles', app_auth, session_verify, portefeuilleController.loadAllPortefeuilles);
-router.get('/:id/portefeuilles', app_auth, session_verify, portefeuilleController.loadActeurPortefeuilles);
 
+router.get('/:id/portefeuilles', app_auth, session_verify, portefeuilleController.loadActeurPortefeuilles);
 router.get('/:id/operations', app_auth, session_verify, operationController.loadAllByActeur);
 
 module.exports = router;

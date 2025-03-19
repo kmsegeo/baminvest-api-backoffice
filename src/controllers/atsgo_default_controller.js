@@ -2,7 +2,7 @@ const Systeme = require("../models/Systeme")
 
 const iniAuthData = async () => {
     
-    console.log(`Initialisation de l'autehntification d'api de ATSGO..`)
+    console.log(`Autehntification d'api de ATSGO..`)
 
     await Systeme.findByTag('atsgo_api_key').then(async authdata => {
         if (authdata) return;
