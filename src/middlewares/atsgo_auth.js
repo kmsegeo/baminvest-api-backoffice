@@ -25,8 +25,8 @@ module.exports = async (req, res, next) => {
             .then(async data => {
                 if (data.status!=200) return response(res, data.status, `Erreur d'authentification api !`)
                 await Systeme.update('atsgo_api_key', {
-                    valeur: data.payLoad.apiKey, 
-                    description: data.payLoad.expirationDate
+                    r_valeur: data.payLoad.apiKey, 
+                    r_description: data.payLoad.expirationDate
                 }).then(async apikey => {
                     req.apikey = apikey;
                 })

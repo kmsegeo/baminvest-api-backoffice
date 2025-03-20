@@ -44,6 +44,7 @@ app.use(`${base_path}/p-risques`, campagneRoutes);
 app.use(`${base_path}/fonds`, fondsRoutes);
 app.use(`${base_path}/operations`, operationRoutes);
 app.use(`${base_path}/validations`, circuitRoutes);
+// app.use(`${base_path}/news/`)
 
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 app.use(base_path + '/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
