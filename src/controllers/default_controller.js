@@ -24,7 +24,7 @@ const defaultCanals = async () => {
     const canauxList = default_canal.defaultList;
     
     await Canal.findAll().then(async canaux => {
-        await Utils.sleep(1000);
+        // await Utils.sleep(500);
         console.log(`Vérification des canaux`)
         for(let new_canal of canauxList) {
             let create = true;
@@ -47,7 +47,7 @@ const defaultCanals = async () => {
                         }).catch(err => console.log(err));
                     }).catch(err=>console.log(err));
                 }).catch(err => console.log(err));
-                await Utils.sleep(1000);
+                await Utils.sleep(500);
             }
         }
     }).catch(err => console.log(err));
@@ -78,7 +78,7 @@ const defaultTypeActeur = async () => {
                     let description = new_type_acteur.description;
                     await TypeActeur.create(code, {intitule, description}).catch(err => console.log(err));
                 }).catch(err => console.log(err));
-                await Utils.sleep(1000);
+                await Utils.sleep(500);
             }
         }
     }).catch(err => console.log(err));
@@ -96,7 +96,6 @@ const defaultAdmin = async () => {
     console.log(`Vérification du compte admin par défaut..`)
 
     await Agent.findAll().then(async results => {
-        await Utils.sleep(1000);
         if (results.length==0) {
             console.log("Création d'un profil par défaut: ");
             await Utils.generateCode(Profil.codePrefix, Profil.tableName, Profil.codeColumn, Profil.codeSpliter).then(async code => {
@@ -163,7 +162,7 @@ const defaultOperations = async () => {
                         console.log(tyop)
                     }).catch(err => console.log(err));
                 }).catch(err => console.log(err));
-                await Utils.sleep(1000);
+                await Utils.sleep(500);
             }
         }
     }).catch(err => console.log(err.stack));
@@ -198,10 +197,9 @@ const defaultTypeDocument = async () => {
                         console.log(result);
                     }).catch(err => console.log(err));
                 }).catch(err => console.log(err));
-                await Utils.sleep(1000);
+                await Utils.sleep(500);
             }
         }
-        // await Utils.sleep(1000);
     }).catch(err => console.log(err));
 }
 
@@ -231,7 +229,7 @@ const defaultCampagneRisque = async () => {
                 let r_description = new_description;
                 await Campagne.create(code, acteur_id, {r_intitule, r_description}).catch(err => console.log(err));
             }).catch(err => console.log(err));
-            await Utils.sleep(1000);
+            await Utils.sleep(500);
         }
     }).catch(err => console.log(err));
 }
