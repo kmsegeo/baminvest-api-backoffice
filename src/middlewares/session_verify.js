@@ -18,8 +18,7 @@ module.exports = async (req, res, next) => {
         }
         
         console.log(`Vérification de session`)
-        await Session.findByRef(decodedToken.session)
-        .then(session => {
+        await Session.findByRef(decodedToken.session).then(session => {
             if (!session) throw `Erreur de session !`;
             if (session.r_statut==0) throw `Session inactive !`;
             req.session = session;

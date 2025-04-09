@@ -47,6 +47,13 @@ const TypeDocument = {
         return (await res).rows[0];
     },
 
+    async findByIntitule(intitule) {
+        const queryString = `
+            SELECT r_i, r_code, r_intitule, r_description, r_format FROM ${this.tableName} WHERE r_intitule=$1`;
+        const res = db.query(queryString, [intitule]);
+        return (await res).rows[0];
+    },
+
     async update(code, {r_intitule, r_description, r_format}) {
         const queryString = `
             UPDATE ${this.tableName} 
