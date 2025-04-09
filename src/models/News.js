@@ -5,7 +5,7 @@ const News = {
     tableName: 't_news',
 
     async findAll() {
-        const res = await db.query(`SELECT * FROM ${this.tableName} WHERE r_statut=$1`, [1]);
+        const res = await db.query(`SELECT * FROM ${this.tableName}`);
         return res.rows;
     },
 
@@ -25,7 +25,7 @@ const News = {
     },
 
     async findById(id) {
-        const res = await db.query(`SELECT * FROM ${this.tableName} WHERE r_i=$1 AND r_statut=$2`, [id, 1]);
+        const res = await db.query(`SELECT * FROM ${this.tableName} WHERE r_i=$1`, [id]);
         return res.rows[0];
     },
 
@@ -40,7 +40,7 @@ const News = {
     },
 
     async delete(id) {
-        const res = await db.query(`UPDATE ${this.tableName} SET r_statut=$1 WHERE r_i=$2 RETURNING *`, [0, id]);
+        const res = await db.query(`UPDATE ${this.tableName} SET r_statut=$1 WHERE r_i=$2 RETURNING *`, [2, id]);
         return res.rows[0];
     }
 }

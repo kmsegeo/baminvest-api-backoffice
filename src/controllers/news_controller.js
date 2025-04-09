@@ -11,7 +11,6 @@ const getAllNews = async (req, res, next) => {
                 delete doc.r_date_creer
                 delete doc.r_date_modif
                 result['fichier'] = doc;
-                delete result.r_statut
                 delete result.e_document
                 delete result.e_acteur
             }).catch(err => next(err));
@@ -34,7 +33,6 @@ const createNews = async (req, res, next) => {
                     delete doc.r_date_creer
                     delete doc.r_date_modif
                     result['fichier'] = doc;
-                    delete result.r_statut
                     delete result.e_document
                     delete result.e_acteur
                 }).catch(err => next(err));
@@ -53,7 +51,6 @@ const getOneNews = async (req, res, next) => {
             delete doc.r_date_creer
             delete doc.r_date_modif
             result['fichier'] = doc;
-            delete result.r_statut
             delete result.e_document
             delete result.e_acteur
         }).catch(err => next(err));
@@ -75,7 +72,6 @@ const updateNews = async (req, res, next) => {
                     delete doc.r_date_creer
                     delete doc.r_date_modif
                     result['fichier'] = doc;
-                    delete result.r_statut
                     delete result.e_document
                     delete result.e_acteur
                 }).catch(err => next(err));
