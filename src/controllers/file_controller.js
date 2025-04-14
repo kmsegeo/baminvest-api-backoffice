@@ -3,10 +3,18 @@ const Document = require('../models/Document');
 const TypeDocument = require('../models/TypeDocument');
 
 const getAllFiles = async (req, res, next) => {
+    
     const intitule = req.query.intitule;
-    await Document.findAllByIntitule(intitule).then(async documents => {
-        return response(res, 200, `Chargement terminé`, documents);
-    }).catch(err => next(err));
+
+    if (!intitule) 
+        await Document.findAll().then(async documents => {
+            return response(res, 200, `Chargement terminé`, documents);
+        }).catch(err => next(err));
+    else
+        await Document.findAllByIntitule(intitule).then(async documents => {
+            return response(res, 200, `Chargement terminé`, documents);
+        }).catch(err => next(err));
+
 }
 
 const saveOneFile = async (req, res, next) => {
@@ -15,7 +23,7 @@ const saveOneFile = async (req, res, next) => {
 
     const acteur = req.session.e_acteur;
     const typedoc_intitule = req.params.intitule;
-    const nom_fichier = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    const nom_fichier = `${req.protocol}://${req.get('host')}/apibam/uploads/${req.file.filename}`;
 
     await TypeDocument.findByIntitule(typedoc_intitule).then(async typedoc => {
         if(!typedoc) return response(res, 404, `Le type document '${typedoc_intitule}' introuvable !`);
