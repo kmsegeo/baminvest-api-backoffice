@@ -11,7 +11,7 @@
     "http"
   ],
   "paths": {
-    "/api/v1/auth/encode": {
+    "/v1/auth/encode": {
       "post": {
         "description": "",
         "parameters": [
@@ -44,7 +44,7 @@
         }
       }
     },
-    "/api/v1/auth/verify": {
+    "/v1/auth/verify": {
       "get": {
         "description": "",
         "parameters": [
@@ -76,7 +76,7 @@
         }
       }
     },
-    "/api/v1/config/sys/": {
+    "/v1/config/sys/": {
       "get": {
         "description": "",
         "parameters": [
@@ -166,7 +166,7 @@
         }
       }
     },
-    "/api/v1/config/sys/{tag}": {
+    "/v1/config/sys/{tag}": {
       "get": {
         "description": "",
         "parameters": [
@@ -268,7 +268,7 @@
         }
       }
     },
-    "/api/v1/config/canal/list": {
+    "/v1/config/canal/list": {
       "get": {
         "description": "",
         "parameters": [
@@ -305,7 +305,7 @@
         }
       }
     },
-    "/api/v1/config/canal": {
+    "/v1/config/canal": {
       "post": {
         "description": "",
         "parameters": [
@@ -363,7 +363,7 @@
         }
       }
     },
-    "/api/v1/config/canal/{code}": {
+    "/v1/config/canal/{code}": {
       "get": {
         "description": "",
         "parameters": [
@@ -465,7 +465,7 @@
         }
       }
     },
-    "/api/v1/t-acteurs/": {
+    "/v1/t-acteurs/": {
       "get": {
         "description": "",
         "parameters": [
@@ -552,7 +552,7 @@
         }
       }
     },
-    "/api/v1/t-acteurs/{code}": {
+    "/v1/t-acteurs/{code}": {
       "get": {
         "description": "",
         "parameters": [
@@ -654,7 +654,7 @@
         }
       }
     },
-    "/api/v1/t-acteurs/{code}/desactiver": {
+    "/v1/t-acteurs/{code}/desactiver": {
       "put": {
         "description": "",
         "parameters": [
@@ -697,7 +697,7 @@
         }
       }
     },
-    "/api/v1/t-acteurs/{code}/activer": {
+    "/v1/t-acteurs/{code}/activer": {
       "put": {
         "description": "",
         "parameters": [
@@ -740,7 +740,7 @@
         }
       }
     },
-    "/api/v1/t-documents/": {
+    "/v1/t-documents/": {
       "get": {
         "description": "",
         "parameters": [
@@ -830,7 +830,7 @@
         }
       }
     },
-    "/api/v1/t-documents/{code}": {
+    "/v1/t-documents/{code}": {
       "get": {
         "description": "",
         "parameters": [
@@ -935,7 +935,7 @@
         }
       }
     },
-    "/api/v1/t-documents/{code}/desactiver": {
+    "/v1/t-documents/{code}/desactiver": {
       "put": {
         "description": "",
         "parameters": [
@@ -978,7 +978,7 @@
         }
       }
     },
-    "/api/v1/t-documents/{code}/activer": {
+    "/v1/t-documents/{code}/activer": {
       "put": {
         "description": "",
         "parameters": [
@@ -1021,7 +1021,7 @@
         }
       }
     },
-    "/api/v1/t-operations/": {
+    "/v1/t-operations/": {
       "get": {
         "description": "",
         "parameters": [
@@ -1108,7 +1108,7 @@
         }
       }
     },
-    "/api/v1/t-operations/{code}": {
+    "/v1/t-operations/{code}": {
       "get": {
         "description": "",
         "parameters": [
@@ -1207,7 +1207,7 @@
         }
       }
     },
-    "/api/v1/t-operations/{code}/desactiver": {
+    "/v1/t-operations/{code}/desactiver": {
       "put": {
         "description": "",
         "parameters": [
@@ -1250,7 +1250,7 @@
         }
       }
     },
-    "/api/v1/t-operations/{code}/activer": {
+    "/v1/t-operations/{code}/activer": {
       "put": {
         "description": "",
         "parameters": [
@@ -1293,7 +1293,7 @@
         }
       }
     },
-    "/api/v1/t-moypaiement/": {
+    "/v1/t-moypaiement/": {
       "get": {
         "description": "",
         "parameters": [
@@ -1383,7 +1383,7 @@
         }
       }
     },
-    "/api/v1/t-moypaiement/{code}": {
+    "/v1/t-moypaiement/{code}": {
       "get": {
         "description": "",
         "parameters": [
@@ -1485,7 +1485,7 @@
         }
       }
     },
-    "/api/v1/t-moypaiement/{code}/desactiver": {
+    "/v1/t-moypaiement/{code}/desactiver": {
       "put": {
         "description": "",
         "parameters": [
@@ -1528,7 +1528,7 @@
         }
       }
     },
-    "/api/v1/t-moypaiement/{code}/activer": {
+    "/v1/t-moypaiement/{code}/activer": {
       "put": {
         "description": "",
         "parameters": [
@@ -1571,7 +1571,7 @@
         }
       }
     },
-    "/api/v1/profils/": {
+    "/v1/profils/": {
       "get": {
         "description": "",
         "parameters": [
@@ -1661,7 +1661,7 @@
         }
       }
     },
-    "/api/v1/profils/{code}": {
+    "/v1/profils/{code}": {
       "get": {
         "description": "",
         "parameters": [
@@ -1766,7 +1766,7 @@
         }
       }
     },
-    "/api/v1/profils/{code}/desactiver": {
+    "/v1/profils/{code}/desactiver": {
       "put": {
         "description": "",
         "parameters": [
@@ -1809,7 +1809,7 @@
         }
       }
     },
-    "/api/v1/profils/{code}/activer": {
+    "/v1/profils/{code}/activer": {
       "put": {
         "description": "",
         "parameters": [
@@ -1852,7 +1852,7 @@
         }
       }
     },
-    "/api/v1/agents/login": {
+    "/v1/agents/login": {
       "post": {
         "description": "",
         "parameters": [
@@ -1919,7 +1919,7 @@
         }
       }
     },
-    "/api/v1/agents/{id}/sessions": {
+    "/v1/agents/{id}/sessions": {
       "get": {
         "description": "",
         "parameters": [
@@ -1962,7 +1962,7 @@
         }
       }
     },
-    "/api/v1/agents/{id}/sessions/{ref}": {
+    "/v1/agents/{id}/sessions/{ref}": {
       "delete": {
         "description": "",
         "parameters": [
@@ -2011,7 +2011,7 @@
         }
       }
     },
-    "/api/v1/agents/": {
+    "/v1/agents/": {
       "get": {
         "description": "",
         "parameters": [
@@ -2119,7 +2119,7 @@
         }
       }
     },
-    "/api/v1/agents/{id}": {
+    "/v1/agents/{id}": {
       "get": {
         "description": "",
         "parameters": [
@@ -2227,7 +2227,7 @@
         }
       }
     },
-    "/api/v1/agents/{id}/motdepasse": {
+    "/v1/agents/{id}/motdepasse": {
       "put": {
         "description": "",
         "parameters": [
@@ -2288,7 +2288,7 @@
         }
       }
     },
-    "/api/v1/agents/{id}/desactiver": {
+    "/v1/agents/{id}/desactiver": {
       "put": {
         "description": "",
         "parameters": [
@@ -2331,7 +2331,7 @@
         }
       }
     },
-    "/api/v1/agents/{id}/activer": {
+    "/v1/agents/{id}/activer": {
       "put": {
         "description": "",
         "parameters": [
@@ -2374,7 +2374,7 @@
         }
       }
     },
-    "/api/v1/agents/{id}/panier": {
+    "/v1/agents/{id}/panier": {
       "get": {
         "description": "",
         "parameters": [
@@ -2417,7 +2417,7 @@
         }
       }
     },
-    "/api/v1/agents/affectation/{id}/valider": {
+    "/v1/agents/affectation/{id}/valider": {
       "put": {
         "description": "",
         "parameters": [
@@ -2478,7 +2478,7 @@
         }
       }
     },
-    "/api/v1/agents/validation/historique": {
+    "/v1/agents/validation/historique": {
       "get": {
         "description": "",
         "parameters": [
@@ -2515,7 +2515,7 @@
         }
       }
     },
-    "/api/v1/acteurs/particuliers": {
+    "/v1/acteurs/particuliers": {
       "get": {
         "description": "",
         "parameters": [
@@ -2552,7 +2552,7 @@
         }
       }
     },
-    "/api/v1/acteurs/particuliers/{id}": {
+    "/v1/acteurs/particuliers/{id}": {
       "get": {
         "description": "",
         "parameters": [
@@ -2595,7 +2595,7 @@
         }
       }
     },
-    "/api/v1/acteurs/particuliers/{id}/desactiver": {
+    "/v1/acteurs/particuliers/{id}/desactiver": {
       "put": {
         "description": "",
         "parameters": [
@@ -2638,7 +2638,7 @@
         }
       }
     },
-    "/api/v1/acteurs/particuliers/{id}/activer": {
+    "/v1/acteurs/particuliers/{id}/activer": {
       "put": {
         "description": "",
         "parameters": [
@@ -2681,7 +2681,7 @@
         }
       }
     },
-    "/api/v1/acteurs/entreprises": {
+    "/v1/acteurs/entreprises": {
       "get": {
         "description": "",
         "parameters": [
@@ -2718,7 +2718,7 @@
         }
       }
     },
-    "/api/v1/acteurs/entreprises/{id}": {
+    "/v1/acteurs/entreprises/{id}": {
       "get": {
         "description": "",
         "parameters": [
@@ -2761,7 +2761,7 @@
         }
       }
     },
-    "/api/v1/acteurs/entreprises/{id}/desactiver": {
+    "/v1/acteurs/entreprises/{id}/desactiver": {
       "put": {
         "description": "",
         "parameters": [
@@ -2804,7 +2804,7 @@
         }
       }
     },
-    "/api/v1/acteurs/entreprises/{id}/activer": {
+    "/v1/acteurs/entreprises/{id}/activer": {
       "put": {
         "description": "",
         "parameters": [
@@ -2847,7 +2847,7 @@
         }
       }
     },
-    "/api/v1/acteurs/portefeuilles": {
+    "/v1/acteurs/portefeuilles": {
       "get": {
         "description": "",
         "parameters": [
@@ -2884,50 +2884,7 @@
         }
       }
     },
-    "/api/v1/acteurs/{id}/portefeuilles": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "appauth",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "app_id",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "op_code",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "timestamp",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/v1/acteurs/{id}/operations": {
+    "/v1/acteurs/{id}/portefeuilles": {
       "get": {
         "description": "",
         "parameters": [
@@ -2970,7 +2927,50 @@
         }
       }
     },
-    "/api/v1/p-risques/": {
+    "/v1/acteurs/{id}/operations": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "appauth",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "app_id",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "op_code",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/p-risques/": {
       "get": {
         "description": "",
         "parameters": [
@@ -3069,7 +3069,7 @@
         }
       }
     },
-    "/api/v1/p-risques/{code}": {
+    "/v1/p-risques/{code}": {
       "get": {
         "description": "",
         "parameters": [
@@ -3180,7 +3180,7 @@
         }
       }
     },
-    "/api/v1/p-risques/{code}/parties": {
+    "/v1/p-risques/{code}/parties": {
       "get": {
         "description": "",
         "parameters": [
@@ -3223,7 +3223,7 @@
         }
       }
     },
-    "/api/v1/p-risques/parties": {
+    "/v1/p-risques/parties": {
       "post": {
         "description": "",
         "parameters": [
@@ -3284,7 +3284,7 @@
         }
       }
     },
-    "/api/v1/p-risques/parties/{p_ref}": {
+    "/v1/p-risques/parties/{p_ref}": {
       "get": {
         "description": "",
         "parameters": [
@@ -3392,7 +3392,7 @@
         }
       }
     },
-    "/api/v1/p-risques/parties/{p_ref}/questions": {
+    "/v1/p-risques/parties/{p_ref}/questions": {
       "get": {
         "description": "",
         "parameters": [
@@ -3435,7 +3435,7 @@
         }
       }
     },
-    "/api/v1/p-risques/parties/questions": {
+    "/v1/p-risques/parties/questions": {
       "post": {
         "description": "",
         "parameters": [
@@ -3499,7 +3499,7 @@
         }
       }
     },
-    "/api/v1/p-risques/parties/questions/{q_ref}": {
+    "/v1/p-risques/parties/questions/{q_ref}": {
       "get": {
         "description": "",
         "parameters": [
@@ -3610,7 +3610,7 @@
         }
       }
     },
-    "/api/v1/p-risques/questions/{q_ref}/matrices": {
+    "/v1/p-risques/questions/{q_ref}/matrices": {
       "get": {
         "description": "",
         "parameters": [
@@ -3653,7 +3653,7 @@
         }
       }
     },
-    "/api/v1/p-risques/questions/matrices": {
+    "/v1/p-risques/questions/matrices": {
       "post": {
         "description": "",
         "parameters": [
@@ -3714,7 +3714,7 @@
         }
       }
     },
-    "/api/v1/p-risques/questions/matrices/{rm_ref}": {
+    "/v1/p-risques/questions/matrices/{rm_ref}": {
       "get": {
         "description": "",
         "parameters": [
@@ -3822,7 +3822,7 @@
         }
       }
     },
-    "/api/v1/p-risques/matrices/{rm_ref}/reponses": {
+    "/v1/p-risques/matrices/{rm_ref}/reponses": {
       "get": {
         "description": "",
         "parameters": [
@@ -3865,7 +3865,7 @@
         }
       }
     },
-    "/api/v1/p-risques/matrices/reponses": {
+    "/v1/p-risques/matrices/reponses": {
       "post": {
         "description": "",
         "parameters": [
@@ -3926,7 +3926,7 @@
         }
       }
     },
-    "/api/v1/p-risques/matrices/reponses/{_ref}": {
+    "/v1/p-risques/matrices/reponses/{_ref}": {
       "get": {
         "description": "",
         "parameters": [
@@ -4034,7 +4034,7 @@
         }
       }
     },
-    "/api/v1/fonds/": {
+    "/v1/fonds/": {
       "get": {
         "description": "",
         "parameters": [
@@ -4071,7 +4071,7 @@
         }
       }
     },
-    "/api/v1/fonds/val_liquidatives": {
+    "/v1/fonds/val_liquidatives": {
       "get": {
         "description": "",
         "parameters": [
@@ -4108,7 +4108,7 @@
         }
       }
     },
-    "/api/v1/operations/{date_debut}/{date_fin}": {
+    "/v1/operations/{date_debut}/{date_fin}": {
       "get": {
         "description": "",
         "parameters": [
@@ -4157,7 +4157,7 @@
         }
       }
     },
-    "/api/v1/operations/souscription/{date_debut}/{date_fin}": {
+    "/v1/operations/souscription/{date_debut}/{date_fin}": {
       "get": {
         "description": "",
         "parameters": [
@@ -4206,7 +4206,7 @@
         }
       }
     },
-    "/api/v1/operations/rachat/{date_debut}/{date_fin}": {
+    "/v1/operations/rachat/{date_debut}/{date_fin}": {
       "get": {
         "description": "",
         "parameters": [
@@ -4255,7 +4255,7 @@
         }
       }
     },
-    "/api/v1/operations/transfert/{date_debut}/{date_fin}": {
+    "/v1/operations/transfert/{date_debut}/{date_fin}": {
       "get": {
         "description": "",
         "parameters": [
@@ -4304,7 +4304,7 @@
         }
       }
     },
-    "/api/v1/operations/{ref}": {
+    "/v1/operations/{ref}": {
       "get": {
         "description": "",
         "parameters": [
@@ -4347,7 +4347,7 @@
         }
       }
     },
-    "/api/v1/operations/{date_debut}/{date_fin}/commissions": {
+    "/v1/operations/{date_debut}/{date_fin}/commissions": {
       "get": {
         "description": "",
         "parameters": [
@@ -4396,7 +4396,7 @@
         }
       }
     },
-    "/api/v1/validations/circuits": {
+    "/v1/validations/circuits": {
       "get": {
         "description": "",
         "parameters": [
@@ -4489,7 +4489,7 @@
         }
       }
     },
-    "/api/v1/validations/circuits/{ref}": {
+    "/v1/validations/circuits/{ref}": {
       "get": {
         "description": "",
         "parameters": [
@@ -4594,7 +4594,7 @@
         }
       }
     },
-    "/api/v1/validations/circuits/{ref}/etapes": {
+    "/v1/validations/circuits/{ref}/etapes": {
       "get": {
         "description": "",
         "parameters": [
@@ -4637,7 +4637,7 @@
         }
       }
     },
-    "/api/v1/validations/circuits/etapes": {
+    "/v1/validations/circuits/etapes": {
       "post": {
         "description": "",
         "parameters": [
@@ -4710,7 +4710,7 @@
         }
       }
     },
-    "/api/v1/validations/circuits/etapes/{ref}": {
+    "/v1/validations/circuits/etapes/{ref}": {
       "get": {
         "description": "",
         "parameters": [
@@ -4830,7 +4830,7 @@
         }
       }
     },
-    "/api/v1/fichiers/": {
+    "/v1/fichiers/": {
       "get": {
         "description": "",
         "parameters": [
@@ -4872,7 +4872,7 @@
         }
       }
     },
-    "/api/v1/fichiers/{intitule}": {
+    "/v1/fichiers/{intitule}": {
       "post": {
         "description": "",
         "parameters": [
@@ -4915,7 +4915,7 @@
         }
       }
     },
-    "/api/v1/fichiers/{ref}": {
+    "/v1/fichiers/{ref}": {
       "get": {
         "description": "",
         "parameters": [
@@ -4958,7 +4958,7 @@
         }
       }
     },
-    "/api/v1/news/": {
+    "/v1/news/": {
       "get": {
         "description": "",
         "parameters": [
@@ -5048,7 +5048,7 @@
         }
       }
     },
-    "/api/v1/news/{id}": {
+    "/v1/news/{id}": {
       "get": {
         "description": "",
         "parameters": [

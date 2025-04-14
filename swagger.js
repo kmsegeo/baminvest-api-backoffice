@@ -6,7 +6,7 @@ const doc = {
         version: process.env.VERSION,
         description: `Api backoffice de l'application de fonds commun de placement de Bridge Asset Management`,
     },
-    host: 'localhost:3000',
+    host: 'bam.mediasoftci.net/api/bambckoff',
     schemes: ['http']
 };
 
