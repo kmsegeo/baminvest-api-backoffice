@@ -30,7 +30,7 @@ app.use(express.json());
 
 // Routes
 
-const base_path = '/api/v1'
+const base_path = '/v1'
 
 app.use(`${base_path}/auth`, authRoutes);
 app.use(`${base_path}/config`, systemeRoutes);
