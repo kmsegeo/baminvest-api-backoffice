@@ -8,7 +8,7 @@
   "host": "bam.mediasoftci.net/api/bambckoff",
   "basePath": "/",
   "schemes": [
-    "http"
+    "https"
   ],
   "paths": {
     "/v1/auth/encode": {
