@@ -7,7 +7,7 @@ const doc = {
         description: `Api backoffice de l'application de fonds commun de placement de Bridge Asset Management`,
     },
     host: 'bam.mediasoftci.net/api/bambckoff',
-    schemes: ['http']
+    schemes: ['https']
 };
 
 const outpoutFile = './swagger-outpout.json';
