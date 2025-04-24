@@ -6,8 +6,9 @@ const upload = require('../middlewares/multer-config');
 
 const router = express.Router();
 
-router.get('/', app_auth, session_verify, fileController.getAllFiles);
 router.post('/:intitule', app_auth, session_verify, upload.single('file'), fileController.saveOneFile);
+
+router.get('/', app_auth, session_verify, fileController.getAllFiles);
 router.get('/:ref', app_auth, session_verify, fileController.getOneFile);
 
 module.exports = router;

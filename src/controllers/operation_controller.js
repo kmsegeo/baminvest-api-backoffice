@@ -268,6 +268,19 @@ const getCommissionsAtDate = async (req, res, next) => {
     }).catch(err => next(err));
 }
 
+const validateMouvment = async (req, res, next) => {
+    
+}
+
+const validateSouscription = async (req, res, next) => {
+
+}
+
+const validateRachat = async (req, res, next) => {
+
+}
+
+
 module.exports = {
     loadAllOperationsAtDate,
     getOpSouscriptionAtDate,
@@ -278,5 +291,8 @@ module.exports = {
     validOperation,
     validHistorique,
     validOperationByCode,
-    getCommissionsAtDate
+    getCommissionsAtDate,
+    validateMouvment,
+    validateSouscription,
+    validateRachat
 }

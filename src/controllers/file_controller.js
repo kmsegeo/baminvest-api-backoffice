@@ -23,7 +23,7 @@ const saveOneFile = async (req, res, next) => {
 
     const acteur = req.session.e_acteur;
     const typedoc_intitule = req.params.intitule;
-    const nom_fichier = `${req.protocol}://${req.get('host')}/apibam/uploads/${req.file.filename}`;
+    const nom_fichier = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
 
     await TypeDocument.findByIntitule(typedoc_intitule).then(async typedoc => {
         if(!typedoc) return response(res, 404, `Le type document '${typedoc_intitule}' introuvable !`);
