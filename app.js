@@ -50,7 +50,7 @@ app.use(`${base_path}/validations`, circuitRoutes);
 app.use(`${base_path}/fichiers`, fichierRoutes);
 app.use(`${base_path}/news`, newsRoutes);
 
-app.use(`${base_path}/uploads`, express.static(path.join(__dirname, 'uploads')));
+app.use(`/uploads`, express.static(path.join(__dirname, 'uploads')));
 
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 app.use(base_path + '/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
