@@ -20,9 +20,9 @@ const circuitRoutes = require('./src/routes/circuit_validation_routes');
 const fondsRoutes = require('./src/routes/fonds_routes');
 const operationRoutes = require('./src/routes/operation_routes');
 const atsgoDefaultController = require('./src/controllers/atsgo_default_controller');
-const path = require('path');
 const fichierRoutes = require('./src/routes/fichier_routes')
 const newsRoutes = require('./src/routes/news_routes');
+const path = require('path');
 
 const app = express();
 
