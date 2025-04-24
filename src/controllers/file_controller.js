@@ -21,8 +21,6 @@ const saveOneFile = async (req, res, next) => {
 
     console.log(`Chargememnt de fichier..`);
 
-    console.log("__dirname", __dirname)
-
     const acteur = req.session.e_acteur;
     const typedoc_intitule = req.params.intitule;
     const nom_fichier = `${req.protocol}://${req.get('host')}/api/bambckoff/uploads/${req.file.filename}`;
