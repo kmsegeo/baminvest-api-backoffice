@@ -19,7 +19,7 @@ const Document = {
         return (await res).rows;
     },
 
-    async create({acteur_id, type_document, nom_fichier}) {
+    async create({acteur_id, type_document, nom_fichier, chemin_fichier}) {
         const date = new Date();
         const res = db.query(`
             INSERT INTO ${this.tableName} (
@@ -29,13 +29,15 @@ const Document = {
                 r_statut,
                 e_type_document,
                 e_acteur,
-                r_nom_fichier) 
-            VALUES($1,$2,$3,$4,$5,$6,$7)
+                r_nom_fichier,
+                r_chemin_fichier) 
+            VALUES($1,$2,$3,$4,$5,$6,$7,$8)
             RETURNING 
                 r_reference,
                 r_nom_fichier, 
+                r_chemin_fichier,
                 r_date_creer, 
-                r_date_modif`, [uuid.v4(), date, date, 1, type_document, acteur_id, nom_fichier]);
+                r_date_modif`, [uuid.v4(), date, date, 1, type_document, acteur_id, nom_fichier, chemin_fichier]);
         return (await res).rows[0];
     },
 
