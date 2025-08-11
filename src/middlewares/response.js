@@ -2,7 +2,6 @@ const statuts = require('../config/default_statuts')
 
 const response = async (res, statut_code, message, data, data_status, analytics) => {
     
-    console.log(message);
     const type = data_status ? data_status : 'default_status';
 
     if (data)
@@ -19,6 +18,8 @@ const response = async (res, statut_code, message, data, data_status, analytics)
         analytics,
         data
     })
+
+    (statut_code==200 || statut_code==201) ? console.log(message) : console.error(message);
 }
 
 module.exports = response;

@@ -23,7 +23,7 @@ const saveOneFile = async (req, res, next) => {
 
     const acteur = req.session.e_acteur;
     const typedoc_intitule = req.params.intitule;
-    const nom_fichier = req.body.nom_fichier;
+    const nom_fichier = req.file?.filename;
     const chemin_fichier = `${req.protocol}://${req.get('host')}/api/bambckoff/uploads/${req.file.filename}`;
 
     await TypeDocument.findByIntitule(typedoc_intitule).then(async typedoc => {

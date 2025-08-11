@@ -23,7 +23,7 @@ const atsgoDefaultController = require('./src/controllers/atsgo_default_controll
 const fichierRoutes = require('./src/routes/fichier_routes')
 const newsRoutes = require('./src/routes/news_routes');
 const path = require('path');
-var bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 
 const app = express();
 
